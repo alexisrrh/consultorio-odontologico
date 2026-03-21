@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Odontograma from "./Odontograma";
 
 const preguntasRiesgo = [
   { key: "cepillado", label: "Se cepilla menos de 2 veces al día", puntos: 2 },
@@ -79,13 +80,30 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
     }));
   };
 
-  const seleccionarZonaDiente = (zona) => {
+ const cambiarEstadoCara = (numeroDiente, cara, nuevoEstado) => {
+  setFormulario((prev) => ({
+    ...prev,
+    odontograma: (prev.odontograma || []).map((diente) =>
+      diente.numero === numeroDiente
+        ? {
+            ...diente,
+            caras: {
+              ...diente.caras,
+              [cara]: nuevoEstado,
+            },
+          }
+        : diente
+    ),
+  }));
+};
+  const manejarNotasDiente = (numero, texto) => {
     setFormulario((prev) => ({
       ...prev,
-      odontograma: {
-        ...prev.odontograma,
-        zonaPosibleCaries: zona,
-      },
+      odontograma: (prev.odontograma || []).map((diente) =>
+        diente.numero === numero
+          ? { ...diente, notas: texto }
+          : diente
+      ),
     }));
   };
 
@@ -93,8 +111,6 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
     e.preventDefault();
     alGuardar(formulario);
   };
-
-  const zonaActiva = formulario.odontograma?.zonaPosibleCaries || "";
 
   return (
     <div className="ficha-pantalla-completa">
@@ -114,7 +130,10 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
         </div>
       </div>
 
-      <form className="formulario-ficha formulario-ficha-completa" onSubmit={manejarEnvio}>
+      <form
+        className="formulario-ficha formulario-ficha-completa"
+        onSubmit={manejarEnvio}
+      >
         <section className="seccion-ficha">
           <h3>Datos personales</h3>
 
@@ -122,7 +141,7 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
             <input
               type="text"
               name="nombre"
-              value={formulario.nombre}
+              value={formulario.nombre || ""}
               onChange={manejarCambio}
               placeholder="Nombre completo"
             />
@@ -130,7 +149,7 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
             <input
               type="text"
               name="cedula"
-              value={formulario.cedula}
+              value={formulario.cedula || ""}
               onChange={manejarCambio}
               placeholder="Cédula"
             />
@@ -140,7 +159,7 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
             <input
               type="text"
               name="telefono"
-              value={formulario.telefono}
+              value={formulario.telefono || ""}
               onChange={manejarCambio}
               placeholder="Teléfono"
             />
@@ -148,14 +167,14 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
             <input
               type="date"
               name="fechaNacimiento"
-              value={formulario.fechaNacimiento}
+              value={formulario.fechaNacimiento || ""}
               onChange={manejarCambio}
             />
 
             <input
               type="email"
               name="email"
-              value={formulario.email}
+              value={formulario.email || ""}
               onChange={manejarCambio}
               placeholder="Correo"
             />
@@ -164,7 +183,7 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
           <input
             type="text"
             name="direccion"
-            value={formulario.direccion}
+            value={formulario.direccion || ""}
             onChange={manejarCambio}
             placeholder="Dirección"
           />
@@ -175,14 +194,14 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
 
           <textarea
             name="antecedentes"
-            value={formulario.antecedentes}
+            value={formulario.antecedentes || ""}
             onChange={manejarCambio}
             placeholder="Antecedentes médicos"
           />
 
           <textarea
             name="alergias"
-            value={formulario.alergias}
+            value={formulario.alergias || ""}
             onChange={manejarCambio}
             placeholder="Alergias"
           />
@@ -228,7 +247,15 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
           <div className="bloque-opciones">
             <strong>Tejidos</strong>
             <div className="grupo-checkbox">
-              {["Esmalte", "Dentina", "Encía", "Pulpa", "Labios", "Lengua", "Carrillos"].map((item) => (
+              {[
+                "Esmalte",
+                "Dentina",
+                "Encía",
+                "Pulpa",
+                "Labios",
+                "Lengua",
+                "Carrillos",
+              ].map((item) => (
                 <label key={item}>
                   <input
                     type="checkbox"
@@ -246,13 +273,26 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
           <div className="bloque-opciones">
             <strong>Motivo de consulta</strong>
             <div className="grupo-checkbox">
-              {["Emergencia", "Dolor", "Lesión caries", "Odontoxesis", "Puente", "Prostodoncia", "Extracción", "Amalgamas"].map((item) => (
+              {[
+                "Emergencia",
+                "Dolor",
+                "Lesión caries",
+                "Odontoxesis",
+                "Puente",
+                "Prostodoncia",
+                "Extracción",
+                "Amalgamas",
+              ].map((item) => (
                 <label key={item}>
                   <input
                     type="checkbox"
                     checked={formulario.motivoDetalle?.includes(item) || false}
                     onChange={(e) =>
-                      manejarCheckboxLista("motivoDetalle", item, e.target.checked)
+                      manejarCheckboxLista(
+                        "motivoDetalle",
+                        item,
+                        e.target.checked
+                      )
                     }
                   />
                   {item}
@@ -279,7 +319,11 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
                     type="checkbox"
                     checked={formulario.habitosClinicos?.includes(item) || false}
                     onChange={(e) =>
-                      manejarCheckboxLista("habitosClinicos", item, e.target.checked)
+                      manejarCheckboxLista(
+                        "habitosClinicos",
+                        item,
+                        e.target.checked
+                      )
                     }
                   />
                   {item}
@@ -307,9 +351,15 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
                 <label key={item}>
                   <input
                     type="checkbox"
-                    checked={formulario.enfermedadesClinicas?.includes(item) || false}
+                    checked={
+                      formulario.enfermedadesClinicas?.includes(item) || false
+                    }
                     onChange={(e) =>
-                      manejarCheckboxLista("enfermedadesClinicas", item, e.target.checked)
+                      manejarCheckboxLista(
+                        "enfermedadesClinicas",
+                        item,
+                        e.target.checked
+                      )
                     }
                   />
                   {item}
@@ -327,7 +377,9 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
               <label key={pregunta.key} className="item-riesgo">
                 <input
                   type="checkbox"
-                  checked={formulario.riesgoCaries?.respuestas?.[pregunta.key] || false}
+                  checked={
+                    formulario.riesgoCaries?.respuestas?.[pregunta.key] || false
+                  }
                   onChange={(e) =>
                     manejarRespuestaRiesgo(pregunta.key, e.target.checked)
                   }
@@ -344,96 +396,71 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
           </div>
 
           {formulario.riesgoCaries?.nivel && (
-            <div className={`resultado-riesgo ${formulario.riesgoCaries.nivel.toLowerCase()}`}>
+            <div
+              className={`resultado-riesgo ${formulario.riesgoCaries.nivel.toLowerCase()}`}
+            >
               <strong>Riesgo: {formulario.riesgoCaries.nivel}</strong>
               <p>Puntaje: {formulario.riesgoCaries.puntaje}</p>
               <p>
-                Este resultado es orientativo y no sustituye la evaluación clínica
-                odontológica.
+                Este resultado es orientativo y no sustituye la evaluación
+                clínica odontológica.
               </p>
             </div>
           )}
+
+          {formulario.riesgoCaries?.nivel === "Bajo" && (
+  <p className="mensaje-riesgo-clinico">
+    Riesgo bajo: mantener control preventivo y seguimiento periódico.
+  </p>
+)}
+
+{formulario.riesgoCaries?.nivel === "Medio" && (
+  <p className="mensaje-riesgo-clinico">
+    Riesgo medio: se recomienda una revisión clínica cuidadosa y refuerzo de hábitos de higiene oral.
+  </p>
+)}
+
+{formulario.riesgoCaries?.nivel === "Alto" && (
+  <p className="mensaje-riesgo-clinico">
+    Riesgo alto: se recomienda una evaluación clínica detallada del odontograma y planificación preventiva o restauradora según hallazgos.
+  </p>
+)}
         </section>
 
+
         <section className="seccion-ficha">
-          <h3>Visualización de posible caries</h3>
+          <h3>Odontograma</h3>
 
-          <div className="grid-dos odontograma-simple">
-            <div>
-              <label className="etiqueta-campo">Diente / pieza dental</label>
-              <input
-                type="text"
-                value={formulario.odontograma?.dienteSeleccionado || ""}
-                onChange={(e) =>
-                  setFormulario((prev) => ({
-                    ...prev,
-                    odontograma: {
-                      ...prev.odontograma,
-                      dienteSeleccionado: e.target.value,
-                    },
-                  }))
-                }
-                placeholder="Ej: 16, 21, 36"
-              />
+      <p className="subtexto-ficha">
+  El odontograma se completa manualmente tras la evaluación clínica del paciente.
+  Haz clic en cada cara del diente para registrar el hallazgo observado.
+</p>
+<p className="subtexto-ficha">
+  Blanco: sano | Rojo: caries | Azul: restauración | Gris: ausente
+</p>
 
-              <p className="subtexto-ficha">
-                Selecciona abajo la zona donde podría existir la lesión.
-              </p>
+          <Odontograma
+  odontograma={formulario.odontograma || []}
+  alCambiarCara={cambiarEstadoCara}
+/>
 
-              <div className="resumen-caries">
-                <p>
-                  <strong>Pieza:</strong>{" "}
-                  {formulario.odontograma?.dienteSeleccionado || "No seleccionada"}
-                </p>
-                <p>
-                  <strong>Zona probable:</strong>{" "}
-                  {formulario.odontograma?.zonaPosibleCaries || "No seleccionada"}
-                </p>
-              </div>
-            </div>
+          <div className="notas-dientes mt-4">
+            <h4>Notas por diente</h4>
 
-            <div className="contenedor-diente">
-              <div className="diente-dibujo">
-                <button
-                  type="button"
-                  className={`zona-diente zona-superior ${zonaActiva === "superior" ? "activa" : ""}`}
-                  onClick={() => seleccionarZonaDiente("superior")}
-                >
-                  Superior
-                </button>
-
-                <button
-                  type="button"
-                  className={`zona-diente zona-izquierda ${zonaActiva === "izquierda" ? "activa" : ""}`}
-                  onClick={() => seleccionarZonaDiente("izquierda")}
-                >
-                  Izq.
-                </button>
-
-                <button
-                  type="button"
-                  className={`zona-diente zona-centro ${zonaActiva === "oclusal/centro" ? "activa" : ""}`}
-                  onClick={() => seleccionarZonaDiente("oclusal/centro")}
-                >
-                  Centro
-                </button>
-
-                <button
-                  type="button"
-                  className={`zona-diente zona-derecha ${zonaActiva === "derecha" ? "activa" : ""}`}
-                  onClick={() => seleccionarZonaDiente("derecha")}
-                >
-                  Der.
-                </button>
-
-                <button
-                  type="button"
-                  className={`zona-diente zona-inferior ${zonaActiva === "inferior" ? "activa" : ""}`}
-                  onClick={() => seleccionarZonaDiente("inferior")}
-                >
-                  Inferior
-                </button>
-              </div>
+            <div className="grid-dos">
+              {(formulario.odontograma || []).map((diente) => (
+                <div key={diente.numero} className="bloque-nota-diente">
+                  <label>Diente {diente.numero}</label>
+                  <textarea
+                    rows="2"
+                    value={diente.notas || ""}
+                    onChange={(e) =>
+                      manejarNotasDiente(diente.numero, e.target.value)
+                    }
+                    placeholder="Observaciones de esta pieza dental"
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -443,14 +470,14 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
 
           <textarea
             name="motivoConsulta"
-            value={formulario.motivoConsulta}
+            value={formulario.motivoConsulta || ""}
             onChange={manejarCambio}
             placeholder="Motivo general de consulta"
           />
 
           <textarea
             name="observaciones"
-            value={formulario.observaciones}
+            value={formulario.observaciones || ""}
             onChange={manejarCambio}
             placeholder="Observaciones clínicas"
           />
@@ -461,14 +488,14 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
 
           <textarea
             name="diagnostico"
-            value={formulario.diagnostico}
+            value={formulario.diagnostico || ""}
             onChange={manejarCambio}
             placeholder="Diagnóstico"
           />
 
           <textarea
             name="tratamiento"
-            value={formulario.tratamiento}
+            value={formulario.tratamiento || ""}
             onChange={manejarCambio}
             placeholder="Tratamiento"
           />
