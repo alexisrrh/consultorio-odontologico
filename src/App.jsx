@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Encabezado from "./componentes/Encabezado";
 import FormularioPaciente from "./componentes/FormularioPaciente";
 import BusquedaPaciente from "./componentes/BusquedaPaciente";
@@ -10,6 +10,17 @@ function App() {
   const [pacientes, setPacientes] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [pacienteActivo, setPacienteActivo] = useState(null);
+
+  useEffect(() => {
+    const pacientesGuardados = localStorage.getItem("pacientes_odontologia");
+    if (pacientesGuardados) {
+      setPacientes(JSON.parse(pacientesGuardados));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("pacientes_odontologia", JSON.stringify(pacientes));
+  }, [pacientes]);
 
   const agregarPaciente = (nuevoPaciente) => {
     setPacientes((prev) => [nuevoPaciente, ...prev]);
@@ -30,7 +41,18 @@ function App() {
     );
     setPacientes(actualizados);
     setPacienteActivo(pacienteActualizado);
-    alert("Ficha actualizada");
+  };
+
+  const eliminarPaciente = (id) => {
+    const confirmar = window.confirm("¿Seguro que deseas eliminar este paciente?");
+    if (!confirmar) return;
+
+    const actualizados = pacientes.filter((p) => p.id !== id);
+    setPacientes(actualizados);
+
+    if (pacienteActivo?.id === id) {
+      setPacienteActivo(null);
+    }
   };
 
   const pacientesFiltrados = pacientes.filter((paciente) => {
@@ -64,6 +86,7 @@ function App() {
             <ListaPacientes
               pacientes={pacientesFiltrados}
               alCompletarFicha={abrirFicha}
+              alEliminar={eliminarPaciente}
             />
           </section>
         </main>

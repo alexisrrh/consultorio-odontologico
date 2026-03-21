@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react";
 
+const preguntasRiesgo = [
+  { key: "cepillado", label: "Se cepilla menos de 2 veces al día", puntos: 2 },
+  { key: "azucar", label: "Consume azúcar frecuentemente", puntos: 2 },
+  { key: "dolor", label: "Presenta dolor dental", puntos: 2 },
+  { key: "manchas", label: "Tiene manchas o cavidades visibles", puntos: 3 },
+  { key: "historial", label: "Ha tenido caries anteriormente", puntos: 3 },
+  { key: "bocaSeca", label: "Sufre de boca seca", puntos: 2 },
+  { key: "sinDentista", label: "No visita al dentista regularmente", puntos: 1 },
+];
+
 export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
   const [formulario, setFormulario] = useState(null);
 
@@ -33,10 +43,58 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
     });
   };
 
+  const manejarRespuestaRiesgo = (key, checked) => {
+    setFormulario((prev) => ({
+      ...prev,
+      riesgoCaries: {
+        ...prev.riesgoCaries,
+        respuestas: {
+          ...(prev.riesgoCaries?.respuestas || {}),
+          [key]: checked,
+        },
+      },
+    }));
+  };
+
+  const evaluarRiesgo = () => {
+    let puntaje = 0;
+
+    preguntasRiesgo.forEach((pregunta) => {
+      if (formulario.riesgoCaries?.respuestas?.[pregunta.key]) {
+        puntaje += pregunta.puntos;
+      }
+    });
+
+    let nivel = "Bajo";
+    if (puntaje >= 5 && puntaje < 10) nivel = "Medio";
+    if (puntaje >= 10) nivel = "Alto";
+
+    setFormulario((prev) => ({
+      ...prev,
+      riesgoCaries: {
+        ...prev.riesgoCaries,
+        puntaje,
+        nivel,
+      },
+    }));
+  };
+
+  const seleccionarZonaDiente = (zona) => {
+    setFormulario((prev) => ({
+      ...prev,
+      odontograma: {
+        ...prev.odontograma,
+        zonaPosibleCaries: zona,
+      },
+    }));
+  };
+
   const manejarEnvio = (e) => {
     e.preventDefault();
     alGuardar(formulario);
   };
+
+  const zonaActiva = formulario.odontograma?.zonaPosibleCaries || "";
 
   return (
     <div className="ficha-pantalla-completa">
@@ -50,11 +108,7 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
         </div>
 
         <div className="acciones-cabecera">
-          <button
-            type="button"
-            className="boton-secundario"
-            onClick={alCerrar}
-          >
+          <button type="button" className="boton-secundario" onClick={alCerrar}>
             Volver
           </button>
         </div>
@@ -261,6 +315,125 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
                   {item}
                 </label>
               ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="seccion-ficha">
+          <h3>Evaluación de riesgo de caries</h3>
+
+          <div className="lista-riesgo">
+            {preguntasRiesgo.map((pregunta) => (
+              <label key={pregunta.key} className="item-riesgo">
+                <input
+                  type="checkbox"
+                  checked={formulario.riesgoCaries?.respuestas?.[pregunta.key] || false}
+                  onChange={(e) =>
+                    manejarRespuestaRiesgo(pregunta.key, e.target.checked)
+                  }
+                />
+                {pregunta.label}
+              </label>
+            ))}
+          </div>
+
+          <div className="acciones-riesgo">
+            <button type="button" onClick={evaluarRiesgo}>
+              Evaluar riesgo
+            </button>
+          </div>
+
+          {formulario.riesgoCaries?.nivel && (
+            <div className={`resultado-riesgo ${formulario.riesgoCaries.nivel.toLowerCase()}`}>
+              <strong>Riesgo: {formulario.riesgoCaries.nivel}</strong>
+              <p>Puntaje: {formulario.riesgoCaries.puntaje}</p>
+              <p>
+                Este resultado es orientativo y no sustituye la evaluación clínica
+                odontológica.
+              </p>
+            </div>
+          )}
+        </section>
+
+        <section className="seccion-ficha">
+          <h3>Visualización de posible caries</h3>
+
+          <div className="grid-dos odontograma-simple">
+            <div>
+              <label className="etiqueta-campo">Diente / pieza dental</label>
+              <input
+                type="text"
+                value={formulario.odontograma?.dienteSeleccionado || ""}
+                onChange={(e) =>
+                  setFormulario((prev) => ({
+                    ...prev,
+                    odontograma: {
+                      ...prev.odontograma,
+                      dienteSeleccionado: e.target.value,
+                    },
+                  }))
+                }
+                placeholder="Ej: 16, 21, 36"
+              />
+
+              <p className="subtexto-ficha">
+                Selecciona abajo la zona donde podría existir la lesión.
+              </p>
+
+              <div className="resumen-caries">
+                <p>
+                  <strong>Pieza:</strong>{" "}
+                  {formulario.odontograma?.dienteSeleccionado || "No seleccionada"}
+                </p>
+                <p>
+                  <strong>Zona probable:</strong>{" "}
+                  {formulario.odontograma?.zonaPosibleCaries || "No seleccionada"}
+                </p>
+              </div>
+            </div>
+
+            <div className="contenedor-diente">
+              <div className="diente-dibujo">
+                <button
+                  type="button"
+                  className={`zona-diente zona-superior ${zonaActiva === "superior" ? "activa" : ""}`}
+                  onClick={() => seleccionarZonaDiente("superior")}
+                >
+                  Superior
+                </button>
+
+                <button
+                  type="button"
+                  className={`zona-diente zona-izquierda ${zonaActiva === "izquierda" ? "activa" : ""}`}
+                  onClick={() => seleccionarZonaDiente("izquierda")}
+                >
+                  Izq.
+                </button>
+
+                <button
+                  type="button"
+                  className={`zona-diente zona-centro ${zonaActiva === "oclusal/centro" ? "activa" : ""}`}
+                  onClick={() => seleccionarZonaDiente("oclusal/centro")}
+                >
+                  Centro
+                </button>
+
+                <button
+                  type="button"
+                  className={`zona-diente zona-derecha ${zonaActiva === "derecha" ? "activa" : ""}`}
+                  onClick={() => seleccionarZonaDiente("derecha")}
+                >
+                  Der.
+                </button>
+
+                <button
+                  type="button"
+                  className={`zona-diente zona-inferior ${zonaActiva === "inferior" ? "activa" : ""}`}
+                  onClick={() => seleccionarZonaDiente("inferior")}
+                >
+                  Inferior
+                </button>
+              </div>
             </div>
           </div>
         </section>
