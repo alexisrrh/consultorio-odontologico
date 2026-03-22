@@ -1,6 +1,9 @@
-export default function Diente({ diente, alCambiarDiente }) {
+export default function Diente({ diente, alCambiarDiente, modo }) {
   const manejarClick = () => {
-    alCambiarDiente(diente.numero);
+    if (modo === "lectura") return;
+    if (typeof alCambiarDiente === "function") {
+      alCambiarDiente(diente.numero);
+    }
   };
 
   const color = () => {
@@ -11,7 +14,11 @@ export default function Diente({ diente, alCambiarDiente }) {
   };
 
   return (
-    <div className="diente-svg" onClick={manejarClick}>
+    <div
+      className="diente-svg"
+      onClick={manejarClick}
+      style={{ cursor: modo === "lectura" ? "default" : "pointer" }}
+    >
       <svg width="60" height="80" viewBox="0 0 80 100">
         <path
           d="

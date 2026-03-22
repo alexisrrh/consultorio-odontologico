@@ -1,6 +1,6 @@
 import Diente from "./Diente";
 
-export default function Odontograma({ odontograma, alCambiarDiente }) {
+export default function Odontograma({ odontograma = [], alCambiarDiente, modo }) {
   const filaSuperior = odontograma.filter((d) =>
     [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28].includes(
       d.numero
@@ -31,7 +31,11 @@ export default function Odontograma({ odontograma, alCambiarDiente }) {
                   : ""
               }`}
             >
-              <Diente diente={diente} alCambiarDiente={alCambiarDiente} />
+              <Diente
+                diente={diente}
+                alCambiarDiente={alCambiarDiente}
+                modo={modo}
+              />
             </div>
           ))}
         </div>
@@ -46,7 +50,11 @@ export default function Odontograma({ odontograma, alCambiarDiente }) {
                   : ""
               }`}
             >
-              <Diente diente={diente} alCambiarDiente={alCambiarDiente} />
+              <Diente
+                diente={diente}
+                alCambiarDiente={alCambiarDiente}
+                modo={modo}
+              />
             </div>
           ))}
         </div>

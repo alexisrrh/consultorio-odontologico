@@ -706,3 +706,387 @@ button:hover {
     font-size: 14px;
   }
 }
+
+.presupuesto-container {
+  width: min(900px, 100%);
+  margin: 20px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+}
+
+.presupuesto-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.presupuesto-seccion {
+  margin-bottom: 20px;
+}
+
+.presupuesto-seccion h2 {
+  margin-bottom: 8px;
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 4px;
+}
+
+.presupuesto-footer {
+  margin-top: 30px;
+  font-size: 0.9rem;
+  color: #64748b;
+  text-align: center;
+}
+.presupuesto-container {
+  width: min(1000px, 100%);
+  margin: 0 auto;
+}
+
+@media print {
+  .acciones-cabecera,
+  .barra-acciones-ficha,
+  .encabezado {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  .presupuesto-container,
+  .seccion-ficha {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+}
+/* ========================= */
+/* ODONTOGRAMA DENTRO DEL PRESUPUESTO */
+/* ========================= */
+
+.presupuesto-container .odontograma-realista {
+  margin-top: 12px;
+}
+
+.presupuesto-container .odontograma-canvas {
+  padding: 34px 18px 40px;
+  overflow-x: auto;
+}
+
+.presupuesto-container .arcada {
+  gap: 2px;
+  min-width: 860px; /* evita que se rompa la forma */
+}
+
+.presupuesto-container .arcada-superior {
+  margin-bottom: 76px;
+}
+
+.presupuesto-container .arcada-inferior {
+  margin-top: 76px;
+}
+
+.presupuesto-container .slot {
+  min-width: 48px;
+}
+
+.presupuesto-container .zona-espaciada {
+  margin-left: 1px;
+  margin-right: 1px;
+}
+
+.presupuesto-container .diente-svg {
+  min-width: 52px;
+  transform: scale(0.82);
+}
+
+.presupuesto-container .arcada-superior .diente-svg {
+  transform: rotate(180deg) scale(0.82);
+}
+
+.presupuesto-container .diente-svg:hover svg {
+  transform: none;
+  filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.12));
+}
+
+.presupuesto-container .numero-diente {
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+.presupuesto-container .encia-superior {
+  top: 52px;
+  height: 62px;
+}
+
+.presupuesto-container .encia-inferior {
+  bottom: 52px;
+  height: 62px;
+}
+
+/* Ajuste de curvatura en presupuesto */
+.presupuesto-container .arcada-superior .slot:nth-child(1),
+.presupuesto-container .arcada-superior .slot:nth-child(16) {
+  transform: translateY(28px);
+}
+.presupuesto-container .arcada-superior .slot:nth-child(2),
+.presupuesto-container .arcada-superior .slot:nth-child(15) {
+  transform: translateY(22px);
+}
+.presupuesto-container .arcada-superior .slot:nth-child(3),
+.presupuesto-container .arcada-superior .slot:nth-child(14) {
+  transform: translateY(16px);
+}
+.presupuesto-container .arcada-superior .slot:nth-child(4),
+.presupuesto-container .arcada-superior .slot:nth-child(13) {
+  transform: translateY(11px);
+}
+.presupuesto-container .arcada-superior .slot:nth-child(5),
+.presupuesto-container .arcada-superior .slot:nth-child(12) {
+  transform: translateY(7px);
+}
+.presupuesto-container .arcada-superior .slot:nth-child(6),
+.presupuesto-container .arcada-superior .slot:nth-child(11) {
+  transform: translateY(4px);
+}
+.presupuesto-container .arcada-superior .slot:nth-child(7),
+.presupuesto-container .arcada-superior .slot:nth-child(10) {
+  transform: translateY(1px);
+}
+.presupuesto-container .arcada-superior .slot:nth-child(8),
+.presupuesto-container .arcada-superior .slot:nth-child(9) {
+  transform: translateY(0);
+}
+
+.presupuesto-container .arcada-inferior .slot:nth-child(1),
+.presupuesto-container .arcada-inferior .slot:nth-child(16) {
+  transform: translateY(-28px);
+}
+.presupuesto-container .arcada-inferior .slot:nth-child(2),
+.presupuesto-container .arcada-inferior .slot:nth-child(15) {
+  transform: translateY(-22px);
+}
+.presupuesto-container .arcada-inferior .slot:nth-child(3),
+.presupuesto-container .arcada-inferior .slot:nth-child(14) {
+  transform: translateY(-16px);
+}
+.presupuesto-container .arcada-inferior .slot:nth-child(4),
+.presupuesto-container .arcada-inferior .slot:nth-child(13) {
+  transform: translateY(-11px);
+}
+.presupuesto-container .arcada-inferior .slot:nth-child(5),
+.presupuesto-container .arcada-inferior .slot:nth-child(12) {
+  transform: translateY(-7px);
+}
+.presupuesto-container .arcada-inferior .slot:nth-child(6),
+.presupuesto-container .arcada-inferior .slot:nth-child(11) {
+  transform: translateY(-4px);
+}
+.presupuesto-container .arcada-inferior .slot:nth-child(7),
+.presupuesto-container .arcada-inferior .slot:nth-child(10) {
+  transform: translateY(-1px);
+}
+.presupuesto-container .arcada-inferior .slot:nth-child(8),
+.presupuesto-container .arcada-inferior .slot:nth-child(9) {
+  transform: translateY(0);
+}
+
+@media (max-width: 980px) {
+  .presupuesto-container .odontograma-canvas {
+    overflow-x: auto;
+  }
+}
+/* ========================= */
+/* MEJORA VISUAL EXAMEN CLÍNICO Y RIESGO */
+/* ========================= */
+
+.bloque-opciones {
+  margin-bottom: 24px;
+}
+
+.bloque-opciones strong {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 1rem;
+  color: #0f172a;
+}
+
+/* Contenedor de opciones tipo chip */
+.grupo-checkbox {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 0;
+}
+
+/* Cada opción */
+.grupo-checkbox label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 50px;
+  padding: 10px 16px;
+  border: 1px solid #dbe7f3;
+  border-radius: 999px;
+  background: #f8fbff;
+  color: #1e293b;
+  font-size: 0.98rem;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
+}
+
+.grupo-checkbox label:hover {
+  border-color: #93c5fd;
+  background: #eff6ff;
+  transform: translateY(-1px);
+}
+
+/* Checkbox */
+.grupo-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #2563eb;
+  flex: 0 0 auto;
+}
+
+/* ========================= */
+/* RIESGO DE CARIES MEJORADO */
+/* ========================= */
+
+.lista-riesgo {
+  display: grid;
+  gap: 12px;
+}
+
+.item-riesgo {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 18px;
+  background: #f8fbff;
+  border: 1px solid #dbeafe;
+  min-height: 64px;
+  transition: all 0.18s ease;
+}
+
+.item-riesgo:hover {
+  background: #eff6ff;
+  border-color: #93c5fd;
+}
+
+.item-riesgo input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #2563eb;
+}
+
+.item-riesgo span,
+.item-riesgo {
+  color: #0f172a;
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+/* Botón de riesgo */
+.acciones-riesgo {
+  margin-top: 16px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.acciones-riesgo button {
+  width: auto;
+  min-width: 180px;
+  padding: 12px 22px;
+  border-radius: 14px;
+  font-size: 1rem;
+}
+
+/* ========================= */
+/* RESULTADO DE RIESGO MEJORADO */
+/* ========================= */
+
+.resultado-riesgo {
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+}
+
+.resultado-riesgo strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+.resultado-riesgo p {
+  margin: 4px 0;
+}
+
+.resultado-riesgo.bajo {
+  background: #dcfce7;
+  border-color: #86efac;
+}
+
+.resultado-riesgo.medio {
+  background: #fef3c7;
+  border-color: #fcd34d;
+}
+
+.resultado-riesgo.alto {
+  background: #fee2e2;
+  border-color: #fca5a5;
+}
+
+.mensaje-riesgo-clinico {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-left: 4px solid #2563eb;
+  background: #f8fbff;
+  border-radius: 10px;
+  color: #334155;
+  line-height: 1.5;
+}
+
+/* ========================= */
+/* SECCIONES MÁS ELEGANTES */
+/* ========================= */
+
+.seccion-ficha h3 {
+  margin: 0 0 16px;
+  color: #0f172a;
+  font-size: 1.45rem;
+}
+
+.seccion-ficha {
+  border: 1px solid var(--borde);
+  border-radius: 20px;
+  padding: 22px;
+  background: #fff;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+}
+
+/* ========================= */
+/* RESPONSIVE */
+/* ========================= */
+
+@media (max-width: 768px) {
+  .grupo-checkbox {
+    gap: 10px;
+  }
+
+  .grupo-checkbox label {
+    width: 100%;
+    border-radius: 16px;
+    justify-content: flex-start;
+  }
+
+  .item-riesgo {
+    grid-template-columns: 24px 1fr;
+    padding: 14px;
+  }
+}

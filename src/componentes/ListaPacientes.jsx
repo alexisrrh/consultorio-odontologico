@@ -1,4 +1,10 @@
-export default function ListaPacientes({ pacientes, alCompletarFicha, alEliminar }) {
+export default function ListaPacientes({
+  pacientes,
+  alCompletarFicha,
+  alVerHistorial,
+  alVerPresupuesto,
+  alEliminar,
+}) {
   return (
     <div className="tarjeta">
       <h2>Pacientes registrados</h2>
@@ -14,10 +20,28 @@ export default function ListaPacientes({ pacientes, alCompletarFicha, alEliminar
               <p><strong>Teléfono:</strong> {paciente.telefono || "No registrado"}</p>
 
               <div className="acciones-paciente">
-                <button onClick={() => alCompletarFicha(paciente)}>
+                <button type="button" onClick={() => alCompletarFicha(paciente)}>
                   Completar ficha
                 </button>
+
                 <button
+                  type="button"
+                  className="boton-secundario"
+                  onClick={() => alVerHistorial(paciente)}
+                >
+                  Ver historial
+                </button>
+
+                <button
+                  type="button"
+                  className="boton-secundario"
+                  onClick={() => alVerPresupuesto(paciente)}
+                >
+                  Ver presupuesto
+                </button>
+
+                <button
+                  type="button"
                   className="boton-secundario"
                   onClick={() => alEliminar(paciente.id)}
                 >

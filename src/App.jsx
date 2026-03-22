@@ -4,30 +4,78 @@ import FormularioPaciente from "./componentes/FormularioPaciente";
 import BusquedaPaciente from "./componentes/BusquedaPaciente";
 import ListaPacientes from "./componentes/ListaPacientes";
 import FichaPaciente from "./componentes/FichaPaciente";
+import HistorialPaciente from "./componentes/HistorialPaciente";
+import PresupuestoPaciente from "./componentes/PresupuestoPaciente";
+import {
+  obtenerPacientes,
+  buscarPacientes,
+  crearPaciente,
+  actualizarPaciente,
+  eliminarPaciente as eliminarPacienteDB,
+} from "./servicios/api";
 import "./App.css";
 
 function App() {
   const [pacientes, setPacientes] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [pacienteActivo, setPacienteActivo] = useState(null);
+  const [pacienteHistorial, setPacienteHistorial] = useState(null);
+  const [pacientePresupuesto, setPacientePresupuesto] = useState(null);
+  const [cargando, setCargando] = useState(true);
 
   useEffect(() => {
-    const pacientesGuardados = localStorage.getItem("pacientes_odontologia");
-    if (pacientesGuardados) {
-      setPacientes(JSON.parse(pacientesGuardados));
-    }
+    cargarPacientes();
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("pacientes_odontologia", JSON.stringify(pacientes));
-  }, [pacientes]);
+    const delay = setTimeout(() => {
+      ejecutarBusqueda();
+    }, 300);
 
-  const agregarPaciente = (nuevoPaciente) => {
-    setPacientes((prev) => [nuevoPaciente, ...prev]);
+    return () => clearTimeout(delay);
+  }, [busqueda]);
+
+  async function cargarPacientes() {
+    try {
+      setCargando(true);
+      const data = await obtenerPacientes();
+      setPacientes(data);
+    } catch (error) {
+      console.error("Error cargando pacientes:", error);
+      alert("No se pudieron cargar los pacientes");
+    } finally {
+      setCargando(false);
+    }
+  }
+
+  async function ejecutarBusqueda() {
+    try {
+      setCargando(true);
+      const data = await buscarPacientes(busqueda);
+      setPacientes(data);
+    } catch (error) {
+      console.error("Error buscando pacientes:", error);
+      alert("No se pudo realizar la búsqueda");
+    } finally {
+      setCargando(false);
+    }
+  }
+
+  const agregarPaciente = async (nuevoPaciente) => {
+    try {
+      const creado = await crearPaciente(nuevoPaciente);
+      setPacientes((prev) => [creado, ...prev]);
+      alert("Paciente guardado correctamente");
+    } catch (error) {
+      console.error("Error creando paciente:", error);
+      alert(error.message || "No se pudo registrar el paciente");
+    }
   };
 
   const abrirFicha = (paciente) => {
     setPacienteActivo(paciente);
+    setPacienteHistorial(null);
+    setPacientePresupuesto(null);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -35,39 +83,86 @@ function App() {
     setPacienteActivo(null);
   };
 
-  const guardarFicha = (pacienteActualizado) => {
-    const actualizados = pacientes.map((p) =>
-      p.id === pacienteActualizado.id ? pacienteActualizado : p
-    );
-    setPacientes(actualizados);
-    setPacienteActivo(pacienteActualizado);
+  const abrirHistorial = (paciente) => {
+    setPacienteHistorial(paciente);
+    setPacienteActivo(null);
+    setPacientePresupuesto(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  const eliminarPaciente = (id) => {
-    const confirmar = window.confirm("¿Seguro que deseas eliminar este paciente?");
-    if (!confirmar) return;
+  const cerrarHistorial = () => {
+    setPacienteHistorial(null);
+  };
 
-    const actualizados = pacientes.filter((p) => p.id !== id);
-    setPacientes(actualizados);
+  const abrirPresupuesto = (paciente) => {
+    setPacientePresupuesto(paciente);
+    setPacienteActivo(null);
+    setPacienteHistorial(null);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
-    if (pacienteActivo?.id === id) {
-      setPacienteActivo(null);
+  const cerrarPresupuesto = () => {
+    setPacientePresupuesto(null);
+  };
+
+  const guardarFicha = async (pacienteActualizado) => {
+    try {
+      const actualizado = await actualizarPaciente(pacienteActualizado);
+
+      setPacientes((prev) =>
+        prev.map((p) => (p.id === actualizado.id ? actualizado : p))
+      );
+
+      setPacienteActivo(actualizado);
+      alert("Ficha guardada correctamente");
+    } catch (error) {
+      console.error("Error guardando ficha:", error);
+      alert(error.message || "No se pudo guardar la ficha");
     }
   };
 
-  const pacientesFiltrados = pacientes.filter((paciente) => {
-    const texto = busqueda.toLowerCase();
-    return (
-      paciente.nombre.toLowerCase().includes(texto) ||
-      paciente.cedula.toLowerCase().includes(texto)
-    );
-  });
+  const eliminarPaciente = async (id) => {
+    const confirmar = window.confirm("¿Seguro que deseas eliminar este paciente?");
+    if (!confirmar) return;
+
+    try {
+      await eliminarPacienteDB(id);
+      setPacientes((prev) => prev.filter((p) => p.id !== id));
+
+      if (pacienteActivo?.id === id) setPacienteActivo(null);
+      if (pacienteHistorial?.id === id) setPacienteHistorial(null);
+      if (pacientePresupuesto?.id === id) setPacientePresupuesto(null);
+    } catch (error) {
+      console.error("Error eliminando paciente:", error);
+      alert(error.message || "No se pudo eliminar el paciente");
+    }
+  };
 
   return (
     <div className="app">
       <Encabezado />
 
-      {pacienteActivo ? (
+      {cargando ? (
+        <main className="contenedor-principal">
+          <section className="tarjeta">
+            <h2>Cargando pacientes...</h2>
+          </section>
+        </main>
+      ) : pacientePresupuesto ? (
+        <main className="contenedor-ficha-completa">
+          <PresupuestoPaciente
+            paciente={pacientePresupuesto}
+            alCerrar={cerrarPresupuesto}
+          />
+        </main>
+      ) : pacienteHistorial ? (
+        <main className="contenedor-ficha-completa">
+          <HistorialPaciente
+            paciente={pacienteHistorial}
+            alCerrar={cerrarHistorial}
+          />
+        </main>
+      ) : pacienteActivo ? (
         <main className="contenedor-ficha-completa">
           <FichaPaciente
             paciente={pacienteActivo}
@@ -84,8 +179,10 @@ function App() {
           <section className="columna derecha">
             <BusquedaPaciente busqueda={busqueda} setBusqueda={setBusqueda} />
             <ListaPacientes
-              pacientes={pacientesFiltrados}
+              pacientes={pacientes}
               alCompletarFicha={abrirFicha}
+              alVerHistorial={abrirHistorial}
+              alVerPresupuesto={abrirPresupuesto}
               alEliminar={eliminarPaciente}
             />
           </section>

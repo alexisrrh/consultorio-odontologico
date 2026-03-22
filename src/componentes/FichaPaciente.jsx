@@ -370,18 +370,18 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
 
           <div className="lista-riesgo">
             {preguntasRiesgo.map((pregunta) => (
-              <label key={pregunta.key} className="item-riesgo">
-                <input
-                  type="checkbox"
-                  checked={
-                    formulario.riesgoCaries?.respuestas?.[pregunta.key] || false
-                  }
-                  onChange={(e) =>
-                    manejarRespuestaRiesgo(pregunta.key, e.target.checked)
-                  }
-                />
-                {pregunta.label}
-              </label>
+             <label key={pregunta.key} className="item-riesgo">
+  <input
+    type="checkbox"
+    checked={
+      formulario.riesgoCaries?.respuestas?.[pregunta.key] || false
+    }
+    onChange={(e) =>
+      manejarRespuestaRiesgo(pregunta.key, e.target.checked)
+    }
+  />
+  <span>{pregunta.label}</span>
+</label>
             ))}
           </div>
 
