@@ -1,6 +1,6 @@
 import Diente from "./Diente";
 
-export default function Odontograma({ odontograma, alCambiarCara }) {
+export default function Odontograma({ odontograma, alCambiarDiente }) {
   const filaSuperior = odontograma.filter((d) =>
     [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28].includes(
       d.numero
@@ -26,10 +26,12 @@ export default function Odontograma({ odontograma, alCambiarCara }) {
             <div
               key={diente.numero}
               className={`slot ${
-                dientesConMasEspacio.includes(diente.numero) ? "zona-espaciada" : ""
+                dientesConMasEspacio.includes(diente.numero)
+                  ? "zona-espaciada"
+                  : ""
               }`}
             >
-              <Diente diente={diente} alCambiarCara={alCambiarCara} />
+              <Diente diente={diente} alCambiarDiente={alCambiarDiente} />
             </div>
           ))}
         </div>
@@ -39,10 +41,12 @@ export default function Odontograma({ odontograma, alCambiarCara }) {
             <div
               key={diente.numero}
               className={`slot ${
-                dientesConMasEspacio.includes(diente.numero) ? "zona-espaciada" : ""
+                dientesConMasEspacio.includes(diente.numero)
+                  ? "zona-espaciada"
+                  : ""
               }`}
             >
-              <Diente diente={diente} alCambiarCara={alCambiarCara} />
+              <Diente diente={diente} alCambiarDiente={alCambiarDiente} />
             </div>
           ))}
         </div>

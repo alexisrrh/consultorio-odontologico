@@ -13,6 +13,7 @@ const preguntasRiesgo = [
 
 export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
   const [formulario, setFormulario] = useState(null);
+  const [tratamientoActivo, setTratamientoActivo] = useState("sano");
 
   useEffect(() => {
     if (paciente) {
@@ -80,22 +81,17 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
     }));
   };
 
- const cambiarEstadoCara = (numeroDiente, cara, nuevoEstado) => {
-  setFormulario((prev) => ({
-    ...prev,
-    odontograma: (prev.odontograma || []).map((diente) =>
-      diente.numero === numeroDiente
-        ? {
-            ...diente,
-            caras: {
-              ...diente.caras,
-              [cara]: nuevoEstado,
-            },
-          }
-        : diente
-    ),
-  }));
-};
+  const cambiarEstadoDiente = (numero) => {
+    setFormulario((prev) => ({
+      ...prev,
+      odontograma: (prev.odontograma || []).map((diente) =>
+        diente.numero === numero
+          ? { ...diente, estado: tratamientoActivo }
+          : diente
+      ),
+    }));
+  };
+
   const manejarNotasDiente = (numero, texto) => {
     setFormulario((prev) => ({
       ...prev,
@@ -409,40 +405,90 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
           )}
 
           {formulario.riesgoCaries?.nivel === "Bajo" && (
-  <p className="mensaje-riesgo-clinico">
-    Riesgo bajo: mantener control preventivo y seguimiento periódico.
-  </p>
-)}
+            <p className="mensaje-riesgo-clinico">
+              Riesgo bajo: mantener control preventivo y seguimiento periódico.
+            </p>
+          )}
 
-{formulario.riesgoCaries?.nivel === "Medio" && (
-  <p className="mensaje-riesgo-clinico">
-    Riesgo medio: se recomienda una revisión clínica cuidadosa y refuerzo de hábitos de higiene oral.
-  </p>
-)}
+          {formulario.riesgoCaries?.nivel === "Medio" && (
+            <p className="mensaje-riesgo-clinico">
+              Riesgo medio: se recomienda una revisión clínica cuidadosa y
+              refuerzo de hábitos de higiene oral.
+            </p>
+          )}
 
-{formulario.riesgoCaries?.nivel === "Alto" && (
-  <p className="mensaje-riesgo-clinico">
-    Riesgo alto: se recomienda una evaluación clínica detallada del odontograma y planificación preventiva o restauradora según hallazgos.
-  </p>
-)}
+          {formulario.riesgoCaries?.nivel === "Alto" && (
+            <p className="mensaje-riesgo-clinico">
+              Riesgo alto: se recomienda una evaluación clínica detallada del
+              odontograma y planificación preventiva o restauradora según
+              hallazgos.
+            </p>
+          )}
         </section>
-
 
         <section className="seccion-ficha">
           <h3>Odontograma</h3>
 
-      <p className="subtexto-ficha">
-  El odontograma se completa manualmente tras la evaluación clínica del paciente.
-  Haz clic en cada cara del diente para registrar el hallazgo observado.
-</p>
-<p className="subtexto-ficha">
-  Blanco: sano | Rojo: caries | Azul: restauración | Gris: ausente
-</p>
+          <p className="subtexto-ficha">
+            El odontograma se completa manualmente tras la evaluación clínica
+            del paciente. Selecciona el tratamiento y luego haz clic en el
+            diente correspondiente.
+          </p>
+
+          <p className="subtexto-ficha">
+            Blanco: sano | Rojo: caries | Azul: conducto | Gris: extracción
+          </p>
+
+          <div className="selector-tratamiento">
+            <h4>Seleccionar tratamiento</h4>
+
+            <div className="botones-tratamiento">
+              <button
+                type="button"
+                className={`boton-tratamiento ${
+                  tratamientoActivo === "sano" ? "boton-activo" : ""
+                }`}
+                onClick={() => setTratamientoActivo("sano")}
+              >
+                Sano
+              </button>
+
+              <button
+                type="button"
+                className={`boton-tratamiento ${
+                  tratamientoActivo === "caries" ? "boton-activo" : ""
+                }`}
+                onClick={() => setTratamientoActivo("caries")}
+              >
+                Caries
+              </button>
+
+              <button
+                type="button"
+                className={`boton-tratamiento ${
+                  tratamientoActivo === "conducto" ? "boton-activo" : ""
+                }`}
+                onClick={() => setTratamientoActivo("conducto")}
+              >
+                Conducto
+              </button>
+
+              <button
+                type="button"
+                className={`boton-tratamiento ${
+                  tratamientoActivo === "extraccion" ? "boton-activo" : ""
+                }`}
+                onClick={() => setTratamientoActivo("extraccion")}
+              >
+                Extracción
+              </button>
+            </div>
+          </div>
 
           <Odontograma
-  odontograma={formulario.odontograma || []}
-  alCambiarCara={cambiarEstadoCara}
-/>
+            odontograma={formulario.odontograma}
+            alCambiarDiente={cambiarEstadoDiente}
+          />
 
           <div className="notas-dientes mt-4">
             <h4>Notas por diente</h4>
