@@ -16,8 +16,12 @@ export default function ListaPacientes({
           {pacientes.map((paciente) => (
             <article className="paciente-item" key={paciente.id}>
               <h3>{paciente.nombre}</h3>
-              <p><strong>Cédula:</strong> {paciente.cedula}</p>
-              <p><strong>Teléfono:</strong> {paciente.telefono || "No registrado"}</p>
+              <p>
+                <strong>Cédula:</strong> {paciente.cedula}
+              </p>
+              <p>
+                <strong>Teléfono:</strong> {paciente.telefono || "No registrado"}
+              </p>
 
               <div className="acciones-paciente">
                 <button type="button" onClick={() => alCompletarFicha(paciente)}>
