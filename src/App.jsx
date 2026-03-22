@@ -71,6 +71,17 @@ function App() {
     }
   };
 
+  const guardarPresupuesto = async (pacienteActualizado) => {
+    try {
+      const actualizado = await actualizarPaciente(pacienteActualizado);
+      setPacientePresupuesto(actualizado);
+      alert("Presupuesto guardado correctamente");
+    } catch (error) {
+      console.error("Error guardando presupuesto:", error);
+      alert(error.message || "No se pudo guardar el presupuesto");
+    }
+  };
+
   const eliminarPaciente = async (id) => {
     const confirmar = window.confirm("¿Seguro que deseas eliminar este paciente?");
     if (!confirmar) return;
@@ -96,6 +107,7 @@ function App() {
           <PresupuestoPaciente
             paciente={pacientePresupuesto}
             alCerrar={cerrarPresupuesto}
+            alGuardar={guardarPresupuesto}
           />
         </main>
       ) : pacienteHistorial ? (

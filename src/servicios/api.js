@@ -1,4 +1,9 @@
-import { supabase } from "../lib/supabase";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export async function obtenerPacientes() {
   const { data, error } = await supabase
@@ -7,6 +12,24 @@ export async function obtenerPacientes() {
     .order("created_at", { ascending: false });
 
   if (error) throw error;
+  return (data || []).map(mapPacienteDesdeDB);
+}
+
+export async function buscarPacientes(texto) {
+  const termino = texto.trim();
+
+  if (!termino) {
+    return await obtenerPacientes();
+  }
+
+  const { data, error } = await supabase
+    .from("pacientes")
+    .select("*")
+    .or(`nombre.ilike.%${termino}%,cedula.ilike.%${termino}%`)
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
   return (data || []).map(mapPacienteDesdeDB);
 }
 
@@ -73,7 +96,14 @@ function mapPacienteHaciaDB(paciente) {
 
     diagnostico: paciente.diagnostico || "",
     tratamiento: paciente.tratamiento || "",
-   
+
+    tejidos_otra: paciente.tejidosOtra || "",
+    motivo_detalle_otra: paciente.motivoDetalleOtra || "",
+    habitos_clinicos_otra: paciente.habitosClinicosOtra || "",
+    enfermedades_clinicas_otra: paciente.enfermedadesClinicasOtra || "",
+
+    presupuesto_total: Number(paciente.presupuestoTotal || 0),
+    abonado: Number(paciente.abonado || 0),
   };
 }
 
@@ -104,23 +134,14 @@ function mapPacienteDesdeDB(row) {
     odontograma: row.odontograma || [],
 
     diagnostico: row.diagnostico,
-    tratamiento: row.tratamiento
+    tratamiento: row.tratamiento,
+
+    tejidosOtra: row.tejidos_otra || "",
+    motivoDetalleOtra: row.motivo_detalle_otra || "",
+    habitosClinicosOtra: row.habitos_clinicos_otra || "",
+    enfermedadesClinicasOtra: row.enfermedades_clinicas_otra || "",
+
+    presupuestoTotal: row.presupuesto_total || 0,
+    abonado: row.abonado || 0,
   };
-}
-export async function buscarPacientes(texto) {
-  const termino = texto.trim();
-
-  if (!termino) {
-    return await obtenerPacientes();
-  }
-
-  const { data, error } = await supabase
-    .from("pacientes")
-    .select("*")
-    .or(`nombre.ilike.%${termino}%,cedula.ilike.%${termino}%`)
-    .order("created_at", { ascending: false });
-
-  if (error) throw error;
-
-  return (data || []).map(mapPacienteDesdeDB);
 }

@@ -11,13 +11,63 @@ const preguntasRiesgo = [
   { key: "sinDentista", label: "No visita al dentista regularmente", puntos: 1 },
 ];
 
+const opcionesTejidos = [
+  "Liso",
+  "Rugoso",
+  "Pálido",
+  "Enrojecimiento",
+  "No representa ninguna de las anteriores",
+];
+
+const opcionesMotivoConsulta = [
+  "Emergencia",
+  "Dolor",
+  "Caries",
+  "Prótesis",
+  "Extracción",
+  "No representa ninguna de las anteriores",
+];
+
+const opcionesHabitos = [
+  "Contracciones musculares",
+  "Hábitos de mordida",
+  "Respiración bucal",
+  "Chupadores de labios",
+  "Lengua",
+  "Dedos",
+  "Bruxismo",
+  "Onicofagia",
+  "No representa ninguna de las anteriores",
+];
+
+const opcionesEnfermedadesActuales = [
+  "Sistema cardiovascular",
+  "Sistema nervioso",
+  "Sistema respiratorio",
+  "Propensión hemorrágica",
+  "Pruebas de laboratorio",
+  "Estudio radiológico",
+  "Renal",
+  "Aparato digestivo",
+  "Diabetes",
+  "Artritis",
+  "Estado general",
+  "No representa ninguna de las anteriores",
+];
+
 export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
   const [formulario, setFormulario] = useState(null);
   const [tratamientoActivo, setTratamientoActivo] = useState("sano");
 
   useEffect(() => {
     if (paciente) {
-      setFormulario(paciente);
+      setFormulario({
+        ...paciente,
+        tejidosOtra: paciente.tejidosOtra || "",
+        motivoDetalleOtra: paciente.motivoDetalleOtra || "",
+        habitosClinicosOtra: paciente.habitosClinicosOtra || "",
+        enfermedadesClinicasOtra: paciente.enfermedadesClinicasOtra || "",
+      });
     }
   }, [paciente]);
 
@@ -102,6 +152,10 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
       ),
     }));
   };
+
+  const dientesConNotas = (formulario.odontograma || []).filter((diente) =>
+    ["caries", "conducto", "extraccion"].includes(diente.estado)
+  );
 
   const manejarEnvio = (e) => {
     e.preventDefault();
@@ -201,10 +255,6 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
             onChange={manejarCambio}
             placeholder="Alergias"
           />
-        </section>
-
-        <section className="seccion-ficha">
-          <h3>Historia médica ampliada</h3>
 
           <textarea
             name="medicamentos"
@@ -217,7 +267,7 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
             name="enfermedades"
             value={formulario.enfermedades || ""}
             onChange={manejarCambio}
-            placeholder="Enfermedades sistémicas"
+            placeholder="Enfermedades o antecedentes relevantes"
           />
 
           <div className="grupo-checkbox">
@@ -243,15 +293,7 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
           <div className="bloque-opciones">
             <strong>Tejidos</strong>
             <div className="grupo-checkbox">
-              {[
-                "Esmalte",
-                "Dentina",
-                "Encía",
-                "Pulpa",
-                "Labios",
-                "Lengua",
-                "Carrillos",
-              ].map((item) => (
+              {opcionesTejidos.map((item) => (
                 <label key={item}>
                   <input
                     type="checkbox"
@@ -264,21 +306,20 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
                 </label>
               ))}
             </div>
+
+            <input
+              type="text"
+              name="tejidosOtra"
+              value={formulario.tejidosOtra || ""}
+              onChange={manejarCambio}
+              placeholder="Otra opción de tejidos"
+            />
           </div>
 
           <div className="bloque-opciones">
             <strong>Motivo de consulta</strong>
             <div className="grupo-checkbox">
-              {[
-                "Emergencia",
-                "Dolor",
-                "Lesión caries",
-                "Odontoxesis",
-                "Puente",
-                "Prostodoncia",
-                "Extracción",
-                "Amalgamas",
-              ].map((item) => (
+              {opcionesMotivoConsulta.map((item) => (
                 <label key={item}>
                   <input
                     type="checkbox"
@@ -295,21 +336,20 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
                 </label>
               ))}
             </div>
+
+            <input
+              type="text"
+              name="motivoDetalleOtra"
+              value={formulario.motivoDetalleOtra || ""}
+              onChange={manejarCambio}
+              placeholder="Otra opción de motivo de consulta"
+            />
           </div>
 
           <div className="bloque-opciones">
             <strong>Hábitos</strong>
             <div className="grupo-checkbox">
-              {[
-                "Bricomanía",
-                "Contracciones musculares",
-                "Hábitos de mordida",
-                "Respiración bucal",
-                "Chupadores de labios",
-                "Lengua",
-                "Dedos",
-                "Bruxismo",
-              ].map((item) => (
+              {opcionesHabitos.map((item) => (
                 <label key={item}>
                   <input
                     type="checkbox"
@@ -326,24 +366,20 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
                 </label>
               ))}
             </div>
+
+            <input
+              type="text"
+              name="habitosClinicosOtra"
+              value={formulario.habitosClinicosOtra || ""}
+              onChange={manejarCambio}
+              placeholder="Otro hábito"
+            />
           </div>
 
           <div className="bloque-opciones">
-            <strong>Enfermedades personales</strong>
+            <strong>Enfermedades actuales</strong>
             <div className="grupo-checkbox">
-              {[
-                "Aparato cardiovascular",
-                "Sistema nervioso",
-                "Aparato respiratorio",
-                "Propensión hemorrágica",
-                "Pruebas de laboratorio",
-                "Estudio radiológico",
-                "Renal",
-                "Aparato digestivo",
-                "Diabetes",
-                "Artritis",
-                "Estado general",
-              ].map((item) => (
+              {opcionesEnfermedadesActuales.map((item) => (
                 <label key={item}>
                   <input
                     type="checkbox"
@@ -362,6 +398,14 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
                 </label>
               ))}
             </div>
+
+            <input
+              type="text"
+              name="enfermedadesClinicasOtra"
+              value={formulario.enfermedadesClinicasOtra || ""}
+              onChange={manejarCambio}
+              placeholder="Otra enfermedad actual"
+            />
           </div>
         </section>
 
@@ -370,18 +414,18 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
 
           <div className="lista-riesgo">
             {preguntasRiesgo.map((pregunta) => (
-             <label key={pregunta.key} className="item-riesgo">
-  <input
-    type="checkbox"
-    checked={
-      formulario.riesgoCaries?.respuestas?.[pregunta.key] || false
-    }
-    onChange={(e) =>
-      manejarRespuestaRiesgo(pregunta.key, e.target.checked)
-    }
-  />
-  <span>{pregunta.label}</span>
-</label>
+              <label key={pregunta.key} className="item-riesgo">
+                <input
+                  type="checkbox"
+                  checked={
+                    formulario.riesgoCaries?.respuestas?.[pregunta.key] || false
+                  }
+                  onChange={(e) =>
+                    manejarRespuestaRiesgo(pregunta.key, e.target.checked)
+                  }
+                />
+                <span>{pregunta.label}</span>
+              </label>
             ))}
           </div>
 
@@ -489,14 +533,18 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
             odontograma={formulario.odontograma}
             alCambiarDiente={cambiarEstadoDiente}
           />
+        </section>
 
-          <div className="notas-dientes mt-4">
-            <h4>Notas por diente</h4>
+        {dientesConNotas.length > 0 && (
+          <section className="seccion-ficha">
+            <h3>Observaciones por diente tratado</h3>
 
             <div className="grid-dos">
-              {(formulario.odontograma || []).map((diente) => (
+              {dientesConNotas.map((diente) => (
                 <div key={diente.numero} className="bloque-nota-diente">
-                  <label>Diente {diente.numero}</label>
+                  <label>
+                    Diente {diente.numero} ({diente.estado})
+                  </label>
                   <textarea
                     rows="2"
                     value={diente.notas || ""}
@@ -508,8 +556,8 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
                 </div>
               ))}
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
         <section className="seccion-ficha">
           <h3>Consulta odontológica</h3>
