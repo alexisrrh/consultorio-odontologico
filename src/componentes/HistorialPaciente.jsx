@@ -3,6 +3,10 @@ import Odontograma from "./Odontograma";
 export default function HistorialPaciente({ paciente, alCerrar }) {
   if (!paciente) return null;
 
+  const dientesConNotas = (paciente.odontograma || []).filter(
+    (diente) => diente.notas && diente.notas.trim() !== ""
+  );
+
   return (
     <div className="ficha-pantalla-completa">
       <div className="cabecera-ficha cabecera-ficha-completa">
@@ -15,7 +19,7 @@ export default function HistorialPaciente({ paciente, alCerrar }) {
         </div>
 
         <div className="acciones-cabecera">
-          <button type="button" className="boton-secundario" onClick={alCerrar}>
+          <button type="button" className="boton-principal" onClick={alCerrar}>
             Volver
           </button>
         </div>
@@ -65,14 +69,19 @@ export default function HistorialPaciente({ paciente, alCerrar }) {
 
         <section className="seccion-ficha">
           <h3>Notas por diente</h3>
-          <div className="grid-dos">
-            {(paciente.odontograma || []).map((diente) => (
-              <div key={diente.numero} className="bloque-nota-diente">
-                <label>Diente {diente.numero}</label>
-                <p>{diente.notas || "Sin observaciones"}</p>
-              </div>
-            ))}
-          </div>
+
+          {dientesConNotas.length === 0 ? (
+            <p>Sin observaciones registradas.</p>
+          ) : (
+            <div className="grid-dos">
+              {dientesConNotas.map((diente) => (
+                <div key={diente.numero} className="bloque-nota-diente">
+                  <label>Diente {diente.numero}</label>
+                  <p>{diente.notas}</p>
+                </div>
+              ))}
+            </div>
+          )}
         </section>
       </div>
     </div>

@@ -1,70 +1,269 @@
+/* =========================================================
+   1. RESET Y VARIABLES DE MARCA
+========================================================= */
+
 * {
   box-sizing: border-box;
 }
 
 :root {
-  --fondo: #f3f7fb;
-  --fondo-suave: #eef4fb;
-  --tarjeta: #ffffff;
-  --borde: #dbe7f3;
-  --texto: #1e293b;
-  --texto-suave: #64748b;
-  --primario: #2563eb;
-  --primario-hover: #1d4ed8;
-  --secundario: #0f172a;
-  --sombra: 0 10px 30px rgba(15, 23, 42, 0.08);
-  --radio: 20px;
+  --verde-oscuro: #003f43;
+  --verde-profundo: #0b5f68;
+  --turquesa: #1399a6;
+  --turquesa-hover: #0f7f8a;
+  --turquesa-claro: #7fc3c3;
+  --menta: #a8d1cf;
+
+  --texto: #17323a;
+  --texto-suave: #5d7278;
+
+  --blanco-panel: rgba(143, 228, 243, 0.418);
+  --blanco-panel-fuerte: rgba(74, 179, 187, 0.6);
+  --borde-panel: rgba(255, 255, 255, 0.26);
+
+  --sombra-suave: 0 10px 30px rgba(77, 94, 97, 0.1);
+  --sombra-media: 0 12px 24px rgba(0, 45, 52, 0.16);
+
+  --radio-xl: 24px;
+  --radio-lg: 18px;
+  --radio-md: 14px;
 }
 
-/* BASE */
+
+/* =========================================================
+   2. BASE GENERAL Y FONDO
+========================================================= */
+
 body {
   margin: 0;
   font-family: Inter, Arial, sans-serif;
-  background:
-    radial-gradient(circle at top left, #dbeafe 0, transparent 25%),
-    radial-gradient(circle at top right, #e0f2fe 0, transparent 20%),
-    linear-gradient(180deg, #f8fbff 0%, #f3f7fb 100%);
   color: var(--texto);
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.48)),
+    url("./assets/fondo.jpeg") no-repeat center center fixed;
+  background-size: cover;
 }
 
-#root {
-  min-height: 100vh;
-}
-
+#root,
 .app {
   min-height: 100vh;
 }
 
-/* ENCABEZADO */
-.encabezado {
+
+/* =========================================================
+   3. BARRA SUPERIOR / HEADER PROFESIONAL
+========================================================= */
+
+.barra-superior {
   position: sticky;
   top: 0;
-  z-index: 10;
-  padding: 22px 0;
-  background: rgba(255, 255, 255, 0.75);
+  z-index: 20;
+  padding: 12px 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 63, 67, 0.92),
+    rgba(11, 95, 104, 0.88),
+    rgba(19, 153, 166, 0.82)
+  );
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(219, 231, 243, 0.9);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.14);
 }
 
-.encabezado > div {
-  width: min(1200px, calc(100% - 32px));
+.barra-superior__contenido {
+  width: min(1240px, calc(100% - 32px));
   margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
 }
 
-.encabezado h1 {
+.barra-superior__logos {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.barra-superior__logos img {
+  height: 52px;
+  object-fit: contain;
+  opacity: 0.98;
+}
+
+.barra-superior__titulo {
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.barra-superior__titulo h1 {
   margin: 0;
-  font-size: 2rem;
-  color: var(--secundario);
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.1;
 }
 
-.encabezado p {
-  margin: 8px 0 0;
-  color: var(--texto-suave);
+.barra-superior__titulo p {
+  margin: 4px 0 0;
+  font-size: 0.94rem;
+  color: rgba(255, 255, 255, 0.84);
 }
 
-/* LAYOUT */
+
+/* =========================================================
+   4. BOTONES MODERNOS
+========================================================= */
+/* =========================================================
+   BOTONES PROFESIONALES
+========================================================= */
+
+button {
+  width: auto;
+  font: inherit;
+  border: none;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.boton-principal {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 160px;
+  padding: 10px 16px;
+
+  border-radius: 14px;
+
+  background: linear-gradient(135deg, #0b5f68, #1399a6);
+  color: white;
+
+  font-size: 0.92rem;
+  font-weight: 700;
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
+}
+.acciones-paciente {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.acciones-paciente button {
+  width: 100%;
+  min-width: 0;
+}
+
+.boton-principal,
+.boton-secundario,
+.boton-peligro {
+  height: 42px;
+  padding: 0 16px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+}
+
+.boton-principal {
+  background: linear-gradient(135deg, #0b5f68, #1399a6);
+  color: white;
+  box-shadow: 0 6px 14px rgba(11, 95, 104, 0.22);
+}
+
+.boton-principal:hover {
+  background: linear-gradient(135deg, #08474f, #0f7f8a);
+}
+
+.boton-secundario {
+  background: rgba(255, 255, 255, 0.85);
+  color: #0b5f68;
+  border: 1px solid rgba(19, 153, 166, 0.22);
+}
+
+.boton-secundario:hover {
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.boton-peligro {
+  background: linear-gradient(135deg, #b44b5e, #d35d6e);
+  color: white;
+  box-shadow: 0 6px 14px rgba(180, 75, 94, 0.22);
+}
+
+.boton-peligro:hover {
+  background: linear-gradient(135deg, #9f3d50, #c94c5e);
+}
+/* Botón secundario */
+.boton-secundario {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.78);
+  color: #0b5f68;
+  border: 1px solid rgba(19, 153, 166, 0.22);
+  font-size: 0.92rem;
+  font-weight: 700;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 4px 10px rgba(0, 45, 52, 0.06);
+}
+
+.boton-secundario:hover {
+  background: rgba(255, 255, 255, 0.92);
+  transform: translateY(-1px);
+}
+
+/* Botón peligro */
+.boton-peligro {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+  padding: 10px 15px;
+  border-radius: 14px;
+  background: #b44b5e;
+  color: white;
+  font-size: 0.92rem;
+  font-weight: 700;
+  box-shadow: 0 8px 16px rgba(180, 75, 94, 0.18);
+}
+
+.boton-peligro:hover {
+  background: #9f3d50;
+  transform: translateY(-1px);
+}
+
+/* Contenedores de acciones */
+.acciones-paciente,
+.barra-acciones-ficha,
+.acciones-cabecera,
+.acciones-riesgo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+/* Botón principal del formulario ancho completo */
+.boton-formulario {
+  width: 100%;
+  justify-content: center;
+}
+/* =========================================================
+   5. CONTENEDOR PRINCIPAL
+========================================================= */
+
 .contenedor-principal {
-  width: min(1200px, calc(100% - 32px));
+  width: min(1240px, calc(100% - 32px));
   margin: 28px auto;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -77,45 +276,98 @@ body {
   gap: 24px;
 }
 
-/* TARJETAS */
+
+/* =========================================================
+   6. PANELES PRINCIPALES (MÁS TRANSLÚCIDOS)
+========================================================= */
+
 .tarjeta {
-  background: var(--tarjeta);
-  border: 1px solid var(--borde);
-  border-radius: var(--radio);
+  background: var(--blanco-panel);
+  border: 1px solid var(--borde-panel);
+  border-radius: var(--radio-xl);
   padding: 24px;
-  box-shadow: var(--sombra);
+  box-shadow: var(--sombra-suave);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 .tarjeta h2 {
-  margin-bottom: 18px;
-  font-size: 1.3rem;
+  margin: 0 0 18px;
+  font-size: 1.28rem;
+  color: var(--verde-oscuro);
 }
 
-/* FORMULARIOS */
+.paciente-item {
+  padding: 16px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(8px);
+}
+
+.lista-pacientes {
+  display: grid;
+  gap: 12px;
+}
+
+
+/* =========================================================
+   7. TIPOGRAFÍA Y TEXTOS
+========================================================= */
+
+.etiqueta-superior {
+  margin: 0 0 8px;
+  font-size: 0.88rem;
+  color: var(--turquesa);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.titulo-ficha-completa,
+.seccion-ficha h3,
+.tarjeta h2 {
+  color: var(--verde-oscuro);
+}
+
+.subtexto-ficha,
+.encabezado p,
+.barra-superior__titulo p {
+  color: var(--texto-suave);
+}
+
+
+/* =========================================================
+   8. FORMULARIOS E INPUTS
+========================================================= */
+
 .formulario {
   display: grid;
   gap: 14px;
 }
 
 input,
-textarea,
-button {
+textarea {
   width: 100%;
   font: inherit;
-}
-
-input,
-textarea {
-  border: 1px solid #cbd5e1;
-  padding: 14px;
+  border: 1px solid rgba(19, 153, 166, 0.18);
+  padding: 13px 14px;
   border-radius: 14px;
   outline: none;
+  background: rgba(255, 255, 255, 0.66);
+  color: var(--texto);
+  backdrop-filter: blur(6px);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6e7f86;
 }
 
 input:focus,
 textarea:focus {
-  border-color: var(--primario);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  border-color: var(--turquesa);
+  box-shadow: 0 0 0 3px rgba(19, 153, 166, 0.12);
 }
 
 textarea {
@@ -123,49 +375,11 @@ textarea {
   resize: vertical;
 }
 
-button {
-  border: none;
-  border-radius: 14px;
-  padding: 14px;
-  background: var(--primario);
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
-}
 
-button:hover {
-  background: var(--primario-hover);
-}
+/* =========================================================
+   9. FICHA DEL PACIENTE
+========================================================= */
 
-.boton-secundario {
-  background: #64748b;
-}
-
-.boton-secundario:hover {
-  background: #475569;
-}
-
-/* LISTA */
-.lista-pacientes {
-  display: grid;
-  gap: 12px;
-}
-
-.paciente-item {
-  padding: 16px;
-  border-radius: 16px;
-  background: #f8fbff;
-  border: 1px solid #dbeafe;
-}
-
-.acciones-paciente {
-  display: flex;
-  gap: 10px;
-  margin-top: 12px;
-}
-
-/* FICHA */
 .contenedor-ficha-completa {
   width: min(1200px, calc(100% - 32px));
   margin: 28px auto;
@@ -183,29 +397,14 @@ button:hover {
   margin-bottom: 22px;
 }
 
-.etiqueta-superior {
-  margin: 0 0 8px;
-  font-size: 0.9rem;
-  color: var(--primario);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
 .titulo-ficha-completa {
   margin: 0;
   font-size: 2rem;
-  color: var(--secundario);
 }
 
 .subtexto-ficha {
   margin: 10px 0 0;
-  color: var(--texto-suave);
   line-height: 1.5;
-}
-
-.acciones-cabecera {
-  min-width: 140px;
 }
 
 .formulario-ficha-completa {
@@ -215,20 +414,19 @@ button:hover {
 }
 
 .seccion-ficha {
-  border: 1px solid var(--borde);
-  border-radius: 18px;
-  padding: 18px;
-  background: #fff;
-  margin-bottom: 0;
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  border-radius: 22px;
+  padding: 22px;
+  background: var(--blanco-panel-fuerte);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+  backdrop-filter: blur(10px);
 }
 
-.seccion-ficha h3 {
-  margin: 0 0 12px;
-  color: var(--secundario);
-}
 
-/* GRID */
+/* =========================================================
+   10. GRIDS
+========================================================= */
+
 .grid-dos {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -241,89 +439,128 @@ button:hover {
   gap: 12px;
 }
 
-/* CHECKBOX */
+
+/* =========================================================
+   11. CHIPS / CHECKBOX CLÍNICOS
+========================================================= */
+
 .bloque-opciones {
-  margin-bottom: 16px;
+  margin-bottom: 24px;
+}
+
+.bloque-opciones strong {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 1rem;
+  color: var(--verde-oscuro);
 }
 
 .grupo-checkbox {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
+  gap: 12px;
 }
 
 .grupo-checkbox label {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  background: #fff;
-  border: 1px solid #dbe7f3;
+  gap: 10px;
+  min-height: 48px;
+  padding: 10px 15px;
+  border: 1px solid rgba(19, 153, 166, 0.18);
   border-radius: 999px;
-  padding: 8px 12px;
-  font-size: 0.9rem;
+  background: rgba(255, 255, 255, 0.46);
+  color: var(--texto);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  backdrop-filter: blur(8px);
 }
 
-/* RIESGO */
+.grupo-checkbox label:hover {
+  border-color: rgba(19, 153, 166, 0.36);
+  background: rgba(255, 255, 255, 0.62);
+  transform: translateY(-1px);
+}
+
+.grupo-checkbox input[type="checkbox"] {
+  width: 17px;
+  height: 17px;
+  margin: 0;
+  accent-color: var(--turquesa);
+}
+
+
+/* =========================================================
+   12. RIESGO DE CARIES
+========================================================= */
+
 .lista-riesgo {
   display: grid;
-  gap: 8px;
+  gap: 12px;
 }
 
 .item-riesgo {
-  display: flex;
+  display: grid;
+  grid-template-columns: 28px 1fr;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: #f8fbff;
-  border: 1px solid #dbeafe;
+  gap: 14px;
+  padding: 15px 17px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.46);
+  border: 1px solid rgba(19, 153, 166, 0.14);
+  min-height: 62px;
+  backdrop-filter: blur(8px);
 }
 
-.acciones-riesgo {
-  margin-top: 14px;
-  display: flex;
-  justify-content: flex-start;
+.item-riesgo:hover {
+  background: rgba(255, 255, 255, 0.58);
+  border-color: rgba(19, 153, 166, 0.26);
 }
 
-.acciones-riesgo button {
-  width: auto;
-  min-width: 170px;
+.item-riesgo input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--turquesa);
 }
 
 .resultado-riesgo {
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 12px;
+  margin-top: 16px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid transparent;
 }
 
 .resultado-riesgo.bajo {
-  background: #dcfce7;
+  background: rgba(220, 252, 231, 0.82);
+  border-color: #86efac;
 }
 
 .resultado-riesgo.medio {
-  background: #fef3c7;
+  background: rgba(254, 243, 199, 0.88);
+  border-color: #fcd34d;
 }
 
 .resultado-riesgo.alto {
-  background: #fee2e2;
+  background: rgba(254, 226, 226, 0.88);
+  border-color: #fca5a5;
 }
 
 .mensaje-riesgo-clinico {
-  margin-top: 10px;
-  color: var(--texto);
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-left: 4px solid var(--turquesa);
+  background: rgba(255, 255, 255, 0.46);
+  border-radius: 10px;
+  color: #334155;
+  line-height: 1.5;
 }
 
-/* BOTONES FINALES */
-.barra-acciones-ficha {
-  display: flex;
-  gap: 10px;
-  margin-top: 16px;
-}
 
-/* ========================= */
-/* SELECTOR DE TRATAMIENTO */
-/* ========================= */
+/* =========================================================
+   13. SELECTOR DE TRATAMIENTO
+========================================================= */
 
 .selector-tratamiento {
   margin: 18px 0 24px;
@@ -334,7 +571,7 @@ button:hover {
   margin: 0 0 14px;
   font-size: 18px;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--verde-oscuro);
 }
 
 .botones-tratamiento {
@@ -347,57 +584,37 @@ button:hover {
 
 .boton-tratamiento {
   width: auto !important;
-  min-width: 120px;
-  max-width: 160px;
-  padding: 10px 18px;
-  border: 1px solid #cbd5e1;
+  min-width: 112px;
+  max-width: 150px;
+  padding: 9px 15px;
+  border: 1px solid rgba(19, 153, 166, 0.18);
   border-radius: 12px;
-  background: #ffffff;
-  color: #1e293b;
-  font-size: 15px;
+  background: rgba(255, 255, 255, 0.62);
+  color: var(--verde-oscuro);
+  font-size: 0.92rem;
   font-weight: 700;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
-  transition: all 0.18s ease;
+  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(8px);
 }
 
 .boton-tratamiento:hover {
-  background: #ffffff;
+  background: rgba(255, 255, 255, 0.78);
   transform: translateY(-1px);
-  border-color: #94a3b8;
-}
-
-.boton-tratamiento:active {
-  transform: translateY(1px);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.15);
+  border-color: rgba(19, 153, 166, 0.36);
 }
 
 .boton-tratamiento.boton-activo {
-  background: #2563eb;
-  color: #ffffff;
-  border-color: #1d4ed8;
-  transform: translateY(2px);
-  box-shadow:
-    inset 0 4px 10px rgba(0, 0, 0, 0.18),
-    0 1px 2px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, var(--verde-profundo), var(--turquesa));
+  color: white;
+  border-color: transparent;
+  transform: translateY(1px);
 }
 
-.boton-tratamiento.boton-activo:hover {
-  background: #2563eb;
-  transform: translateY(2px);
-}
 
-.selector-tratamiento .botones-tratamiento button {
-  width: auto !important;
-  display: inline-flex !important;
-  justify-content: center;
-  align-items: center;
-  flex: 0 0 auto !important;
-}
-
-/* ========================= */
-/* NOTAS POR DIENTE */
-/* ========================= */
+/* =========================================================
+   14. NOTAS POR DIENTE
+========================================================= */
 
 .notas-dientes {
   margin-top: 20px;
@@ -415,16 +632,17 @@ button:hover {
 
 .bloque-nota-diente label {
   font-weight: 600;
-  color: var(--secundario);
+  color: var(--verde-oscuro);
 }
 
 .bloque-nota-diente textarea {
   min-height: 80px;
 }
 
-/* ========================= */
-/* ODONTOGRAMA */
-/* ========================= */
+
+/* =========================================================
+   15. ODONTOGRAMA
+========================================================= */
 
 .odontograma-realista {
   margin-top: 18px;
@@ -434,9 +652,10 @@ button:hover {
   position: relative;
   padding: 50px 40px 60px;
   border-radius: 28px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
-  border: 1px solid #dbe7f3;
+  background: rgba(255, 255, 255, 0.54);
+  border: 1px solid rgba(255, 255, 255, 0.26);
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(12px);
   overflow: visible;
 }
 
@@ -504,87 +723,55 @@ button:hover {
   margin-right: 10px;
 }
 
-/* Curva superior */
+/* Curvatura superior */
 .arcada-superior .slot:nth-child(1),
-.arcada-superior .slot:nth-child(16) {
-  transform: translateY(42px);
-}
+.arcada-superior .slot:nth-child(16) { transform: translateY(42px); }
 
 .arcada-superior .slot:nth-child(2),
-.arcada-superior .slot:nth-child(15) {
-  transform: translateY(32px);
-}
+.arcada-superior .slot:nth-child(15) { transform: translateY(32px); }
 
 .arcada-superior .slot:nth-child(3),
-.arcada-superior .slot:nth-child(14) {
-  transform: translateY(24px);
-}
+.arcada-superior .slot:nth-child(14) { transform: translateY(24px); }
 
 .arcada-superior .slot:nth-child(4),
-.arcada-superior .slot:nth-child(13) {
-  transform: translateY(16px);
-}
+.arcada-superior .slot:nth-child(13) { transform: translateY(16px); }
 
 .arcada-superior .slot:nth-child(5),
-.arcada-superior .slot:nth-child(12) {
-  transform: translateY(10px);
-}
+.arcada-superior .slot:nth-child(12) { transform: translateY(10px); }
 
 .arcada-superior .slot:nth-child(6),
-.arcada-superior .slot:nth-child(11) {
-  transform: translateY(6px);
-}
+.arcada-superior .slot:nth-child(11) { transform: translateY(6px); }
 
 .arcada-superior .slot:nth-child(7),
-.arcada-superior .slot:nth-child(10) {
-  transform: translateY(2px);
-}
+.arcada-superior .slot:nth-child(10) { transform: translateY(2px); }
 
 .arcada-superior .slot:nth-child(8),
-.arcada-superior .slot:nth-child(9) {
-  transform: translateY(0);
-}
+.arcada-superior .slot:nth-child(9) { transform: translateY(0); }
 
-/* Curva inferior */
+/* Curvatura inferior */
 .arcada-inferior .slot:nth-child(1),
-.arcada-inferior .slot:nth-child(16) {
-  transform: translateY(-42px);
-}
+.arcada-inferior .slot:nth-child(16) { transform: translateY(-42px); }
 
 .arcada-inferior .slot:nth-child(2),
-.arcada-inferior .slot:nth-child(15) {
-  transform: translateY(-32px);
-}
+.arcada-inferior .slot:nth-child(15) { transform: translateY(-32px); }
 
 .arcada-inferior .slot:nth-child(3),
-.arcada-inferior .slot:nth-child(14) {
-  transform: translateY(-24px);
-}
+.arcada-inferior .slot:nth-child(14) { transform: translateY(-24px); }
 
 .arcada-inferior .slot:nth-child(4),
-.arcada-inferior .slot:nth-child(13) {
-  transform: translateY(-16px);
-}
+.arcada-inferior .slot:nth-child(13) { transform: translateY(-16px); }
 
 .arcada-inferior .slot:nth-child(5),
-.arcada-inferior .slot:nth-child(12) {
-  transform: translateY(-10px);
-}
+.arcada-inferior .slot:nth-child(12) { transform: translateY(-10px); }
 
 .arcada-inferior .slot:nth-child(6),
-.arcada-inferior .slot:nth-child(11) {
-  transform: translateY(-6px);
-}
+.arcada-inferior .slot:nth-child(11) { transform: translateY(-6px); }
 
 .arcada-inferior .slot:nth-child(7),
-.arcada-inferior .slot:nth-child(10) {
-  transform: translateY(-2px);
-}
+.arcada-inferior .slot:nth-child(10) { transform: translateY(-2px); }
 
 .arcada-inferior .slot:nth-child(8),
-.arcada-inferior .slot:nth-child(9) {
-  transform: translateY(0);
-}
+.arcada-inferior .slot:nth-child(9) { transform: translateY(0); }
 
 /* Dientes */
 .diente-svg {
@@ -613,7 +800,7 @@ button:hover {
 
 .diente-svg:hover svg {
   transform: scale(1.25);
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.25));
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.22));
 }
 
 .diente-svg::before {
@@ -630,7 +817,7 @@ button:hover {
   margin-top: 4px;
   font-size: 12px;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--verde-oscuro);
 }
 
 .diente-svg path {
@@ -639,7 +826,7 @@ button:hover {
 
 .diente-svg path:hover {
   filter: brightness(1.05);
-  stroke: #2563eb;
+  stroke: var(--turquesa);
   stroke-width: 2.4;
   cursor: pointer;
 }
@@ -654,65 +841,19 @@ button:hover {
   margin-right: 4px;
 }
 
-/* RESPONSIVE */
-@media (max-width: 1100px) {
-  .odontograma-canvas {
-    overflow-x: auto;
-  }
-}
 
-@media (max-width: 980px) {
-  .contenedor-principal {
-    grid-template-columns: 1fr;
-  }
-
-  .grid-dos,
-  .grid-tres {
-    grid-template-columns: 1fr;
-  }
-
-  .barra-acciones-ficha,
-  .acciones-paciente,
-  .cabecera-ficha-completa {
-    flex-direction: column;
-  }
-}
-
-@media (max-width: 640px) {
-  .encabezado h1 {
-    font-size: 1.7rem;
-  }
-
-  .titulo-ficha-completa {
-    font-size: 1.6rem;
-  }
-
-  .odontograma-canvas {
-    padding: 40px 18px 50px;
-  }
-
-  .diente-svg {
-    min-width: 60px;
-    transform: scale(1);
-  }
-
-  .arcada-superior .diente-svg {
-    transform: rotate(180deg) scale(1);
-  }
-
-  .boton-tratamiento {
-    min-width: 100px;
-    padding: 9px 14px;
-    font-size: 14px;
-  }
-}
+/* =========================================================
+   16. PRESUPUESTO
+========================================================= */
 
 .presupuesto-container {
-  width: min(900px, 100%);
-  margin: 20px auto;
-  background: white;
+  width: min(1000px, 100%);
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.56);
   padding: 30px;
-  border-radius: 16px;
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+  box-shadow: var(--sombra-media);
 }
 
 .presupuesto-header {
@@ -726,41 +867,21 @@ button:hover {
 
 .presupuesto-seccion h2 {
   margin-bottom: 8px;
-  border-bottom: 2px solid #e2e8f0;
+  border-bottom: 2px solid rgba(19, 153, 166, 0.18);
   padding-bottom: 4px;
 }
 
 .presupuesto-footer {
   margin-top: 30px;
   font-size: 0.9rem;
-  color: #64748b;
+  color: var(--texto-suave);
   text-align: center;
 }
-.presupuesto-container {
-  width: min(1000px, 100%);
-  margin: 0 auto;
-}
 
-@media print {
-  .acciones-cabecera,
-  .barra-acciones-ficha,
-  .encabezado {
-    display: none !important;
-  }
 
-  body {
-    background: white !important;
-  }
-
-  .presupuesto-container,
-  .seccion-ficha {
-    box-shadow: none !important;
-    border: 1px solid #ddd !important;
-  }
-}
-/* ========================= */
-/* ODONTOGRAMA DENTRO DEL PRESUPUESTO */
-/* ========================= */
+/* =========================================================
+   17. ODONTOGRAMA DENTRO DEL PRESUPUESTO
+========================================================= */
 
 .presupuesto-container .odontograma-realista {
   margin-top: 12px;
@@ -773,7 +894,7 @@ button:hover {
 
 .presupuesto-container .arcada {
   gap: 2px;
-  min-width: 860px; /* evita que se rompa la forma */
+  min-width: 860px;
 }
 
 .presupuesto-container .arcada-superior {
@@ -822,257 +943,88 @@ button:hover {
   height: 62px;
 }
 
-/* Ajuste de curvatura en presupuesto */
+/* Curvatura presupuesto */
 .presupuesto-container .arcada-superior .slot:nth-child(1),
-.presupuesto-container .arcada-superior .slot:nth-child(16) {
-  transform: translateY(28px);
-}
+.presupuesto-container .arcada-superior .slot:nth-child(16) { transform: translateY(28px); }
+
 .presupuesto-container .arcada-superior .slot:nth-child(2),
-.presupuesto-container .arcada-superior .slot:nth-child(15) {
-  transform: translateY(22px);
-}
+.presupuesto-container .arcada-superior .slot:nth-child(15) { transform: translateY(22px); }
+
 .presupuesto-container .arcada-superior .slot:nth-child(3),
-.presupuesto-container .arcada-superior .slot:nth-child(14) {
-  transform: translateY(16px);
-}
+.presupuesto-container .arcada-superior .slot:nth-child(14) { transform: translateY(16px); }
+
 .presupuesto-container .arcada-superior .slot:nth-child(4),
-.presupuesto-container .arcada-superior .slot:nth-child(13) {
-  transform: translateY(11px);
-}
+.presupuesto-container .arcada-superior .slot:nth-child(13) { transform: translateY(11px); }
+
 .presupuesto-container .arcada-superior .slot:nth-child(5),
-.presupuesto-container .arcada-superior .slot:nth-child(12) {
-  transform: translateY(7px);
-}
+.presupuesto-container .arcada-superior .slot:nth-child(12) { transform: translateY(7px); }
+
 .presupuesto-container .arcada-superior .slot:nth-child(6),
-.presupuesto-container .arcada-superior .slot:nth-child(11) {
-  transform: translateY(4px);
-}
+.presupuesto-container .arcada-superior .slot:nth-child(11) { transform: translateY(4px); }
+
 .presupuesto-container .arcada-superior .slot:nth-child(7),
-.presupuesto-container .arcada-superior .slot:nth-child(10) {
-  transform: translateY(1px);
-}
+.presupuesto-container .arcada-superior .slot:nth-child(10) { transform: translateY(1px); }
+
 .presupuesto-container .arcada-superior .slot:nth-child(8),
-.presupuesto-container .arcada-superior .slot:nth-child(9) {
-  transform: translateY(0);
-}
+.presupuesto-container .arcada-superior .slot:nth-child(9) { transform: translateY(0); }
 
 .presupuesto-container .arcada-inferior .slot:nth-child(1),
-.presupuesto-container .arcada-inferior .slot:nth-child(16) {
-  transform: translateY(-28px);
-}
+.presupuesto-container .arcada-inferior .slot:nth-child(16) { transform: translateY(-28px); }
+
 .presupuesto-container .arcada-inferior .slot:nth-child(2),
-.presupuesto-container .arcada-inferior .slot:nth-child(15) {
-  transform: translateY(-22px);
-}
+.presupuesto-container .arcada-inferior .slot:nth-child(15) { transform: translateY(-22px); }
+
 .presupuesto-container .arcada-inferior .slot:nth-child(3),
-.presupuesto-container .arcada-inferior .slot:nth-child(14) {
-  transform: translateY(-16px);
-}
+.presupuesto-container .arcada-inferior .slot:nth-child(14) { transform: translateY(-16px); }
+
 .presupuesto-container .arcada-inferior .slot:nth-child(4),
-.presupuesto-container .arcada-inferior .slot:nth-child(13) {
-  transform: translateY(-11px);
-}
+.presupuesto-container .arcada-inferior .slot:nth-child(13) { transform: translateY(-11px); }
+
 .presupuesto-container .arcada-inferior .slot:nth-child(5),
-.presupuesto-container .arcada-inferior .slot:nth-child(12) {
-  transform: translateY(-7px);
-}
+.presupuesto-container .arcada-inferior .slot:nth-child(12) { transform: translateY(-7px); }
+
 .presupuesto-container .arcada-inferior .slot:nth-child(6),
-.presupuesto-container .arcada-inferior .slot:nth-child(11) {
-  transform: translateY(-4px);
-}
+.presupuesto-container .arcada-inferior .slot:nth-child(11) { transform: translateY(-4px); }
+
 .presupuesto-container .arcada-inferior .slot:nth-child(7),
-.presupuesto-container .arcada-inferior .slot:nth-child(10) {
-  transform: translateY(-1px);
-}
+.presupuesto-container .arcada-inferior .slot:nth-child(10) { transform: translateY(-1px); }
+
 .presupuesto-container .arcada-inferior .slot:nth-child(8),
-.presupuesto-container .arcada-inferior .slot:nth-child(9) {
-  transform: translateY(0);
+.presupuesto-container .arcada-inferior .slot:nth-child(9) { transform: translateY(0); }
+
+
+/* =========================================================
+   18. RESPONSIVE
+========================================================= */
+
+@media (max-width: 1100px) {
+  .odontograma-canvas {
+    overflow-x: auto;
+  }
 }
 
 @media (max-width: 980px) {
+  .contenedor-principal {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-dos,
+  .grid-tres {
+    grid-template-columns: 1fr;
+  }
+
+  .barra-acciones-ficha,
+  .acciones-paciente,
+  .cabecera-ficha-completa,
+  .barra-superior__contenido {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .presupuesto-container .odontograma-canvas {
     overflow-x: auto;
   }
 }
-/* ========================= */
-/* MEJORA VISUAL EXAMEN CLÍNICO Y RIESGO */
-/* ========================= */
-
-.bloque-opciones {
-  margin-bottom: 24px;
-}
-
-.bloque-opciones strong {
-  display: block;
-  margin-bottom: 14px;
-  font-size: 1rem;
-  color: #0f172a;
-}
-
-/* Contenedor de opciones tipo chip */
-.grupo-checkbox {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 0;
-}
-
-/* Cada opción */
-.grupo-checkbox label {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  min-height: 50px;
-  padding: 10px 16px;
-  border: 1px solid #dbe7f3;
-  border-radius: 999px;
-  background: #f8fbff;
-  color: #1e293b;
-  font-size: 0.98rem;
-  line-height: 1.2;
-  cursor: pointer;
-  transition: all 0.18s ease;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.03);
-}
-
-.grupo-checkbox label:hover {
-  border-color: #93c5fd;
-  background: #eff6ff;
-  transform: translateY(-1px);
-}
-
-/* Checkbox */
-.grupo-checkbox input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  accent-color: #2563eb;
-  flex: 0 0 auto;
-}
-
-/* ========================= */
-/* RIESGO DE CARIES MEJORADO */
-/* ========================= */
-
-.lista-riesgo {
-  display: grid;
-  gap: 12px;
-}
-
-.item-riesgo {
-  display: grid;
-  grid-template-columns: 28px 1fr;
-  align-items: center;
-  gap: 14px;
-  padding: 16px 18px;
-  border-radius: 18px;
-  background: #f8fbff;
-  border: 1px solid #dbeafe;
-  min-height: 64px;
-  transition: all 0.18s ease;
-}
-
-.item-riesgo:hover {
-  background: #eff6ff;
-  border-color: #93c5fd;
-}
-
-.item-riesgo input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  margin: 0;
-  accent-color: #2563eb;
-}
-
-.item-riesgo span,
-.item-riesgo {
-  color: #0f172a;
-  font-size: 1rem;
-  line-height: 1.35;
-}
-
-/* Botón de riesgo */
-.acciones-riesgo {
-  margin-top: 16px;
-  display: flex;
-  justify-content: flex-start;
-}
-
-.acciones-riesgo button {
-  width: auto;
-  min-width: 180px;
-  padding: 12px 22px;
-  border-radius: 14px;
-  font-size: 1rem;
-}
-
-/* ========================= */
-/* RESULTADO DE RIESGO MEJORADO */
-/* ========================= */
-
-.resultado-riesgo {
-  margin-top: 16px;
-  padding: 16px 18px;
-  border-radius: 16px;
-  border: 1px solid transparent;
-}
-
-.resultado-riesgo strong {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 1rem;
-}
-
-.resultado-riesgo p {
-  margin: 4px 0;
-}
-
-.resultado-riesgo.bajo {
-  background: #dcfce7;
-  border-color: #86efac;
-}
-
-.resultado-riesgo.medio {
-  background: #fef3c7;
-  border-color: #fcd34d;
-}
-
-.resultado-riesgo.alto {
-  background: #fee2e2;
-  border-color: #fca5a5;
-}
-
-.mensaje-riesgo-clinico {
-  margin-top: 12px;
-  padding: 12px 14px;
-  border-left: 4px solid #2563eb;
-  background: #f8fbff;
-  border-radius: 10px;
-  color: #334155;
-  line-height: 1.5;
-}
-
-/* ========================= */
-/* SECCIONES MÁS ELEGANTES */
-/* ========================= */
-
-.seccion-ficha h3 {
-  margin: 0 0 16px;
-  color: #0f172a;
-  font-size: 1.45rem;
-}
-
-.seccion-ficha {
-  border: 1px solid var(--borde);
-  border-radius: 20px;
-  padding: 22px;
-  background: #fff;
-  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
-}
-
-/* ========================= */
-/* RESPONSIVE */
-/* ========================= */
 
 @media (max-width: 768px) {
   .grupo-checkbox {
@@ -1089,4 +1041,85 @@ button:hover {
     grid-template-columns: 24px 1fr;
     padding: 14px;
   }
+}
+
+@media (max-width: 640px) {
+  .barra-superior__titulo h1 {
+    font-size: 1.2rem;
+  }
+
+  .titulo-ficha-completa {
+    font-size: 1.6rem;
+  }
+
+  .odontograma-canvas {
+    padding: 40px 18px 50px;
+  }
+
+  .diente-svg {
+    min-width: 60px;
+    transform: scale(1);
+  }
+
+  .arcada-superior .diente-svg {
+    transform: rotate(180deg) scale(1);
+  }
+
+  .boton-tratamiento {
+    min-width: 100px;
+    padding: 9px 14px;
+    font-size: 14px;
+  }
+
+  .barra-superior__logos {
+    justify-content: center;
+  }
+}
+
+
+/* =========================================================
+   19. IMPRESIÓN
+========================================================= */
+
+@media print {
+  .acciones-cabecera,
+  .barra-acciones-ficha,
+  .encabezado,
+  .barra-superior {
+    display: none !important;
+  }
+
+  body {
+    background: white !important;
+  }
+
+  .presupuesto-container,
+  .seccion-ficha {
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+    backdrop-filter: none !important;
+    background: white !important;
+  }
+}
+
+.paciente-item {
+  padding: 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(8px);
+}
+
+.paciente-item h3,
+.paciente-item h4,
+.paciente-item strong {
+  color: #0b4f59;
+}
+.boton-principal {
+  letter-spacing: 0.3px;
+}
+
+.boton-formulario {
+  width: 100%;
+  margin-top: 10px;
 }

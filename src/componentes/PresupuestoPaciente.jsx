@@ -56,7 +56,7 @@ export default function PresupuestoPaciente({ paciente, alCerrar, alGuardar }) {
         </div>
 
         <div className="acciones-cabecera">
-          <button type="button" className="boton-secundario" onClick={alCerrar}>
+          <button type="button" className="boton-principal"  onClick={alCerrar}>
             Volver
           </button>
         </div>
@@ -168,11 +168,11 @@ export default function PresupuestoPaciente({ paciente, alCerrar, alGuardar }) {
         </section>
 
         <div className="barra-acciones-ficha">
-          <button type="button" className="boton-secundario" onClick={alCerrar}>
+          <button type="button" className="boton-principal"  onClick={alCerrar}>
             Volver
           </button>
 
-          <button type="button" className="boton-secundario" onClick={manejarGuardar}>
+          <button type="button" className="boton-principal"  onClick={manejarGuardar}>
             Guardar presupuesto
           </button>
 

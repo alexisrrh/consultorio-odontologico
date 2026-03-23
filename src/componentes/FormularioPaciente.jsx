@@ -110,7 +110,7 @@ export default function FormularioPaciente({ alGuardar }) {
           onChange={manejarCambio}
         />
 
-        <button type="submit">Registrar paciente</button>
+        <button type="submit" className="boton-principal">Registrar paciente</button>
       </form>
     </div>
   );

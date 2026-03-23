@@ -1,6 +1,5 @@
 :root {
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  --color-principal: #1399a6;
+  --color-principal-hover: #0f7f8a;
+  --color-secundario: #0b5f68;
 }

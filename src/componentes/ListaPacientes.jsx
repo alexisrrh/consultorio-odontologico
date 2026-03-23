@@ -24,13 +24,13 @@ export default function ListaPacientes({
               </p>
 
               <div className="acciones-paciente">
-                <button type="button" onClick={() => alCompletarFicha(paciente)}>
+                <button type="button" className="boton-principal" onClick={() => alCompletarFicha(paciente)}>
                   Completar ficha
                 </button>
 
                 <button
                   type="button"
-                  className="boton-secundario"
+                 className="boton-principal" 
                   onClick={() => alVerHistorial(paciente)}
                 >
                   Ver historial
@@ -38,7 +38,7 @@ export default function ListaPacientes({
 
                 <button
                   type="button"
-                  className="boton-secundario"
+                 className="boton-principal" 
                   onClick={() => alVerPresupuesto(paciente)}
                 >
                   Ver presupuesto
@@ -46,7 +46,7 @@ export default function ListaPacientes({
 
                 <button
                   type="button"
-                  className="boton-secundario"
+                  className="boton-peligro"
                   onClick={() => alEliminar(paciente.id)}
                 >
                   Eliminar

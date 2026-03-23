@@ -596,10 +596,10 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
         </section>
 
         <div className="barra-acciones-ficha">
-          <button type="button" className="boton-secundario" onClick={alCerrar}>
+          <button type="button" className="boton-principal" onClick={alCerrar}>
             Cancelar
           </button>
-          <button type="submit">Guardar ficha</button>
+          <button type="submit" className="boton-principal" >Guardar ficha</button>
         </div>
       </form>
     </div>
