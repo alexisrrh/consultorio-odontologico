@@ -18,6 +18,7 @@ export default function Odontograma({
   );
 
   const dientesConMasEspacio = [18, 17, 16, 26, 27, 28, 48, 47, 46, 36, 37, 38];
+  const modo = modoImpresion ? "lectura" : "edicion";
 
   return (
     <div
@@ -42,7 +43,7 @@ export default function Odontograma({
               <Diente
                 diente={diente}
                 alCambiarDiente={alCambiarDiente}
-                modoImpresion={modoImpresion}
+                modo={modo}
               />
             </div>
           ))}
@@ -59,10 +60,10 @@ export default function Odontograma({
               }`}
             >
               <Diente
-  diente={diente}
-  alCambiarDiente={alCambiarDiente}
-  modo="lectura"
-/>
+                diente={diente}
+                alCambiarDiente={alCambiarDiente}
+                modo={modo}
+              />
             </div>
           ))}
         </div>

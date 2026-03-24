@@ -1338,3 +1338,56 @@ textarea {
     color: #17323a !important;
   }
 }
+/* ===== AJUSTE SOLO PARA MÓVIL ===== */
+@media (max-width: 768px) {
+  .odontograma-realista {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+  }
+
+  .odontograma-canvas {
+    padding: 28px 12px 36px;
+    min-width: 720px; /* suficiente para móvil sin romper escritorio */
+  }
+
+  .arcada {
+    gap: 2px;
+    justify-content: flex-start;
+  }
+
+  .arcada-superior {
+    margin-bottom: 64px;
+  }
+
+  .arcada-inferior {
+    margin-top: 64px;
+  }
+
+  .slot {
+    min-width: 42px;
+  }
+
+  .diente-svg {
+    min-width: 42px;
+    transform: scale(0.78);
+  }
+
+  .arcada-superior .diente-svg {
+    transform: rotate(180deg) scale(0.78);
+  }
+
+  .numero-diente {
+    font-size: 9px;
+  }
+
+  .encia-superior {
+    top: 42px;
+    height: 52px;
+  }
+
+  .encia-inferior {
+    bottom: 42px;
+    height: 52px;
+  }
+}
