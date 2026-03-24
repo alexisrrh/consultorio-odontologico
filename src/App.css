@@ -1338,56 +1338,102 @@ textarea {
     color: #17323a !important;
   }
 }
-/* ===== AJUSTE SOLO PARA MÓVIL ===== */
+//* ===== SCROLL MÓVIL MÁS SUAVE PARA EL ODONTOGRAMA ===== */
 @media (max-width: 768px) {
   .odontograma-realista {
     width: 100%;
     overflow-x: auto;
     overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+    padding-bottom: 10px;
   }
 
   .odontograma-canvas {
-    padding: 28px 12px 36px;
-    min-width: 720px; /* suficiente para móvil sin romper escritorio */
+    min-width: 620px;
+    padding: 22px 10px 30px;
   }
 
   .arcada {
-    gap: 2px;
+    gap: 1px;
     justify-content: flex-start;
   }
 
-  .arcada-superior {
-    margin-bottom: 64px;
-  }
-
-  .arcada-inferior {
-    margin-top: 64px;
-  }
-
   .slot {
-    min-width: 42px;
+    min-width: 36px;
   }
 
   .diente-svg {
-    min-width: 42px;
-    transform: scale(0.78);
+    min-width: 36px;
+    transform: scale(0.68);
+    pointer-events: none;
   }
 
   .arcada-superior .diente-svg {
-    transform: rotate(180deg) scale(0.78);
+    transform: rotate(180deg) scale(0.68);
   }
 
   .numero-diente {
-    font-size: 9px;
+    font-size: 8px;
+  }
+
+  .arcada-superior {
+    margin-bottom: 50px;
+  }
+
+  .arcada-inferior {
+    margin-top: 50px;
   }
 
   .encia-superior {
-    top: 42px;
-    height: 52px;
+    top: 34px;
+    height: 42px;
   }
 
   .encia-inferior {
-    bottom: 42px;
-    height: 52px;
+    bottom: 34px;
+    height: 42px;
+  }
+}
+
+@media (max-width: 480px) {
+  .odontograma-canvas {
+    min-width: 560px;
+    padding: 18px 8px 24px;
+  }
+
+  .slot {
+    min-width: 32px;
+  }
+
+  .diente-svg {
+    min-width: 32px;
+    transform: scale(0.6);
+  }
+
+  .arcada-superior .diente-svg {
+    transform: rotate(180deg) scale(0.6);
+  }
+
+  .numero-diente {
+    font-size: 7px;
+  }
+
+  .arcada-superior {
+    margin-bottom: 42px;
+  }
+
+  .arcada-inferior {
+    margin-top: 42px;
+  }
+
+  .encia-superior {
+    top: 28px;
+    height: 34px;
+  }
+
+  .encia-inferior {
+    bottom: 28px;
+    height: 34px;
   }
 }
