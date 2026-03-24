@@ -17,7 +17,7 @@
   --texto: #17323a;
   --texto-suave: #5d7278;
 
-  --blanco-panel: rgba(143, 228, 243, 0.418);
+  --blanco-panel: rgba(143, 228, 243, 0.42);
   --blanco-panel-fuerte: rgba(74, 179, 187, 0.6);
   --borde-panel: rgba(255, 255, 255, 0.26);
 
@@ -28,7 +28,6 @@
   --radio-lg: 18px;
   --radio-md: 14px;
 }
-
 
 /* =========================================================
    2. BASE GENERAL Y FONDO
@@ -49,9 +48,8 @@ body {
   min-height: 100vh;
 }
 
-
 /* =========================================================
-   3. BARRA SUPERIOR / HEADER PROFESIONAL
+   3. BARRA SUPERIOR
 ========================================================= */
 
 .barra-superior {
@@ -111,12 +109,8 @@ body {
   color: rgba(255, 255, 255, 0.84);
 }
 
-
 /* =========================================================
-   4. BOTONES MODERNOS
-========================================================= */
-/* =========================================================
-   BOTONES PROFESIONALES
+   4. BOTONES
 ========================================================= */
 
 button {
@@ -125,36 +119,6 @@ button {
   border: none;
   cursor: pointer;
   transition: all 0.18s ease;
-}
-
-.boton-principal {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-
-  min-width: 160px;
-  padding: 10px 16px;
-
-  border-radius: 14px;
-
-  background: linear-gradient(135deg, #0b5f68, #1399a6);
-  color: white;
-
-  font-size: 0.92rem;
-  font-weight: 700;
-
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.2);
-}
-.acciones-paciente {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-  margin-top: 14px;
-}
-
-.acciones-paciente button {
-  width: 100%;
-  min-width: 0;
 }
 
 .boton-principal,
@@ -168,7 +132,7 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: none;
+  letter-spacing: 0.3px;
 }
 
 .boton-principal {
@@ -179,16 +143,20 @@ button {
 
 .boton-principal:hover {
   background: linear-gradient(135deg, #08474f, #0f7f8a);
+  transform: translateY(-1px);
 }
 
 .boton-secundario {
   background: rgba(255, 255, 255, 0.85);
   color: #0b5f68;
   border: 1px solid rgba(19, 153, 166, 0.22);
+  box-shadow: 0 4px 10px rgba(0, 45, 52, 0.06);
+  backdrop-filter: blur(6px);
 }
 
 .boton-secundario:hover {
   background: rgba(255, 255, 255, 0.95);
+  transform: translateY(-1px);
 }
 
 .boton-peligro {
@@ -199,65 +167,21 @@ button {
 
 .boton-peligro:hover {
   background: linear-gradient(135deg, #9f3d50, #c94c5e);
-}
-/* Botón secundario */
-.boton-secundario {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 150px;
-  padding: 10px 16px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.78);
-  color: #0b5f68;
-  border: 1px solid rgba(19, 153, 166, 0.22);
-  font-size: 0.92rem;
-  font-weight: 700;
-  backdrop-filter: blur(6px);
-  box-shadow: 0 4px 10px rgba(0, 45, 52, 0.06);
-}
-
-.boton-secundario:hover {
-  background: rgba(255, 255, 255, 0.92);
   transform: translateY(-1px);
 }
 
-/* Botón peligro */
-.boton-peligro {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 120px;
-  padding: 10px 15px;
-  border-radius: 14px;
-  background: #b44b5e;
-  color: white;
-  font-size: 0.92rem;
-  font-weight: 700;
-  box-shadow: 0 8px 16px rgba(180, 75, 94, 0.18);
-}
-
-.boton-peligro:hover {
-  background: #9f3d50;
-  transform: translateY(-1px);
-}
-
-/* Contenedores de acciones */
-.acciones-paciente,
-.barra-acciones-ficha,
-.acciones-cabecera,
-.acciones-riesgo {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 14px;
-}
-
-/* Botón principal del formulario ancho completo */
 .boton-formulario {
   width: 100%;
+  margin-top: 10px;
   justify-content: center;
 }
+
+.boton-mini {
+  height: 34px;
+  padding: 0 12px;
+  font-size: 0.82rem;
+}
+
 /* =========================================================
    5. CONTENEDOR PRINCIPAL
 ========================================================= */
@@ -276,9 +200,8 @@ button {
   gap: 24px;
 }
 
-
 /* =========================================================
-   6. PANELES PRINCIPALES (MÁS TRANSLÚCIDOS)
+   6. PANELES Y TARJETAS
 ========================================================= */
 
 .tarjeta {
@@ -297,22 +220,39 @@ button {
   color: var(--verde-oscuro);
 }
 
-.paciente-item {
-  padding: 16px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.34);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(8px);
-}
-
 .lista-pacientes {
   display: grid;
   gap: 12px;
 }
 
+.paciente-item {
+  padding: 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.34);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(8px);
+}
+
+.paciente-item h3,
+.paciente-item h4,
+.paciente-item strong {
+  color: #0b4f59;
+}
+
+.acciones-paciente {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.acciones-paciente button {
+  width: 100%;
+  min-width: 0;
+}
 
 /* =========================================================
-   7. TIPOGRAFÍA Y TEXTOS
+   7. TIPOGRAFÍA
 ========================================================= */
 
 .etiqueta-superior {
@@ -331,11 +271,9 @@ button {
 }
 
 .subtexto-ficha,
-.encabezado p,
 .barra-superior__titulo p {
   color: var(--texto-suave);
 }
-
 
 /* =========================================================
    8. FORMULARIOS E INPUTS
@@ -374,7 +312,6 @@ textarea {
   min-height: 100px;
   resize: vertical;
 }
-
 
 /* =========================================================
    9. FICHA DEL PACIENTE
@@ -422,7 +359,6 @@ textarea {
   backdrop-filter: blur(10px);
 }
 
-
 /* =========================================================
    10. GRIDS
 ========================================================= */
@@ -439,9 +375,8 @@ textarea {
   gap: 12px;
 }
 
-
 /* =========================================================
-   11. CHIPS / CHECKBOX CLÍNICOS
+   11. CHIPS / CHECKBOX
 ========================================================= */
 
 .bloque-opciones {
@@ -489,7 +424,6 @@ textarea {
   margin: 0;
   accent-color: var(--turquesa);
 }
-
 
 /* =========================================================
    12. RIESGO DE CARIES
@@ -557,7 +491,6 @@ textarea {
   line-height: 1.5;
 }
 
-
 /* =========================================================
    13. SELECTOR DE TRATAMIENTO
 ========================================================= */
@@ -611,7 +544,6 @@ textarea {
   transform: translateY(1px);
 }
 
-
 /* =========================================================
    14. NOTAS POR DIENTE
 ========================================================= */
@@ -639,7 +571,6 @@ textarea {
   min-height: 80px;
 }
 
-
 /* =========================================================
    15. ODONTOGRAMA
 ========================================================= */
@@ -659,7 +590,6 @@ textarea {
   overflow: visible;
 }
 
-/* Encías */
 .encia {
   position: absolute;
   left: 50%;
@@ -693,7 +623,6 @@ textarea {
   border-radius: 50%;
 }
 
-/* Arcadas */
 .arcada {
   display: flex;
   justify-content: center;
@@ -711,7 +640,6 @@ textarea {
   margin-top: 100px;
 }
 
-/* Slots */
 .slot {
   display: flex;
   justify-content: center;
@@ -723,7 +651,6 @@ textarea {
   margin-right: 10px;
 }
 
-/* Curvatura superior */
 .arcada-superior .slot:nth-child(1),
 .arcada-superior .slot:nth-child(16) { transform: translateY(42px); }
 
@@ -748,7 +675,6 @@ textarea {
 .arcada-superior .slot:nth-child(8),
 .arcada-superior .slot:nth-child(9) { transform: translateY(0); }
 
-/* Curvatura inferior */
 .arcada-inferior .slot:nth-child(1),
 .arcada-inferior .slot:nth-child(16) { transform: translateY(-42px); }
 
@@ -773,7 +699,6 @@ textarea {
 .arcada-inferior .slot:nth-child(8),
 .arcada-inferior .slot:nth-child(9) { transform: translateY(0); }
 
-/* Dientes */
 .diente-svg {
   display: flex;
   flex-direction: column;
@@ -841,19 +766,28 @@ textarea {
   margin-right: 4px;
 }
 
-
 /* =========================================================
    16. PRESUPUESTO
 ========================================================= */
 
 .presupuesto-container {
-  width: min(1000px, 100%);
-  margin: 0 auto;
-  background: rgba(255, 255, 255, 0.56);
+  position: relative;
+  overflow: hidden;
+  max-width: 900px;
+  margin: 30px auto;
+  background: rgba(255, 255, 255, 0.95);
   padding: 30px;
-  border-radius: 18px;
-  backdrop-filter: blur(10px);
-  box-shadow: var(--sombra-media);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.presupuesto-logo-esquina {
+  position: absolute;
+  top: 18px;
+  left: 18px;
+  width: 200px;
+  object-fit: contain;
+  z-index: 2;
 }
 
 .presupuesto-header {
@@ -861,23 +795,133 @@ textarea {
   margin-bottom: 20px;
 }
 
+.presupuesto-header h1 {
+  margin: 5px 0;
+  color: #0b5f68;
+}
+
+.presupuesto-header h2 {
+  margin: 0;
+}
+
+.presupuesto-clinica p {
+  margin: 4px 0;
+}
+
+.presupuesto-bloque-titulo {
+  margin-top: 10px;
+}
+
+.presupuesto-titulo {
+  text-align: center;
+  margin: 20px 0;
+  letter-spacing: 2px;
+  color: #0b4f59;
+}
+
 .presupuesto-seccion {
+  position: relative;
   margin-bottom: 20px;
 }
 
-.presupuesto-seccion h2 {
-  margin-bottom: 8px;
-  border-bottom: 2px solid rgba(19, 153, 166, 0.18);
-  padding-bottom: 4px;
+.presupuesto-seccion h3 {
+  margin-bottom: 12px;
+  color: #0b4f59;
+}
+
+.presupuesto-datos-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.datos-con-marca {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  padding: 20px;
+  background: rgba(233, 240, 241, 0.651);
+}
+
+.marca-agua-datos {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.datos-con-marca > *:not(.marca-agua-datos) {
+  position: relative;
+  z-index: 1;
+}
+
+.presupuesto-tabla {
+  border-top: 2px solid #ddd;
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr 120px;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #eee;
+  align-items: center;
+}
+
+.encabezado-tabla {
+  font-weight: bold;
+  color: #0b5f68;
+}
+
+.fila-vacia {
+  color: #5d7278;
+}
+
+.col-acciones {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.presupuesto-tratamientos-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.presupuesto-total {
+  text-align: right;
+  font-size: 1.3rem;
+  margin-top: 20px;
+  color: #0b4f59;
 }
 
 .presupuesto-footer {
-  margin-top: 30px;
-  font-size: 0.9rem;
-  color: var(--texto-suave);
+  margin-top: 40px;
   text-align: center;
+  color: #666;
 }
 
+.input-presupuesto {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(19, 153, 166, 0.22);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.solo-print {
+  display: none;
+}
+
+.presupuesto-odontograma-wrap {
+  overflow-x: auto;
+}
 
 /* =========================================================
    17. ODONTOGRAMA DENTRO DEL PRESUPUESTO
@@ -943,7 +987,6 @@ textarea {
   height: 62px;
 }
 
-/* Curvatura presupuesto */
 .presupuesto-container .arcada-superior .slot:nth-child(1),
 .presupuesto-container .arcada-superior .slot:nth-child(16) { transform: translateY(28px); }
 
@@ -992,7 +1035,6 @@ textarea {
 .presupuesto-container .arcada-inferior .slot:nth-child(8),
 .presupuesto-container .arcada-inferior .slot:nth-child(9) { transform: translateY(0); }
 
-
 /* =========================================================
    18. RESPONSIVE
 ========================================================= */
@@ -1009,20 +1051,28 @@ textarea {
   }
 
   .grid-dos,
-  .grid-tres {
+  .grid-tres,
+  .presupuesto-datos-grid {
     grid-template-columns: 1fr;
   }
 
-  .barra-acciones-ficha,
-  .acciones-paciente,
   .cabecera-ficha-completa,
-  .barra-superior__contenido {
+  .barra-superior__contenido,
+  .presupuesto-tratamientos-header {
     flex-direction: column;
     align-items: stretch;
   }
 
   .presupuesto-container .odontograma-canvas {
     overflow-x: auto;
+  }
+
+  .fila {
+    grid-template-columns: 1fr;
+  }
+
+  .col-acciones {
+    justify-content: flex-start;
   }
 }
 
@@ -1074,19 +1124,27 @@ textarea {
   .barra-superior__logos {
     justify-content: center;
   }
-}
 
+  .presupuesto-logo-esquina {
+    width: 100px;
+  }
+}
 
 /* =========================================================
    19. IMPRESIÓN
 ========================================================= */
 
+.no-print {
+  display: initial;
+}
+
 @media print {
-  .acciones-cabecera,
-  .barra-acciones-ficha,
-  .encabezado,
-  .barra-superior {
+  .no-print {
     display: none !important;
+  }
+
+  .solo-print {
+    display: inline !important;
   }
 
   body {
@@ -1094,32 +1152,129 @@ textarea {
   }
 
   .presupuesto-container,
-  .seccion-ficha {
+  .seccion-ficha,
+  .datos-con-marca {
     box-shadow: none !important;
-    border: 1px solid #ddd !important;
+    border: 1px solid #26909e !important;
     backdrop-filter: none !important;
     background: white !important;
   }
+
+  .barra-superior,
+  .cabecera-ficha-completa {
+    display: none !important;
+  }
+
+  
+
+  .marca-agua-datos {
+    opacity: 0.04 !important;
+  }
+}
+/* ===== AJUSTES SOLO PARA PRESUPUESTO E IMPRESIÓN ===== */
+
+.acciones-documento {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 22px;
+  flex-wrap: wrap;
 }
 
-.paciente-item {
-  padding: 20px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.34);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  backdrop-filter: blur(8px);
+.marca-agua-datos {
+  opacity: 0.50 !important;
 }
 
-.paciente-item h3,
-.paciente-item h4,
-.paciente-item strong {
+@media print {
+  .no-imprimir,
+  .acciones-documento {
+    display: none !important;
+  }
+
+  .presupuesto-container {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10mm !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+  }
+
+  .presupuesto-seccion,
+  .datos-con-marca {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .presupuesto-container .odontograma-canvas {
+    overflow: visible !important;
+    padding: 18px 8px 22px !important;
+  }
+
+  .presupuesto-container .arcada {
+    min-width: 0 !important;
+    gap: 0 !important;
+  }
+
+  .presupuesto-container .slot {
+    min-width: 34px !important;
+  }
+
+  .presupuesto-container .diente-svg {
+    min-width: 36px !important;
+    transform: scale(0.58) !important;
+  }
+
+  .presupuesto-container .arcada-superior .diente-svg {
+    transform: rotate(180deg) scale(0.58) !important;
+  }
+
+  .presupuesto-container .arcada-superior {
+    margin-bottom: 46px !important;
+  }
+
+  .presupuesto-container .arcada-inferior {
+    margin-top: 46px !important;
+  }
+
+  .presupuesto-container .encia-superior {
+    top: 34px !important;
+    height: 44px !important;
+  }
+
+  .presupuesto-container .encia-inferior {
+    bottom: 34px !important;
+    height: 44px !important;
+  }
+
+  
+}
+.presupuesto-bloque-titulo {
+  text-align: left;
+  margin-bottom: 22px;
+}
+
+.presupuesto-titulo-principal {
+  margin: 4px 0 0;
+  font-size: 2rem;
   color: #0b4f59;
 }
-.boton-principal {
-  letter-spacing: 0.3px;
-}
 
-.boton-formulario {
-  width: 100%;
-  margin-top: 10px;
+.acciones-documento {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+.marca-agua-datos {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 320px;
+  opacity: 0.28;
+  pointer-events: none;
+  z-index: 0;
 }

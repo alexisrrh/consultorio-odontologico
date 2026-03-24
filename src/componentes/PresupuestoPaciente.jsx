@@ -1,186 +1,300 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
+import html2pdf from "html2pdf.js";
 import Odontograma from "./Odontograma";
+import logo1 from "../assets/logo1.png";
+import marca from "../assets/marca.png";
 
-export default function PresupuestoPaciente({ paciente, alCerrar, alGuardar }) {
-  const [formulario, setFormulario] = useState(null);
+export default function PresupuestoPaciente({
+  paciente,
+  alCerrar,
+  logoEsquinaSrc = logo1,
+  marcaAguaSrc = marca,
+})  {
+  const presupuestoRef = useRef(null);
 
-  useEffect(() => {
-    if (paciente) {
-      setFormulario({
-        ...paciente,
-        presupuestoTotal: paciente.presupuestoTotal || 0,
-        abonado: paciente.abonado || 0,
-      });
-    }
-  }, [paciente]);
-
-  const fecha = new Date().toLocaleDateString();
-
-  const saldoPendiente = useMemo(() => {
-    const total = Number(formulario?.presupuestoTotal || 0);
-    const abonado = Number(formulario?.abonado || 0);
-    return total - abonado;
-  }, [formulario]);
-
-  if (!paciente || !formulario) return null;
-
-  const manejarCambio = (e) => {
-    const { name, value } = e.target;
-    setFormulario((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const manejarGuardar = () => {
-    alGuardar({
-      ...formulario,
-      presupuestoTotal: Number(formulario.presupuestoTotal || 0),
-      abonado: Number(formulario.abonado || 0),
-    });
-  };
-
-  const dientesConNotas = (formulario.odontograma || []).filter((diente) =>
-    ["caries", "conducto", "extraccion"].includes(diente.estado)
+  const [tratamientos, setTratamientos] = useState(
+    (paciente?.tratamientos || []).map((t, index) => ({
+      id: t.id || Date.now() + index,
+      nombre: t.nombre || "Nuevo tratamiento",
+      dientes: t.dientes || "",
+      cantidad: t.cantidad || 1,
+      precio: t.precio || 0,
+    }))
   );
 
-  return (
-    <div className="presupuesto-container">
-      <div className="cabecera-ficha cabecera-ficha-completa">
-        <div>
-          <p className="etiqueta-superior">Presupuesto odontológico</p>
-          <h1 className="titulo-ficha-completa">Propuesta de tratamiento</h1>
-          <p className="subtexto-ficha">
-            Documento de solo lectura con control económico del tratamiento.
-          </p>
-        </div>
+  if (!paciente) return null;
 
-        <div className="acciones-cabecera">
-          <button type="button" className="boton-principal"  onClick={alCerrar}>
-            Volver
-          </button>
-        </div>
+  const total = useMemo(() => {
+    return tratamientos.reduce(
+      (acc, t) => acc + (Number(t.precio) || 0) * (Number(t.cantidad) || 1),
+      0
+    );
+  }, [tratamientos]);
+
+  const cambiarCampo = (id, campo, valor) => {
+    setTratamientos((prev) =>
+      prev.map((t) =>
+        t.id === id
+          ? {
+              ...t,
+              [campo]:
+                campo === "cantidad" || campo === "precio"
+                  ? Number(valor) || 0
+                  : valor,
+            }
+          : t
+      )
+    );
+  };
+
+  const agregarTratamiento = () => {
+    setTratamientos((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        nombre: "Nuevo tratamiento",
+        dientes: "",
+        cantidad: 1,
+        precio: 0,
+      },
+    ]);
+  };
+
+  const eliminarTratamiento = (id) => {
+    setTratamientos((prev) => prev.filter((t) => t.id !== id));
+  };
+
+  const imprimirPresupuesto = () => {
+    window.print();
+  };
+
+  const descargarPDF = () => {
+    if (!presupuestoRef.current) return;
+
+    const opciones = {
+      margin: 0.35,
+      filename: `presupuesto-${paciente.nombre || "paciente"}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+    };
+
+    html2pdf().set(opciones).from(presupuestoRef.current).save();
+  };
+
+  return (
+    <div className="contenedor-ficha-completa">
+      <div className="presupuesto-bloque-titulo">
+        <p className="etiqueta-superior">DOCUMENTO ECONÓMICO</p>
+        <h1 className="presupuesto-titulo-principal">Presupuesto odontológico</h1>
       </div>
 
-      <div className="formulario-ficha formulario-ficha-completa">
-        <section className="seccion-ficha">
+      <div className="presupuesto-container" ref={presupuestoRef}>
+        {logoEsquinaSrc && (
+          <img
+            src={logoEsquinaSrc}
+            alt="Logo de la clínica"
+            className="presupuesto-logo-esquina"
+          />
+        )}
+
+        <header className="presupuesto-header">
+          <div className="presupuesto-clinica">
+            <h2>ODONTÓLOGO GENERAL</h2>
+            <h1>José J. Figueroa</h1>
+            <p>Centro Clínico Golima, detrás del Banco Caroní</p>
+            <p>Punta de Mata</p>
+            <p>Teléfono: 0412-0282591</p>
+          </div>
+
+          <div className="presupuesto-bloque-titulo">
+            <h2 className="presupuesto-titulo">PRESUPUESTO</h2>
+          </div>
+        </header>
+
+        <section className="presupuesto-seccion datos-con-marca">
+          {marcaAguaSrc && (
+            <img
+              src={marcaAguaSrc}
+              alt="Marca de agua"
+              className="marca-agua-datos"
+            />
+          )}
+
           <h3>Datos del paciente</h3>
-          <p><strong>Fecha:</strong> {fecha}</p>
-          <p><strong>Nombre:</strong> {formulario.nombre || "-"}</p>
-          <p><strong>Cédula:</strong> {formulario.cedula || "-"}</p>
-          <p><strong>Teléfono:</strong> {formulario.telefono || "-"}</p>
-          <p><strong>Correo:</strong> {formulario.email || "-"}</p>
-          <p><strong>Dirección:</strong> {formulario.direccion || "-"}</p>
+
+          <div className="presupuesto-datos-grid">
+            <div>
+              <p><strong>Paciente:</strong> {paciente.nombre || "-"}</p>
+              <p><strong>Cédula:</strong> {paciente.cedula || "-"}</p>
+              <p><strong>Teléfono:</strong> {paciente.telefono || "-"}</p>
+            </div>
+
+            <div>
+              <p><strong>Fecha:</strong> {new Date().toLocaleDateString()}</p>
+              <p><strong>Correo:</strong> {paciente.email || "-"}</p>
+              <p><strong>Dirección:</strong> {paciente.direccion || "-"}</p>
+            </div>
+          </div>
         </section>
 
-        <section className="seccion-ficha">
-          <h3>Motivo de consulta</h3>
-          <p>{formulario.motivoConsulta || "No registrado"}</p>
-        </section>
-
-        <section className="seccion-ficha">
-          <h3>Diagnóstico</h3>
-          <p>{formulario.diagnostico || "Sin diagnóstico registrado"}</p>
-        </section>
-
-        <section className="seccion-ficha">
+        <section className="presupuesto-seccion">
           <h3>Odontograma</h3>
-          <p className="subtexto-ficha">
-            Blanco: sano | Rojo: caries | Azul: conducto | Gris: extracción
-          </p>
-
-          <div className="odontograma-presupuesto-wrap">
+          <div className="presupuesto-odontograma-wrap">
             <Odontograma
-              odontograma={formulario.odontograma || []}
-              modo="lectura"
+              odontograma={paciente.odontograma || []}
+              alCambiarDiente={() => {}}
             />
           </div>
         </section>
 
-        <section className="seccion-ficha">
-          <h3>Observaciones clínicas</h3>
-          <p>{formulario.observaciones || "Sin observaciones"}</p>
-        </section>
+        <section className="presupuesto-seccion">
+          <div className="presupuesto-tratamientos-header no-print">
+            <h3>Tratamientos</h3>
+            <button
+              type="button"
+              className="boton-secundario"
+              onClick={agregarTratamiento}
+            >
+              Agregar tratamiento
+            </button>
+          </div>
 
-        <section className="seccion-ficha">
-          <h3>Tratamiento propuesto</h3>
-          <p>{formulario.tratamiento || "No definido"}</p>
-        </section>
+          <div className="presupuesto-tabla">
+            <div className="fila encabezado-tabla">
+              <span>Tratamiento</span>
+              <span>Pieza</span>
+              <span>Cantidad</span>
+              <span>Precio</span>
+              <span>Subtotal</span>
+              <span className="col-acciones no-print">Acción</span>
+            </div>
 
-        <section className="seccion-ficha">
-          <h3>Notas por diente tratado</h3>
+            {tratamientos.length === 0 ? (
+              <div className="fila fila-vacia">
+                <span>No hay tratamientos registrados.</span>
+                <span>-</span>
+                <span>-</span>
+                <span>-</span>
+                <span>-</span>
+                <span className="no-print">-</span>
+              </div>
+            ) : (
+              tratamientos.map((t) => (
+                <div key={t.id} className="fila">
+                  <span>
+                    <input
+                      className="input-presupuesto no-print"
+                      type="text"
+                      value={t.nombre}
+                      onChange={(e) =>
+                        cambiarCampo(t.id, "nombre", e.target.value)
+                      }
+                    />
+                    <span className="solo-print">{t.nombre}</span>
+                  </span>
 
-          {dientesConNotas.length === 0 ? (
-            <p>No hay observaciones por dientes tratados.</p>
-          ) : (
-            <div className="grid-dos">
-              {dientesConNotas.map((diente) => (
-                <div key={diente.numero} className="bloque-nota-diente">
-                  <label>
-                    Diente {diente.numero} ({diente.estado})
-                  </label>
-                  <p>{diente.notas || "Sin observaciones"}</p>
+                  <span>
+                    <input
+                      className="input-presupuesto no-print"
+                      type="text"
+                      value={t.dientes}
+                      onChange={(e) =>
+                        cambiarCampo(t.id, "dientes", e.target.value)
+                      }
+                    />
+                    <span className="solo-print">{t.dientes || "-"}</span>
+                  </span>
+
+                  <span>
+                    <input
+                      className="input-presupuesto no-print"
+                      type="number"
+                      min="1"
+                      value={t.cantidad}
+                      onChange={(e) =>
+                        cambiarCampo(t.id, "cantidad", e.target.value)
+                      }
+                    />
+                    <span className="solo-print">{t.cantidad}</span>
+                  </span>
+
+                  <span>
+                    <input
+                      className="input-presupuesto no-print"
+                      type="number"
+                      min="0"
+                      step="0.01"
+                      value={t.precio}
+                      onChange={(e) =>
+                        cambiarCampo(t.id, "precio", e.target.value)
+                      }
+                    />
+                    <span className="solo-print">
+                      {Number(t.precio).toFixed(2)}$
+                    </span>
+                  </span>
+
+                  <span>
+                    {((Number(t.precio) || 0) * (Number(t.cantidad) || 1)).toFixed(2)}$
+                  </span>
+
+                  <span className="col-acciones no-print">
+                    <button
+                      type="button"
+                      className="boton-peligro boton-mini"
+                      onClick={() => eliminarTratamiento(t.id)}
+                    >
+                      Quitar
+                    </button>
+                  </span>
                 </div>
-              ))}
-            </div>
-          )}
-        </section>
-
-        <section className="seccion-ficha">
-          <h3>Control económico</h3>
-
-          <div className="grid-dos">
-            <div>
-              <label>Precio total</label>
-              <input
-                type="number"
-                name="presupuestoTotal"
-                value={formulario.presupuestoTotal}
-                onChange={manejarCambio}
-                placeholder="0"
-              />
-            </div>
-
-            <div>
-              <label>Abonado</label>
-              <input
-                type="number"
-                name="abonado"
-                value={formulario.abonado}
-                onChange={manejarCambio}
-                placeholder="0"
-              />
-            </div>
+              ))
+            )}
           </div>
 
-          <div className="resultado-riesgo medio" style={{ marginTop: "16px" }}>
-            <strong>Saldo pendiente: {saldoPendiente}</strong>
+          <div className="presupuesto-total">
+            <strong>Monto total: {total.toFixed(2)}$</strong>
           </div>
         </section>
 
-        <section className="seccion-ficha">
-          <h3>Condición del presupuesto</h3>
+        <section className="presupuesto-seccion">
+          <h3>Observaciones</h3>
           <p>
-            Este documento es una propuesta clínica basada en la evaluación
-            actual del paciente y puede requerir ajustes según exámenes
-            complementarios o evolución del tratamiento.
+            Este presupuesto puede variar según evaluación clínica, hallazgos
+            adicionales o cambios en el plan de tratamiento.
+          </p>
+          <p className="subtexto-ficha">
+            Puedes editar tratamientos, imprimir o descargar PDF.
           </p>
         </section>
-
-        <div className="barra-acciones-ficha">
-          <button type="button" className="boton-principal"  onClick={alCerrar}>
-            Volver
-          </button>
-
-          <button type="button" className="boton-principal"  onClick={manejarGuardar}>
-            Guardar presupuesto
-          </button>
-
-          <button type="button" onClick={() => window.print()}>
-            Imprimir / Guardar PDF
-          </button>
-        </div>
       </div>
+
+      <div className="acciones-documento no-imprimir">
+        <button type="button" className="boton-secundario" onClick={alCerrar}>
+          Volver
+        </button>
+
+        <button
+          type="button"
+          className="boton-secundario"
+          onClick={imprimirPresupuesto}
+        >
+          Imprimir
+        </button>
+
+        <button
+          type="button"
+          className="boton-principal"
+          onClick={descargarPDF}
+        >
+          Descargar PDF
+        </button>
+      </div>
+
+      <footer className="presupuesto-footer">
+        <p>@od.josefigueroa</p>
+      </footer>
     </div>
   );
 }
