@@ -4,6 +4,8 @@
 
 * {
   box-sizing: border-box;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }
 
 :root {
@@ -783,9 +785,9 @@ textarea {
 
 .presupuesto-logo-esquina {
   position: absolute;
-  top: 18px;
-  left: 18px;
-  width: 200px;
+  top: 10px;      /* antes 16px → lo subimos */
+  left: 10px;     /* antes 16px → más a la esquina */
+  width: 110px;   /* un pelín más pequeño */
   object-fit: contain;
   z-index: 2;
 }
@@ -806,17 +808,6 @@ textarea {
 
 .presupuesto-clinica p {
   margin: 4px 0;
-}
-
-.presupuesto-bloque-titulo {
-  margin-top: 10px;
-}
-
-.presupuesto-titulo {
-  text-align: center;
-  margin: 20px 0;
-  letter-spacing: 2px;
-  color: #0b4f59;
 }
 
 .presupuesto-seccion {
@@ -848,8 +839,8 @@ textarea {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 350px;
-  opacity: 0.05;
+  width: 320px;
+  opacity: 0.28;
   pointer-events: none;
   z-index: 0;
 }
@@ -920,7 +911,14 @@ textarea {
 }
 
 .presupuesto-odontograma-wrap {
-  overflow-x: auto;
+  overflow: visible;
+  width: 100%;
+  scrollbar-width: none;
+}
+
+.presupuesto-odontograma-wrap::-webkit-scrollbar,
+.presupuesto-container .odontograma-canvas::-webkit-scrollbar {
+  display: none;
 }
 
 /* =========================================================
@@ -932,39 +930,43 @@ textarea {
 }
 
 .presupuesto-container .odontograma-canvas {
-  padding: 34px 18px 40px;
-  overflow-x: auto;
+  padding: 26px 8px 30px;
+  overflow: visible;
+  background: transparent;
+  box-shadow: none;
 }
 
 .presupuesto-container .arcada {
-  gap: 2px;
-  min-width: 860px;
+  gap: 0;
+  min-width: 0;
+  width: 100%;
+  justify-content: center;
 }
 
 .presupuesto-container .arcada-superior {
-  margin-bottom: 76px;
+  margin-bottom: 58px;
 }
 
 .presupuesto-container .arcada-inferior {
-  margin-top: 76px;
+  margin-top: 58px;
 }
 
 .presupuesto-container .slot {
-  min-width: 48px;
+  min-width: 36px;
 }
 
 .presupuesto-container .zona-espaciada {
-  margin-left: 1px;
-  margin-right: 1px;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .presupuesto-container .diente-svg {
-  min-width: 52px;
-  transform: scale(0.82);
+  min-width: 38px;
+  transform: scale(0.62);
 }
 
 .presupuesto-container .arcada-superior .diente-svg {
-  transform: rotate(180deg) scale(0.82);
+  transform: rotate(180deg) scale(0.62);
 }
 
 .presupuesto-container .diente-svg:hover svg {
@@ -973,18 +975,18 @@ textarea {
 }
 
 .presupuesto-container .numero-diente {
-  font-size: 10px;
-  margin-top: 2px;
+  font-size: 8px;
+  margin-top: 0;
 }
 
 .presupuesto-container .encia-superior {
-  top: 52px;
-  height: 62px;
+  top: 34px;
+  height: 42px;
 }
 
 .presupuesto-container .encia-inferior {
-  bottom: 52px;
-  height: 62px;
+  bottom: 34px;
+  height: 42px;
 }
 
 .presupuesto-container .arcada-superior .slot:nth-child(1),
@@ -1034,6 +1036,35 @@ textarea {
 
 .presupuesto-container .arcada-inferior .slot:nth-child(8),
 .presupuesto-container .arcada-inferior .slot:nth-child(9) { transform: translateY(0); }
+
+/* =========================================================
+   TÍTULO DE PRESUPUESTO Y ACCIONES
+========================================================= */
+
+.presupuesto-bloque-titulo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.presupuesto-titulo-principal {
+  margin: 4px 0 0;
+  font-size: 2rem;
+  color: #0b4f59;
+}
+
+.acciones-documento {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
 
 /* =========================================================
    18. RESPONSIVE
@@ -1133,148 +1164,177 @@ textarea {
 /* =========================================================
    19. IMPRESIÓN
 ========================================================= */
-
-.no-print {
-  display: initial;
+@page {
+  size: A4 portrait;
+  margin: 10mm;
 }
 
 @media print {
+  html,
+  body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  body {
+    background-image: none !important;
+  }
+
+  .barra-superior,
+  .cabecera-ficha-completa,
+  .acciones-documento,
+  .presupuesto-footer,
+  .subtexto-ficha,
+  .no-imprimir,
   .no-print {
+    display: none !important;
+  }
+
+  .contenedor-ficha-completa {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .presupuesto-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 8mm !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    overflow: visible !important;
+  }
+
+  .presupuesto-seccion,
+  .datos-con-marca,
+  .presupuesto-odontograma-wrap {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .datos-con-marca {
+    background: #fff !important;
+    border: 1px solid #26909e !important;
+    position: relative !important;
+    overflow: visible !important;
+  }
+
+  .datos-con-marca > *:not(.marca-agua-datos) {
+    position: relative !important;
+    z-index: 2 !important;
+    color: #17323a !important;
+  }
+
+  .datos-con-marca p,
+  .datos-con-marca h3,
+  .presupuesto-datos-grid p {
+    color: #17323a !important;
+    opacity: 1 !important;
+  }
+
+  .marca-agua-datos {
+    width: 120px !important;
+    opacity: 0.06 !important;
+    z-index: 1 !important;
+  }
+
+  .presupuesto-logo-esquina {
+    width: 90px !important;
+  }
+
+  /* ===== ODONTOGRAMA: quitar efectos que Chrome no imprime bien ===== */
+  .presupuesto-odontograma-wrap {
+    overflow: visible !important;
+  }
+
+  .odontograma-realista,
+  .odontograma-canvas,
+  .arcada,
+  .slot,
+  .diente-svg,
+  .diente-svg svg,
+  .diente-svg path,
+  .numero-diente {
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+
+  .odontograma-canvas {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    overflow: visible !important;
+    padding: 10px 0 14px !important;
+  }
+
+  .arcada {
+    gap: 0 !important;
+    justify-content: center !important;
+  }
+
+  .slot {
+    min-width: 28px !important;
+  }
+
+  .diente-svg {
+    min-width: 28px !important;
+    transform: scale(0.48) !important;
+    cursor: default !important;
+  }
+
+  .arcada-superior .diente-svg {
+    transform: rotate(180deg) scale(0.48) !important;
+  }
+
+  .diente-svg svg {
+    filter: none !important;
+  }
+
+  .diente-svg:hover svg {
+    transform: none !important;
+    filter: none !important;
+  }
+
+  .diente-svg path {
+    filter: none !important;
+    stroke: #374151 !important;
+    stroke-width: 2 !important;
+  }
+
+  .numero-diente {
+    font-size: 6px !important;
+    color: #17323a !important;
+    margin-top: 0 !important;
+  }
+
+  .encia-superior {
+    top: 18px !important;
+    height: 24px !important;
+  }
+
+  .encia-inferior {
+    bottom: 18px !important;
+    height: 24px !important;
+  }
+
+  .arcada-superior {
+    margin-bottom: 26px !important;
+  }
+
+  .arcada-inferior {
+    margin-top: 26px !important;
+  }
+
+  .input-presupuesto {
     display: none !important;
   }
 
   .solo-print {
     display: inline !important;
+    color: #17323a !important;
   }
-
-  body {
-    background: white !important;
-  }
-
-  .presupuesto-container,
-  .seccion-ficha,
-  .datos-con-marca {
-    box-shadow: none !important;
-    border: 1px solid #26909e !important;
-    backdrop-filter: none !important;
-    background: white !important;
-  }
-
-  .barra-superior,
-  .cabecera-ficha-completa {
-    display: none !important;
-  }
-
-  
-
-  .marca-agua-datos {
-    opacity: 0.04 !important;
-  }
-}
-/* ===== AJUSTES SOLO PARA PRESUPUESTO E IMPRESIÓN ===== */
-
-.acciones-documento {
-  display: flex;
-  justify-content: center;
-  gap: 14px;
-  margin-top: 22px;
-  flex-wrap: wrap;
-}
-
-.marca-agua-datos {
-  opacity: 0.50 !important;
-}
-
-@media print {
-  .no-imprimir,
-  .acciones-documento {
-    display: none !important;
-  }
-
-  .presupuesto-container {
-    max-width: 100% !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 10mm !important;
-    box-shadow: none !important;
-    border-radius: 0 !important;
-  }
-
-  .presupuesto-seccion,
-  .datos-con-marca {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-
-  .presupuesto-container .odontograma-canvas {
-    overflow: visible !important;
-    padding: 18px 8px 22px !important;
-  }
-
-  .presupuesto-container .arcada {
-    min-width: 0 !important;
-    gap: 0 !important;
-  }
-
-  .presupuesto-container .slot {
-    min-width: 34px !important;
-  }
-
-  .presupuesto-container .diente-svg {
-    min-width: 36px !important;
-    transform: scale(0.58) !important;
-  }
-
-  .presupuesto-container .arcada-superior .diente-svg {
-    transform: rotate(180deg) scale(0.58) !important;
-  }
-
-  .presupuesto-container .arcada-superior {
-    margin-bottom: 46px !important;
-  }
-
-  .presupuesto-container .arcada-inferior {
-    margin-top: 46px !important;
-  }
-
-  .presupuesto-container .encia-superior {
-    top: 34px !important;
-    height: 44px !important;
-  }
-
-  .presupuesto-container .encia-inferior {
-    bottom: 34px !important;
-    height: 44px !important;
-  }
-
-  
-}
-.presupuesto-bloque-titulo {
-  text-align: left;
-  margin-bottom: 22px;
-}
-
-.presupuesto-titulo-principal {
-  margin: 4px 0 0;
-  font-size: 2rem;
-  color: #0b4f59;
-}
-
-.acciones-documento {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 14px;
-  margin-top: 22px;
-  flex-wrap: wrap;
-}
-.marca-agua-datos {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 320px;
-  opacity: 0.28;
-  pointer-events: none;
-  z-index: 0;
 }

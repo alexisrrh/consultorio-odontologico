@@ -67,29 +67,60 @@ export default function PresupuestoPaciente({
   const imprimirPresupuesto = () => {
     window.print();
   };
+const descargarPDF = async () => {
+  if (!presupuestoRef.current) return;
 
-  const descargarPDF = () => {
-    if (!presupuestoRef.current) return;
+  const elemento = presupuestoRef.current;
+  const ocultarEnPdf = document.querySelectorAll(".no-print");
 
-    const opciones = {
-      margin: 0.35,
-      filename: `presupuesto-${paciente.nombre || "paciente"}.pdf`,
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
-    };
+  ocultarEnPdf.forEach((el) => {
+    el.dataset.prevDisplay = el.style.display || "";
+    el.style.display = "none";
+  });
 
-    html2pdf().set(opciones).from(presupuestoRef.current).save();
+  const opciones = {
+    margin: [8, 8, 8, 8],
+    filename: `presupuesto-${paciente.nombre || "paciente"}.pdf`,
+    image: { type: "jpeg", quality: 1 },
+    html2canvas: {
+      scale: 3,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: "#ffffff",
+      logging: false,
+      scrollX: 0,
+      scrollY: 0,
+    },
+    jsPDF: {
+      unit: "mm",
+      format: "a4",
+      orientation: "portrait",
+    },
+    pagebreak: {
+      mode: ["avoid-all", "css", "legacy"],
+    },
   };
+
+  await new Promise((resolve) => setTimeout(resolve, 300));
+
+  try {
+    await html2pdf().set(opciones).from(elemento).save();
+  } finally {
+    ocultarEnPdf.forEach((el) => {
+      el.style.display = el.dataset.prevDisplay || "";
+      delete el.dataset.prevDisplay;
+    });
+  }
+};
 
   return (
     <div className="contenedor-ficha-completa">
       <div className="presupuesto-bloque-titulo">
-        <p className="etiqueta-superior">DOCUMENTO ECONÓMICO</p>
-        <h1 className="presupuesto-titulo-principal">Presupuesto odontológico</h1>
+      
+        <h1 className="presupuesto-titulo-principal">Presupuesto Odontológico</h1>
       </div>
 
-      <div className="presupuesto-container" ref={presupuestoRef}>
+     <div className="presupuesto-container" ref={presupuestoRef}>
         {logoEsquinaSrc && (
           <img
             src={logoEsquinaSrc}
@@ -98,19 +129,29 @@ export default function PresupuestoPaciente({
           />
         )}
 
-        <header className="presupuesto-header">
-          <div className="presupuesto-clinica">
-            <h2>ODONTÓLOGO GENERAL</h2>
-            <h1>José J. Figueroa</h1>
-            <p>Centro Clínico Golima, detrás del Banco Caroní</p>
-            <p>Punta de Mata</p>
-            <p>Teléfono: 0412-0282591</p>
-          </div>
+      <header className="presupuesto-header">
+  <div className="presupuesto-header-superior">
+    {logoEsquinaSrc && (
+      <img
+        src={logoEsquinaSrc}
+        alt="Logo de la clínica"
+        className="presupuesto-logo-esquina"
+      />
+    )}
 
-          <div className="presupuesto-bloque-titulo">
-            <h2 className="presupuesto-titulo">PRESUPUESTO</h2>
-          </div>
-        </header>
+    <div className="presupuesto-clinica">
+      <h2>ODONTÓLOGO GENERAL</h2>
+      <h1>José J. Figueroa</h1>
+      <p>Centro Clínico Golima, detrás del Banco Caroní</p>
+      <p>Punta de Mata</p>
+      <p>Teléfono: 0412-0282591</p>
+    </div>
+  </div>
+
+  <div className="presupuesto-bloque-titulo">
+    <h2 className="presupuesto-titulo">PRESUPUESTO</h2>
+  </div>
+</header>
 
         <section className="presupuesto-seccion datos-con-marca">
           {marcaAguaSrc && (
@@ -140,11 +181,12 @@ export default function PresupuestoPaciente({
 
         <section className="presupuesto-seccion">
           <h3>Odontograma</h3>
-          <div className="presupuesto-odontograma-wrap">
-            <Odontograma
-              odontograma={paciente.odontograma || []}
-              alCambiarDiente={() => {}}
-            />
+      <div className="presupuesto-odontograma-wrap">
+  <Odontograma
+    odontograma={paciente.odontograma || []}
+    alCambiarDiente={() => {}}
+  />
+
           </div>
         </section>
 
@@ -153,7 +195,7 @@ export default function PresupuestoPaciente({
             <h3>Tratamientos</h3>
             <button
               type="button"
-              className="boton-secundario"
+              className="boton-principal"
               onClick={agregarTratamiento}
             >
               Agregar tratamiento
@@ -271,13 +313,13 @@ export default function PresupuestoPaciente({
       </div>
 
       <div className="acciones-documento no-imprimir">
-        <button type="button" className="boton-secundario" onClick={alCerrar}>
+        <button type="button" className="boton-principal" onClick={alCerrar}>
           Volver
         </button>
 
         <button
           type="button"
-          className="boton-secundario"
+          className="boton-principal"
           onClick={imprimirPresupuesto}
         >
           Imprimir

@@ -1,6 +1,10 @@
 import Diente from "./Diente";
 
-export default function Odontograma({ odontograma = [], alCambiarDiente, modo }) {
+export default function Odontograma({
+  odontograma,
+  alCambiarDiente,
+  modoImpresion = false,
+}) {
   const filaSuperior = odontograma.filter((d) =>
     [18, 17, 16, 15, 14, 13, 12, 11, 21, 22, 23, 24, 25, 26, 27, 28].includes(
       d.numero
@@ -16,7 +20,11 @@ export default function Odontograma({ odontograma = [], alCambiarDiente, modo })
   const dientesConMasEspacio = [18, 17, 16, 26, 27, 28, 48, 47, 46, 36, 37, 38];
 
   return (
-    <div className="odontograma-realista">
+    <div
+      className={`odontograma-realista ${
+        modoImpresion ? "odontograma-modo-impresion" : ""
+      }`}
+    >
       <div className="odontograma-canvas">
         <div className="encia encia-superior" />
         <div className="encia encia-inferior" />
@@ -34,7 +42,7 @@ export default function Odontograma({ odontograma = [], alCambiarDiente, modo })
               <Diente
                 diente={diente}
                 alCambiarDiente={alCambiarDiente}
-                modo={modo}
+                modoImpresion={modoImpresion}
               />
             </div>
           ))}
@@ -51,10 +59,10 @@ export default function Odontograma({ odontograma = [], alCambiarDiente, modo })
               }`}
             >
               <Diente
-                diente={diente}
-                alCambiarDiente={alCambiarDiente}
-                modo={modo}
-              />
+  diente={diente}
+  alCambiarDiente={alCambiarDiente}
+  modo="lectura"
+/>
             </div>
           ))}
         </div>
