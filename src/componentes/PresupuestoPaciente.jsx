@@ -142,8 +142,6 @@ const descargarPDF = async () => {
     <div className="presupuesto-clinica">
       <h2>ODONTÓLOGO GENERAL</h2>
       <h1>José J. Figueroa</h1>
-      <p>Centro Clínico Golima, detrás del Banco Caroní</p>
-      <p>Punta de Mata</p>
       <p>Teléfono: 0412-0282591</p>
     </div>
   </div>

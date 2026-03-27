@@ -3,9 +3,34 @@ import Odontograma from "./Odontograma";
 export default function HistorialPaciente({ paciente, alCerrar }) {
   if (!paciente) return null;
 
+  const tieneCariesEnAlgunaCara = (diente) => {
+    return (
+      diente.caras?.superior === "caries" ||
+      diente.caras?.izquierda === "caries" ||
+      diente.caras?.centro === "caries" ||
+      diente.caras?.derecha === "caries" ||
+      diente.caras?.inferior === "caries"
+    );
+  };
+
+  const obtenerTipoTratamientoDiente = (diente) => {
+    if (diente.tratamientoGeneral === "conducto") return "Conducto";
+    if (diente.tratamientoGeneral === "extraccion") return "Extracción";
+    if (tieneCariesEnAlgunaCara(diente)) return "Caries";
+    return "Sano";
+  };
+
   const dientesConNotas = (paciente.odontograma || []).filter(
     (diente) => diente.notas && diente.notas.trim() !== ""
   );
+
+  const dientesTratados = (paciente.odontograma || []).filter((diente) => {
+    return (
+      diente.tratamientoGeneral === "conducto" ||
+      diente.tratamientoGeneral === "extraccion" ||
+      tieneCariesEnAlgunaCara(diente)
+    );
+  });
 
   return (
     <div className="ficha-pantalla-completa">
@@ -60,10 +85,43 @@ export default function HistorialPaciente({ paciente, alCerrar }) {
         </section>
 
         <section className="seccion-ficha">
+          <h3>Resumen de dientes tratados</h3>
+
+          {dientesTratados.length === 0 ? (
+            <p>No hay dientes tratados registrados.</p>
+          ) : (
+            <div className="grid-dos">
+              {dientesTratados.map((diente) => (
+                <div key={diente.numero} className="bloque-nota-diente">
+                  <label>
+                    Diente {diente.numero} - {obtenerTipoTratamientoDiente(diente)}
+                  </label>
+                  <p>
+                    {tieneCariesEnAlgunaCara(diente) && diente.tratamientoGeneral !== "conducto" && diente.tratamientoGeneral !== "extraccion"
+                      ? `Caras afectadas: ${[
+                          diente.caras?.superior === "caries" ? "superior" : null,
+                          diente.caras?.izquierda === "caries" ? "izquierda" : null,
+                          diente.caras?.centro === "caries" ? "centro" : null,
+                          diente.caras?.derecha === "caries" ? "derecha" : null,
+                          diente.caras?.inferior === "caries" ? "inferior" : null,
+                        ]
+                          .filter(Boolean)
+                          .join(", ")}`
+                      : "Tratamiento general aplicado"}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section className="seccion-ficha">
           <h3>Odontograma</h3>
           <Odontograma
             odontograma={paciente.odontograma || []}
             alCambiarDiente={() => {}}
+            tratamientoActivo=""
+            modoImpresion={true}
           />
         </section>
 
@@ -76,7 +134,9 @@ export default function HistorialPaciente({ paciente, alCerrar }) {
             <div className="grid-dos">
               {dientesConNotas.map((diente) => (
                 <div key={diente.numero} className="bloque-nota-diente">
-                  <label>Diente {diente.numero}</label>
+                  <label>
+                    Diente {diente.numero} - {obtenerTipoTratamientoDiente(diente)}
+                  </label>
                   <p>{diente.notas}</p>
                 </div>
               ))}

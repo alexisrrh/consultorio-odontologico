@@ -67,6 +67,18 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
         motivoDetalleOtra: paciente.motivoDetalleOtra || "",
         habitosClinicosOtra: paciente.habitosClinicosOtra || "",
         enfermedadesClinicasOtra: paciente.enfermedadesClinicasOtra || "",
+        odontograma: (paciente.odontograma || []).map((diente) => ({
+          ...diente,
+          tratamientoGeneral: diente.tratamientoGeneral || "sano",
+          caras: {
+            superior: diente.caras?.superior || "sano",
+            izquierda: diente.caras?.izquierda || "sano",
+            centro: diente.caras?.centro || "sano",
+            derecha: diente.caras?.derecha || "sano",
+            inferior: diente.caras?.inferior || "sano",
+          },
+          notas: diente.notas || "",
+        })),
       });
     }
   }, [paciente]);
@@ -131,13 +143,11 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
     }));
   };
 
-  const cambiarEstadoDiente = (numero) => {
+  const cambiarEstadoDiente = (numero, dienteActualizado) => {
     setFormulario((prev) => ({
       ...prev,
       odontograma: (prev.odontograma || []).map((diente) =>
-        diente.numero === numero
-          ? { ...diente, estado: tratamientoActivo }
-          : diente
+        diente.numero === numero ? dienteActualizado : diente
       ),
     }));
   };
@@ -153,9 +163,30 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
     }));
   };
 
-  const dientesConNotas = (formulario.odontograma || []).filter((diente) =>
-    ["caries", "conducto", "extraccion"].includes(diente.estado)
-  );
+  const tieneCariesEnAlgunaCara = (diente) => {
+    return (
+      diente.caras?.superior === "caries" ||
+      diente.caras?.izquierda === "caries" ||
+      diente.caras?.derecha === "caries" ||
+      diente.caras?.inferior === "caries" ||
+      diente.caras?.centro === "caries"
+    );
+  };
+
+  const dientesConNotas = (formulario.odontograma || []).filter((diente) => {
+    return (
+      diente.tratamientoGeneral === "conducto" ||
+      diente.tratamientoGeneral === "extraccion" ||
+      tieneCariesEnAlgunaCara(diente)
+    );
+  });
+
+  const obtenerTipoTratamientoDiente = (diente) => {
+    if (diente.tratamientoGeneral === "conducto") return "conducto";
+    if (diente.tratamientoGeneral === "extraccion") return "extraccion";
+    if (tieneCariesEnAlgunaCara(diente)) return "caries";
+    return "sano";
+  };
 
   const manejarEnvio = (e) => {
     e.preventDefault();
@@ -480,7 +511,7 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
           </p>
 
           <p className="subtexto-ficha">
-            Blanco: sano | Rojo: caries | Azul: conducto | Gris: extracción
+            Blanco: sano | Negro: caries por caras | Azul: conducto | Gris: extracción
           </p>
 
           <div className="selector-tratamiento">
@@ -532,6 +563,7 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
           <Odontograma
             odontograma={formulario.odontograma}
             alCambiarDiente={cambiarEstadoDiente}
+            tratamientoActivo={tratamientoActivo}
           />
         </section>
 
@@ -543,7 +575,7 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
               {dientesConNotas.map((diente) => (
                 <div key={diente.numero} className="bloque-nota-diente">
                   <label>
-                    Diente {diente.numero} ({diente.estado})
+                    Diente {diente.numero} ({obtenerTipoTratamientoDiente(diente)})
                   </label>
                   <textarea
                     rows="2"
@@ -599,7 +631,9 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
           <button type="button" className="boton-principal" onClick={alCerrar}>
             Cancelar
           </button>
-          <button type="submit" className="boton-principal" >Guardar ficha</button>
+          <button type="submit" className="boton-principal">
+            Guardar ficha
+          </button>
         </div>
       </form>
     </div>

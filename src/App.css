@@ -702,18 +702,30 @@ textarea {
 .arcada-inferior .slot:nth-child(9) { transform: translateY(0); }
 
 .diente-svg {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   min-width: 72px;
-  position: relative;
   z-index: 2;
-  transform: scale(1.15);
   cursor: pointer;
+  transition: transform 0.15s ease;
 }
 
 .arcada-superior .diente-svg {
   transform: rotate(180deg) scale(1.15);
+}
+
+.arcada-inferior .diente-svg {
+  transform: scale(1.15);
+}
+
+.arcada-superior .diente-svg:hover {
+  transform: rotate(180deg) scale(1.22);
+}
+
+.arcada-inferior .diente-svg:hover {
+  transform: scale(1.22);
 }
 
 .arcada-superior .numero-diente {
@@ -721,13 +733,12 @@ textarea {
 }
 
 .diente-svg svg {
-  transition: transform 0.18s ease, filter 0.18s ease;
+  transition: filter 0.18s ease;
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.12));
 }
 
 .diente-svg:hover svg {
-  transform: scale(1.25);
-  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.22));
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.18));
 }
 
 .diente-svg::before {
@@ -741,10 +752,12 @@ textarea {
 }
 
 .numero-diente {
-  margin-top: 4px;
+  position: absolute;
+  bottom: -18px;
   font-size: 12px;
   font-weight: 700;
   color: var(--verde-oscuro);
+  pointer-events: none;
 }
 
 .diente-svg path {
@@ -752,10 +765,24 @@ textarea {
 }
 
 .diente-svg path:hover {
-  filter: brightness(1.05);
-  stroke: var(--turquesa);
-  stroke-width: 2.4;
+  stroke: #374151;
+  stroke-width: 2;
   cursor: pointer;
+}
+
+.diente-svg rect {
+  transition: fill 0.18s ease, stroke 0.18s ease, opacity 0.18s ease;
+  cursor: pointer;
+}
+
+.diente-svg rect:hover {
+  fill: rgba(230, 57, 70, 0.18);
+  stroke: #131212;
+}
+
+.arcada-superior .diente-svg rect {
+  transform-box: fill-box;
+  transform-origin: center;
 }
 
 .zona-frontal {
@@ -785,9 +812,9 @@ textarea {
 
 .presupuesto-logo-esquina {
   position: absolute;
-  top: 10px;      /* antes 16px → lo subimos */
-  left: 10px;     /* antes 16px → más a la esquina */
-  width: 110px;   /* un pelín más pequeño */
+  top: 10px;
+  left: 10px;
+  width: 110px;
   object-fit: contain;
   z-index: 2;
 }
@@ -962,15 +989,25 @@ textarea {
 
 .presupuesto-container .diente-svg {
   min-width: 38px;
-  transform: scale(0.62);
 }
 
 .presupuesto-container .arcada-superior .diente-svg {
   transform: rotate(180deg) scale(0.62);
 }
 
+.presupuesto-container .arcada-inferior .diente-svg {
+  transform: scale(0.62);
+}
+
+.presupuesto-container .arcada-superior .diente-svg:hover {
+  transform: rotate(180deg) scale(0.62);
+}
+
+.presupuesto-container .arcada-inferior .diente-svg:hover {
+  transform: scale(0.62);
+}
+
 .presupuesto-container .diente-svg:hover svg {
-  transform: none;
   filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.12));
 }
 
@@ -1122,6 +1159,72 @@ textarea {
     grid-template-columns: 24px 1fr;
     padding: 14px;
   }
+
+  .odontograma-realista {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+    padding-bottom: 10px;
+  }
+
+  .odontograma-canvas {
+    min-width: 620px;
+    padding: 22px 10px 30px;
+  }
+
+  .arcada {
+    gap: 1px;
+    justify-content: flex-start;
+  }
+
+  .slot {
+    min-width: 36px;
+  }
+
+  .diente-svg {
+    min-width: 36px;
+    pointer-events: auto;
+  }
+
+  .arcada-superior .diente-svg {
+    transform: rotate(180deg) scale(0.68);
+  }
+
+  .arcada-inferior .diente-svg {
+    transform: scale(0.68);
+  }
+
+  .arcada-superior .diente-svg:hover {
+    transform: rotate(180deg) scale(0.74);
+  }
+
+  .arcada-inferior .diente-svg:hover {
+    transform: scale(0.74);
+  }
+
+  .numero-diente {
+    font-size: 8px;
+  }
+
+  .arcada-superior {
+    margin-bottom: 50px;
+  }
+
+  .arcada-inferior {
+    margin-top: 50px;
+  }
+
+  .encia-superior {
+    top: 34px;
+    height: 42px;
+  }
+
+  .encia-inferior {
+    bottom: 34px;
+    height: 42px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1135,15 +1238,6 @@ textarea {
 
   .odontograma-canvas {
     padding: 40px 18px 50px;
-  }
-
-  .diente-svg {
-    min-width: 60px;
-    transform: scale(1);
-  }
-
-  .arcada-superior .diente-svg {
-    transform: rotate(180deg) scale(1);
   }
 
   .boton-tratamiento {
@@ -1161,9 +1255,64 @@ textarea {
   }
 }
 
+@media (max-width: 480px) {
+  .odontograma-canvas {
+    min-width: 560px;
+    padding: 18px 8px 24px;
+  }
+
+  .slot {
+    min-width: 32px;
+  }
+
+  .diente-svg {
+    min-width: 32px;
+    pointer-events: auto;
+  }
+
+  .arcada-superior .diente-svg {
+    transform: rotate(180deg) scale(0.6);
+  }
+
+  .arcada-inferior .diente-svg {
+    transform: scale(0.6);
+  }
+
+  .arcada-superior .diente-svg:hover {
+    transform: rotate(180deg) scale(0.66);
+  }
+
+  .arcada-inferior .diente-svg:hover {
+    transform: scale(0.66);
+  }
+
+  .numero-diente {
+    font-size: 7px;
+  }
+
+  .arcada-superior {
+    margin-bottom: 42px;
+  }
+
+  .arcada-inferior {
+    margin-top: 42px;
+  }
+
+  .encia-superior {
+    top: 28px;
+    height: 34px;
+  }
+
+  .encia-inferior {
+    bottom: 28px;
+    height: 34px;
+  }
+}
+
 /* =========================================================
    19. IMPRESIÓN
 ========================================================= */
+
 @page {
   size: A4 portrait;
   margin: 10mm;
@@ -1245,7 +1394,6 @@ textarea {
     width: 90px !important;
   }
 
-  /* ===== ODONTOGRAMA: quitar efectos que Chrome no imprime bien ===== */
   .presupuesto-odontograma-wrap {
     overflow: visible !important;
   }
@@ -1288,6 +1436,10 @@ textarea {
 
   .arcada-superior .diente-svg {
     transform: rotate(180deg) scale(0.48) !important;
+  }
+
+  .arcada-inferior .diente-svg {
+    transform: scale(0.48) !important;
   }
 
   .diente-svg svg {
@@ -1336,104 +1488,5 @@ textarea {
   .solo-print {
     display: inline !important;
     color: #17323a !important;
-  }
-}
-//* ===== SCROLL MÓVIL MÁS SUAVE PARA EL ODONTOGRAMA ===== */
-@media (max-width: 768px) {
-  .odontograma-realista {
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
-    padding-bottom: 10px;
-  }
-
-  .odontograma-canvas {
-    min-width: 620px;
-    padding: 22px 10px 30px;
-  }
-
-  .arcada {
-    gap: 1px;
-    justify-content: flex-start;
-  }
-
-  .slot {
-    min-width: 36px;
-  }
-
-  .diente-svg {
-    min-width: 36px;
-    transform: scale(0.68);
-    pointer-events: none;
-  }
-
-  .arcada-superior .diente-svg {
-    transform: rotate(180deg) scale(0.68);
-  }
-
-  .numero-diente {
-    font-size: 8px;
-  }
-
-  .arcada-superior {
-    margin-bottom: 50px;
-  }
-
-  .arcada-inferior {
-    margin-top: 50px;
-  }
-
-  .encia-superior {
-    top: 34px;
-    height: 42px;
-  }
-
-  .encia-inferior {
-    bottom: 34px;
-    height: 42px;
-  }
-}
-
-@media (max-width: 480px) {
-  .odontograma-canvas {
-    min-width: 560px;
-    padding: 18px 8px 24px;
-  }
-
-  .slot {
-    min-width: 32px;
-  }
-
-  .diente-svg {
-    min-width: 32px;
-    transform: scale(0.6);
-  }
-
-  .arcada-superior .diente-svg {
-    transform: rotate(180deg) scale(0.6);
-  }
-
-  .numero-diente {
-    font-size: 7px;
-  }
-
-  .arcada-superior {
-    margin-bottom: 42px;
-  }
-
-  .arcada-inferior {
-    margin-top: 42px;
-  }
-
-  .encia-superior {
-    top: 28px;
-    height: 34px;
-  }
-
-  .encia-inferior {
-    bottom: 28px;
-    height: 34px;
   }
 }

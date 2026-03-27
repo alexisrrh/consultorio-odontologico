@@ -3,6 +3,7 @@ import Diente from "./Diente";
 export default function Odontograma({
   odontograma,
   alCambiarDiente,
+  tratamientoActivo,
   modoImpresion = false,
 }) {
   const filaSuperior = odontograma.filter((d) =>
@@ -43,6 +44,7 @@ export default function Odontograma({
               <Diente
                 diente={diente}
                 alCambiarDiente={alCambiarDiente}
+                tratamientoActivo={tratamientoActivo}
                 modo={modo}
               />
             </div>
@@ -62,6 +64,7 @@ export default function Odontograma({
               <Diente
                 diente={diente}
                 alCambiarDiente={alCambiarDiente}
+                tratamientoActivo={tratamientoActivo}
                 modo={modo}
               />
             </div>

@@ -3,3 +3,21 @@
   --color-principal-hover: #0f7f8a;
   --color-secundario: #0b5f68;
 }
+.barra-superior-minimal {
+  width: 100%;
+  padding: 10px 20px;
+}
+
+.barra-superior-minimal__contenido {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Logos */
+.logo-izquierdo img,
+.logo-derecho img {
+  height: 100px;
+  object-fit: contain;
+  border-radius: 10px;
+}
