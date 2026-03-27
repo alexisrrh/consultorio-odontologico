@@ -21,3 +21,15 @@
   object-fit: contain;
   border-radius: 10px;
 }
+.logo-izquierdo img,
+.logo-derecho img {
+  height: 100px;
+  object-fit: contain;
+  opacity: 0.95;
+  transition: transform 0.2s ease;
+}
+
+.logo-izquierdo img:hover,
+.logo-derecho img:hover {
+  transform: scale(1.05);
+}
