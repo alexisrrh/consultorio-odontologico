@@ -8,13 +8,17 @@ import { useAuth } from "../context/AuthContext";
 import { cerrarSesion } from "../servicios/auth";
 
 function CitasMedico() {
-  const { usuario } = useAuth();
+  const { usuario, perfil } = useAuth();
   const navigate = useNavigate();
 
   const [citas, setCitas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [fechaSeleccionada, setFechaSeleccionada] = useState("");
   const [actualizandoId, setActualizandoId] = useState(null);
+
+  const hoy = new Date();
+  const [mesActual, setMesActual] = useState(hoy.getMonth());
+  const [anioActual, setAnioActual] = useState(hoy.getFullYear());
 
   useEffect(() => {
     async function cargarCitas() {
@@ -26,6 +30,15 @@ function CitasMedico() {
 
         if (data.length > 0) {
           setFechaSeleccionada(data[0].fecha);
+          const [year, month] = data[0].fecha.split("-");
+          setAnioActual(Number(year));
+          setMesActual(Number(month) - 1);
+        } else {
+          const fechaHoy = new Date();
+          const year = fechaHoy.getFullYear();
+          const month = String(fechaHoy.getMonth() + 1).padStart(2, "0");
+          const day = String(fechaHoy.getDate()).padStart(2, "0");
+          setFechaSeleccionada(`${year}-${month}-${day}`);
         }
       } catch (error) {
         console.error("Error cargando citas del médico:", error);
@@ -67,11 +80,6 @@ function CitasMedico() {
     }
   };
 
-  const fechasDisponibles = useMemo(() => {
-    const unicas = [...new Set(citas.map((cita) => cita.fecha))];
-    return unicas.sort();
-  }, [citas]);
-
   const citasDelDia = useMemo(() => {
     if (!fechaSeleccionada) return [];
     return citas
@@ -97,35 +105,182 @@ function CitasMedico() {
     return resumen;
   }, [citasDelDia]);
 
+  const fechasConCitas = useMemo(() => {
+    const mapa = {};
+    citas.forEach((cita) => {
+      mapa[cita.fecha] = (mapa[cita.fecha] || 0) + 1;
+    });
+    return mapa;
+  }, [citas]);
+
   const formatearFecha = (fecha) => {
     if (!fecha) return "";
     const [year, month, day] = fecha.split("-");
     return `${day}/${month}/${year}`;
   };
 
-  const estiloEstado = (estado) => {
+  const estiloEstadoChip = (estado) => {
     switch (estado) {
       case "pendiente":
-        return { backgroundColor: "#fef3c7", color: "#92400e" };
+        return {
+          backgroundColor: "#fef3c7",
+          color: "#92400e",
+          border: "1px solid #fcd34d",
+        };
       case "confirmada":
-        return { backgroundColor: "#dbeafe", color: "#1e40af" };
+        return {
+          backgroundColor: "#dbeafe",
+          color: "#1e40af",
+          border: "1px solid #93c5fd",
+        };
       case "completada":
-        return { backgroundColor: "#d1fae5", color: "#065f46" };
+        return {
+          backgroundColor: "#d1fae5",
+          color: "#065f46",
+          border: "1px solid #6ee7b7",
+        };
       case "cancelada":
-        return { backgroundColor: "#fee2e2", color: "#991b1b" };
+        return {
+          backgroundColor: "#fee2e2",
+          color: "#991b1b",
+          border: "1px solid #fca5a5",
+        };
       default:
-        return { backgroundColor: "#e5e7eb", color: "#374151" };
+        return {
+          backgroundColor: "#e5e7eb",
+          color: "#374151",
+          border: "1px solid #d1d5db",
+        };
+    }
+  };
+
+  const colorContadorResumen = (tipo) => {
+    switch (tipo) {
+      case "pendiente":
+        return "#92400e";
+      case "confirmada":
+        return "#1e40af";
+      case "completada":
+        return "#065f46";
+      case "cancelada":
+        return "#991b1b";
+      default:
+        return "#111827";
     }
   };
 
   const tarjetaResumenStyle = {
-    borderRadius: "14px",
+    borderRadius: "16px",
     padding: "16px",
-    minWidth: "140px",
-    background: "rgba(255,255,255,0.8)",
-    border: "1px solid rgba(209,213,219,0.9)",
+    minWidth: "150px",
+    background: "rgba(255,255,255,0.85)",
+    border: "1px solid rgba(209,213,219,0.95)",
     backdropFilter: "blur(4px)",
+    boxShadow: "0 6px 18px rgba(0,0,0,0.06)",
   };
+
+  const botonBase = {
+    padding: "10px 14px",
+    borderRadius: "10px",
+    border: "none",
+    cursor: "pointer",
+    fontWeight: "bold",
+  };
+
+  const botonPrimario = {
+    ...botonBase,
+    backgroundColor: "#0f172a",
+    color: "white",
+  };
+
+  const botonAzul = {
+    ...botonBase,
+    backgroundColor: "#2563eb",
+    color: "white",
+  };
+
+  const botonVerde = {
+    ...botonBase,
+    backgroundColor: "#059669",
+    color: "white",
+  };
+
+  const botonRojo = {
+    ...botonBase,
+    backgroundColor: "#dc2626",
+    color: "white",
+  };
+
+  const botonClaro = {
+    ...botonBase,
+    backgroundColor: "#e5e7eb",
+    color: "#111827",
+  };
+
+  const meses = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
+
+  const diasSemana = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
+
+  const obtenerDiasDelCalendario = () => {
+    const primerDiaMes = new Date(anioActual, mesActual, 1);
+    const ultimoDiaMes = new Date(anioActual, mesActual + 1, 0);
+
+    let diaInicio = primerDiaMes.getDay();
+    if (diaInicio === 0) diaInicio = 7;
+
+    const totalDias = ultimoDiaMes.getDate();
+    const celdas = [];
+
+    for (let i = 1; i < diaInicio; i++) {
+      celdas.push(null);
+    }
+
+    for (let dia = 1; dia <= totalDias; dia++) {
+      celdas.push(dia);
+    }
+
+    return celdas;
+  };
+
+  const cambiarMes = (direccion) => {
+    if (direccion === "prev") {
+      if (mesActual === 0) {
+        setMesActual(11);
+        setAnioActual((prev) => prev - 1);
+      } else {
+        setMesActual((prev) => prev - 1);
+      }
+    } else {
+      if (mesActual === 11) {
+        setMesActual(0);
+        setAnioActual((prev) => prev + 1);
+      } else {
+        setMesActual((prev) => prev + 1);
+      }
+    }
+  };
+
+  const seleccionarDia = (dia) => {
+    const fecha = `${anioActual}-${String(mesActual + 1).padStart(2, "0")}-${String(
+      dia
+    ).padStart(2, "0")}`;
+    setFechaSeleccionada(fecha);
+  };
+
+  const celdasCalendario = obtenerDiasDelCalendario();
 
   if (loading) {
     return <p style={{ padding: "20px" }}>Cargando agenda médica...</p>;
@@ -136,196 +291,399 @@ function CitasMedico() {
       <div
         style={{
           display: "flex",
-          gap: "10px",
-          marginBottom: "20px",
+          justifyContent: "space-between",
+          gap: "12px",
           flexWrap: "wrap",
+          alignItems: "center",
+          marginBottom: "20px",
         }}
       >
-        <button onClick={() => navigate("/panel-clinico")}>
-          Volver al panel clínico
-        </button>
+        <div>
+          <h2 style={{ margin: 0 }}>Agenda médica</h2>
+          <p style={{ margin: "6px 0 0", color: "#374151" }}>
+            {perfil?.nombre || "Médico"}
+          </p>
+        </div>
 
-        <button onClick={handleLogout}>Cerrar sesión</button>
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+          <button style={botonClaro} onClick={() => navigate("/panel-clinico")}>
+            Volver al panel clínico
+          </button>
+
+          <button style={botonRojo} onClick={handleLogout}>
+            Cerrar sesión
+          </button>
+        </div>
       </div>
-
-      <h2 style={{ marginBottom: "20px" }}>Agenda médica</h2>
 
       {citas.length === 0 ? (
         <p>No tienes citas asignadas todavía.</p>
       ) : (
-        <>
-          <div style={{ marginBottom: "20px" }}>
-            <label htmlFor="fechaSeleccionada">
-              <strong>Selecciona una fecha:</strong>
-            </label>
-            <br />
-            <select
-              id="fechaSeleccionada"
-              value={fechaSeleccionada}
-              onChange={(e) => setFechaSeleccionada(e.target.value)}
-              style={{
-                marginTop: "8px",
-                padding: "10px",
-                minWidth: "240px",
-                borderRadius: "10px",
-              }}
-            >
-              {fechasDisponibles.map((fecha) => (
-                <option key={fecha} value={fecha}>
-                  {formatearFecha(fecha)}
-                </option>
-              ))}
-            </select>
-          </div>
-
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "minmax(320px, 390px) 1fr",
+            gap: "24px",
+            alignItems: "start",
+          }}
+        >
           <div
             style={{
-              display: "flex",
-              gap: "12px",
-              flexWrap: "wrap",
-              marginBottom: "24px",
+              background: "rgba(255,255,255,0.82)",
+              border: "1px solid #d1d5db",
+              borderRadius: "20px",
+              padding: "20px",
+              backdropFilter: "blur(4px)",
+              boxShadow: "0 8px 20px rgba(0,0,0,0.06)",
             }}
           >
-            <div style={tarjetaResumenStyle}>
-              <strong>Total</strong>
-              <p style={{ fontSize: "24px", margin: "8px 0 0" }}>
-                {resumenDelDia.total}
-              </p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: "18px",
+              }}
+            >
+              <button style={botonClaro} onClick={() => cambiarMes("prev")}>
+                ◀
+              </button>
+              <strong style={{ fontSize: "20px" }}>
+                {meses[mesActual]} {anioActual}
+              </strong>
+              <button style={botonClaro} onClick={() => cambiarMes("next")}>
+                ▶
+              </button>
             </div>
 
-            <div style={tarjetaResumenStyle}>
-              <strong>Pendientes</strong>
-              <p style={{ fontSize: "24px", margin: "8px 0 0", color: "#92400e" }}>
-                {resumenDelDia.pendiente}
-              </p>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(7, 1fr)",
+                gap: "8px",
+                marginBottom: "12px",
+                textAlign: "center",
+                fontWeight: "bold",
+                color: "#1f2937",
+              }}
+            >
+              {diasSemana.map((dia) => (
+                <div key={dia}>{dia}</div>
+              ))}
             </div>
 
-            <div style={tarjetaResumenStyle}>
-              <strong>Confirmadas</strong>
-              <p style={{ fontSize: "24px", margin: "8px 0 0", color: "#1e40af" }}>
-                {resumenDelDia.confirmada}
-              </p>
-            </div>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(7, 1fr)",
+                gap: "10px",
+              }}
+            >
+              {celdasCalendario.map((dia, index) => {
+                if (!dia) {
+                  return <div key={`empty-${index}`} />;
+                }
 
-            <div style={tarjetaResumenStyle}>
-              <strong>Completadas</strong>
-              <p style={{ fontSize: "24px", margin: "8px 0 0", color: "#065f46" }}>
-                {resumenDelDia.completada}
-              </p>
-            </div>
+                const fecha = `${anioActual}-${String(mesActual + 1).padStart(
+                  2,
+                  "0"
+                )}-${String(dia).padStart(2, "0")}`;
 
-            <div style={tarjetaResumenStyle}>
-              <strong>Canceladas</strong>
-              <p style={{ fontSize: "24px", margin: "8px 0 0", color: "#991b1b" }}>
-                {resumenDelDia.cancelada}
-              </p>
+                const esSeleccionada = fechaSeleccionada === fecha;
+                const cantidadCitas = fechasConCitas[fecha] || 0;
+
+                return (
+                  <button
+                    key={fecha}
+                    onClick={() => seleccionarDia(dia)}
+                    style={{
+                      minHeight: "56px",
+                      borderRadius: "14px",
+                      border: esSeleccionada
+                        ? "2px solid #2563eb"
+                        : "1px solid #d1d5db",
+                      background: esSeleccionada
+                        ? "#dbeafe"
+                        : "rgba(255,255,255,0.95)",
+                      position: "relative",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                      fontSize: "17px",
+                      color: "#111827",
+                    }}
+                  >
+                    {dia}
+                    {cantidadCitas > 0 && (
+                      <span
+                        style={{
+                          position: "absolute",
+                          bottom: "6px",
+                          right: "6px",
+                          minWidth: "18px",
+                          height: "18px",
+                          borderRadius: "999px",
+                          backgroundColor: "#0f766e",
+                          color: "white",
+                          fontSize: "11px",
+                          display: "inline-flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          padding: "0 5px",
+                          fontWeight: "bold",
+                        }}
+                      >
+                        {cantidadCitas}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
-          <h3 style={{ marginBottom: "16px" }}>
-            Citas para el {formatearFecha(fechaSeleccionada)}
-          </h3>
+          <div>
+            <div
+              style={{
+                display: "flex",
+                gap: "12px",
+                flexWrap: "wrap",
+                marginBottom: "24px",
+              }}
+            >
+              <div style={tarjetaResumenStyle}>
+                <strong>Total</strong>
+                <p style={{ fontSize: "28px", margin: "8px 0 0" }}>
+                  {resumenDelDia.total}
+                </p>
+              </div>
 
-          {citasDelDia.length === 0 ? (
-            <p>No hay citas para esta fecha.</p>
-          ) : (
-            <div style={{ display: "grid", gap: "14px" }}>
-              {citasDelDia.map((cita) => (
-                <div
-                  key={cita.id}
+              <div style={tarjetaResumenStyle}>
+                <strong>Pendientes</strong>
+                <p
                   style={{
-                    border: "1px solid #d1d5db",
-                    borderRadius: "16px",
-                    padding: "18px",
-                    background: "rgba(255,255,255,0.82)",
-                    backdropFilter: "blur(4px)",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.06)",
+                    fontSize: "28px",
+                    margin: "8px 0 0",
+                    color: colorContadorResumen("pendiente"),
                   }}
                 >
+                  {resumenDelDia.pendiente}
+                </p>
+              </div>
+
+              <div style={tarjetaResumenStyle}>
+                <strong>Confirmadas</strong>
+                <p
+                  style={{
+                    fontSize: "28px",
+                    margin: "8px 0 0",
+                    color: colorContadorResumen("confirmada"),
+                  }}
+                >
+                  {resumenDelDia.confirmada}
+                </p>
+              </div>
+
+              <div style={tarjetaResumenStyle}>
+                <strong>Completadas</strong>
+                <p
+                  style={{
+                    fontSize: "28px",
+                    margin: "8px 0 0",
+                    color: colorContadorResumen("completada"),
+                  }}
+                >
+                  {resumenDelDia.completada}
+                </p>
+              </div>
+
+              <div style={tarjetaResumenStyle}>
+                <strong>Canceladas</strong>
+                <p
+                  style={{
+                    fontSize: "28px",
+                    margin: "8px 0 0",
+                    color: colorContadorResumen("cancelada"),
+                  }}
+                >
+                  {resumenDelDia.cancelada}
+                </p>
+              </div>
+            </div>
+
+            <h3 style={{ marginBottom: "16px" }}>
+              Citas para el {formatearFecha(fechaSeleccionada)}
+            </h3>
+
+            {citasDelDia.length === 0 ? (
+              <div
+                style={{
+                  borderRadius: "16px",
+                  padding: "20px",
+                  background: "rgba(255,255,255,0.8)",
+                  border: "1px solid #d1d5db",
+                }}
+              >
+                No hay citas para esta fecha.
+              </div>
+            ) : (
+              <div style={{ display: "grid", gap: "16px" }}>
+                {citasDelDia.map((cita) => (
                   <div
+                    key={cita.id}
                     style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      gap: "12px",
-                      flexWrap: "wrap",
-                      marginBottom: "12px",
+                      display: "grid",
+                      gridTemplateColumns: "110px 1fr",
+                      gap: "16px",
+                      alignItems: "stretch",
                     }}
                   >
-                    <div>
-                      <p style={{ margin: 0, fontSize: "20px", fontWeight: "bold" }}>
-                        {cita.hora}
-                      </p>
-                      <p style={{ margin: "6px 0 0", fontSize: "18px" }}>
-                        <strong>{cita.paciente?.nombre || "Paciente no disponible"}</strong>
-                      </p>
-                    </div>
-
-                    <div>
+                    <div
+                      style={{
+                        borderLeft: "4px solid #0f766e",
+                        borderRadius: "14px",
+                        background: "rgba(255,255,255,0.78)",
+                        padding: "18px 14px",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
+                      }}
+                    >
                       <span
                         style={{
-                          ...estiloEstado(cita.estado),
-                          padding: "6px 12px",
-                          borderRadius: "999px",
+                          fontSize: "22px",
                           fontWeight: "bold",
-                          display: "inline-block",
+                          color: "#0f172a",
                         }}
                       >
-                        {cita.estado}
+                        {cita.hora}
                       </span>
                     </div>
-                  </div>
 
-                  <div style={{ display: "grid", gap: "6px", marginBottom: "14px" }}>
-                    <p style={{ margin: 0 }}>
-                      <strong>Cédula:</strong>{" "}
-                      {cita.paciente?.cedula || "No disponible"}
-                    </p>
-
-                    <p style={{ margin: 0 }}>
-                      <strong>Teléfono:</strong>{" "}
-                      {cita.paciente?.telefono || "No disponible"}
-                    </p>
-
-                    <p style={{ margin: 0 }}>
-                      <strong>Motivo:</strong> {cita.motivo || "Sin motivo"}
-                    </p>
-                  </div>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: "10px",
-                      flexWrap: "wrap",
-                      alignItems: "center",
-                    }}
-                  >
-                    <select
-                      value={cita.estado}
-                      onChange={(e) =>
-                        handleCambiarEstado(cita.id, e.target.value)
-                      }
-                      disabled={actualizandoId === cita.id}
-                      style={{ padding: "8px", borderRadius: "8px" }}
+                    <div
+                      style={{
+                        border: "1px solid #d1d5db",
+                        borderRadius: "18px",
+                        padding: "18px",
+                        background: "rgba(255,255,255,0.84)",
+                        backdropFilter: "blur(4px)",
+                        boxShadow: "0 8px 18px rgba(0,0,0,0.06)",
+                      }}
                     >
-                      <option value="pendiente">pendiente</option>
-                      <option value="confirmada">confirmada</option>
-                      <option value="completada">completada</option>
-                      <option value="cancelada">cancelada</option>
-                    </select>
-
-                    {cita.paciente?.id && (
-                      <button
-                        onClick={() => navigate(`/paciente/${cita.paciente.id}`)}
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          gap: "12px",
+                          flexWrap: "wrap",
+                          marginBottom: "14px",
+                        }}
                       >
-                        Abrir ficha
-                      </button>
-                    )}
+                        <div>
+                          <p
+                            style={{
+                              margin: 0,
+                              fontSize: "20px",
+                              fontWeight: "bold",
+                              color: "#111827",
+                            }}
+                          >
+                            {cita.paciente?.nombre || "Paciente no disponible"}
+                          </p>
+                        </div>
+
+                        <span
+                          style={{
+                            ...estiloEstadoChip(cita.estado),
+                            padding: "6px 12px",
+                            borderRadius: "999px",
+                            fontWeight: "bold",
+                            display: "inline-block",
+                            height: "fit-content",
+                          }}
+                        >
+                          {cita.estado}
+                        </span>
+                      </div>
+
+                      <div
+                        style={{
+                          display: "grid",
+                          gap: "8px",
+                          marginBottom: "16px",
+                        }}
+                      >
+                        <p style={{ margin: 0 }}>
+                          <strong>Cédula:</strong>{" "}
+                          {cita.paciente?.cedula || "No disponible"}
+                        </p>
+
+                        <p style={{ margin: 0 }}>
+                          <strong>Teléfono:</strong>{" "}
+                          {cita.paciente?.telefono || "No disponible"}
+                        </p>
+
+                        <p style={{ margin: 0 }}>
+                          <strong>Motivo:</strong> {cita.motivo || "Sin motivo"}
+                        </p>
+                      </div>
+<div
+  style={{
+    display: "flex",
+    gap: "10px",
+    flexWrap: "wrap",
+    alignItems: "center",
+  }}
+>
+  <button
+    style={{
+      ...(cita.estado === "confirmada" ? botonClaro : botonAzul),
+      opacity: actualizandoId === cita.id ? 0.7 : 1,
+    }}
+    onClick={() => handleCambiarEstado(cita.id, "confirmada")}
+    disabled={actualizandoId === cita.id || cita.estado === "confirmada"}
+  >
+    Confirmar
+  </button>
+
+  <button
+    style={{
+      ...(cita.estado === "completada" ? botonClaro : botonVerde),
+      opacity: actualizandoId === cita.id ? 0.7 : 1,
+    }}
+    onClick={() => handleCambiarEstado(cita.id, "completada")}
+    disabled={actualizandoId === cita.id || cita.estado === "completada"}
+  >
+    Completar
+  </button>
+
+  <button
+    style={{
+      ...(cita.estado === "cancelada" ? botonClaro : botonRojo),
+      opacity: actualizandoId === cita.id ? 0.7 : 1,
+    }}
+    onClick={() => handleCambiarEstado(cita.id, "cancelada")}
+    disabled={actualizandoId === cita.id || cita.estado === "cancelada"}
+  >
+    Cancelar
+  </button>
+
+  {cita.paciente?.id && (
+    <button
+      style={botonPrimario}
+      onClick={() => navigate(`/paciente/${cita.paciente.id}`)}
+    >
+      Abrir ficha
+    </button>
+  )}
+</div>
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

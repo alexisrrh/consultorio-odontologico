@@ -1,6 +1,19 @@
 import { supabase } from "./supabase";
 
 export async function crearCita(cita) {
+  const { data: existentes, error: errorBusqueda } = await supabase
+    .from("citas")
+    .select("*")
+    .eq("medico_id", cita.medico_id)
+    .eq("fecha", cita.fecha)
+    .eq("hora", cita.hora);
+
+  if (errorBusqueda) throw errorBusqueda;
+
+  if (existentes.length > 0) {
+    throw new Error("Esa hora ya está ocupada");
+  }
+
   const { data, error } = await supabase
     .from("citas")
     .insert([cita])

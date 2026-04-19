@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Encabezado from "../componentes/Encabezado";
+import NavbarMedico from "../componentes/NavbarMedico";
 import FormularioPaciente from "../componentes/FormularioPaciente";
 import FichaPaciente from "../componentes/FichaPaciente";
 import HistorialPaciente from "../componentes/HistorialPaciente";
 import PresupuestoPaciente from "../componentes/PresupuestoPaciente";
 import PanelPacientes from "../componentes/PanelPacientes";
-import { cerrarSesion } from "../servicios/auth";
 import {
   crearPaciente,
   actualizarPaciente,
@@ -15,8 +13,6 @@ import {
 } from "../servicios/api";
 
 function PanelClinico() {
-  const navigate = useNavigate();
-
   const [pacientes, setPacientes] = useState([]);
   const [loadingPacientes, setLoadingPacientes] = useState(true);
 
@@ -39,16 +35,6 @@ function PanelClinico() {
 
     cargarPacientes();
   }, []);
-
-  const handleLogout = async () => {
-    try {
-      await cerrarSesion();
-      navigate("/login-medico");
-    } catch (error) {
-      console.error("Error cerrando sesión:", error);
-      alert("No se pudo cerrar sesión");
-    }
-  };
 
   const abrirFicha = (paciente) => {
     setPacienteActivo(paciente);
@@ -145,17 +131,8 @@ function PanelClinico() {
   };
 
   return (
-    <div className="app">
-      <Encabezado />
-
-      <div style={{ display: "flex", gap: "10px", margin: "10px 0" }}>
-      
-
-        <button onClick={() => navigate("/citas-medico")}>
-          Ver citas
-        </button>
-
-      </div>
+    <div className="app" style={{ padding: "20px" }}>
+      <NavbarMedico />
 
       {pacientePresupuesto ? (
         <main className="contenedor-ficha-completa">

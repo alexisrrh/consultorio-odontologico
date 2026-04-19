@@ -25,32 +25,32 @@ function Miscitas() {
     cargarCitas();
   }, [usuario]);
 
-  if (loading) return <p>Cargando citas...</p>;
+  if (loading) {
+    return <p>Cargando citas...</p>;
+  }
 
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
       <h2>Mis citas</h2>
 
       {citas.length === 0 ? (
         <p>No tienes citas agendadas todavía.</p>
       ) : (
-        <div>
+        <div style={{ display: "grid", gap: "12px" }}>
           {citas.map((cita) => (
             <div
               key={cita.id}
               style={{
-                border: "1px solid #ccc",
-                padding: "12px",
-                marginBottom: "10px",
-                borderRadius: "8px",
+                border: "1px solid #d1d5db",
+                borderRadius: "12px",
+                padding: "16px",
+                background: "rgba(255,255,255,0.8)",
               }}
             >
               <p><strong>Fecha:</strong> {cita.fecha}</p>
               <p><strong>Hora:</strong> {cita.hora}</p>
               <p><strong>Motivo:</strong> {cita.motivo || "Sin motivo"}</p>
               <p><strong>Estado:</strong> {cita.estado}</p>
-              <p><strong>Médico ID:</strong> {cita.medico_id}</p>
-              <p><strong>Paciente ID:</strong> {cita.paciente_id}</p>
             </div>
           ))}
         </div>
