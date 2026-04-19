@@ -26,11 +26,12 @@ function LoginCliente() {
 
       if (error) throw error;
 
-      if (perfil.rol === "medico") {
-        navigate("/panel-clinico");
-      } else {
-        navigate("/agendar-cita");
+      if (perfil.rol !== "cliente") {
+        alert("Este usuario no es cliente");
+        return;
       }
+
+      navigate("/");
     } catch (error) {
       console.error(error);
       alert(error.message || "No se pudo iniciar sesión");
@@ -39,7 +40,7 @@ function LoginCliente() {
 
   return (
     <form onSubmit={handleLogin}>
-      <h2>Login</h2>
+      <h2>Login Cliente</h2>
 
       <input
         type="email"

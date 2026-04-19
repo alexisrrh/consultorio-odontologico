@@ -1,7 +1,8 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import ProtectedRoute from "./rutas/ProtectedRoute";
 
+import Home from "./paginas/Home";
 import LoginCliente from "./paginas/LoginCliente";
 import LoginMedico from "./paginas/LoginMedico";
 import RegistroCliente from "./paginas/RegistroCliente";
@@ -19,7 +20,7 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Navigate to="/login-cliente" replace />} />
+          <Route path="/" element={<Home />} />
           <Route path="/login-cliente" element={<LoginCliente />} />
           <Route path="/login-medico" element={<LoginMedico />} />
           <Route path="/registro-cliente" element={<RegistroCliente />} />

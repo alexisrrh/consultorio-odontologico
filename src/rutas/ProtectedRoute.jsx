@@ -14,10 +14,10 @@ function ProtectedRoute({ children, allowedRoles = [] }) {
 
   if (allowedRoles.length > 0 && !allowedRoles.includes(perfil?.rol)) {
     if (perfil?.rol === "medico") {
-      return <Navigate to="/panel-clinico" replace />;
+      return <Navigate to="/dashboard-medico" replace />;
     }
 
-    return <Navigate to="/agendar-cita" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return children;

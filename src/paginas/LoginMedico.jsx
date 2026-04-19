@@ -31,7 +31,7 @@ function LoginMedico() {
         return;
       }
 
-      navigate("/panel-clinico");
+      navigate("/dashboard-medico");
     } catch (error) {
       console.error(error);
       alert(error.message || "No se pudo iniciar sesión");

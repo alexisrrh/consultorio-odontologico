@@ -27,6 +27,8 @@ function AgendarCita() {
   const [guardando, setGuardando] = useState(false);
   const [loadingDatos, setLoadingDatos] = useState(true);
 
+  const hoy = new Date().toISOString().split("T")[0];
+
   useEffect(() => {
     async function cargarDatos() {
       if (!usuario || !perfil) return;
@@ -59,11 +61,28 @@ function AgendarCita() {
   const handleLogout = async () => {
     try {
       await cerrarSesion();
-      navigate("/login-cliente");
+      navigate("/");
     } catch (error) {
       console.error("Error cerrando sesión:", error);
       alert("No se pudo cerrar sesión");
     }
+  };
+
+  const horaPermitida = (horaTexto) => {
+    if (!horaTexto) return false;
+
+    const [horas, minutos] = horaTexto.split(":").map(Number);
+    const totalMinutos = horas * 60 + minutos;
+
+    const inicioManana = 8 * 60;
+    const finManana = 13 * 60;
+    const inicioTarde = 14 * 60;
+    const finTarde = 17 * 60;
+
+    const enManana = totalMinutos >= inicioManana && totalMinutos <= finManana;
+    const enTarde = totalMinutos >= inicioTarde && totalMinutos <= finTarde;
+
+    return enManana || enTarde;
   };
 
   const handleSubmit = async (e) => {
@@ -81,6 +100,21 @@ function AgendarCita() {
 
     if (!fecha || !hora) {
       alert("Debes seleccionar fecha y hora");
+      return;
+    }
+
+    const fechaHoy = new Date();
+    fechaHoy.setHours(0, 0, 0, 0);
+
+    const fechaSeleccionada = new Date(fecha);
+
+    if (fechaSeleccionada < fechaHoy) {
+      alert("No puedes seleccionar fechas pasadas");
+      return;
+    }
+
+    if (!horaPermitida(hora)) {
+      alert("Solo se atiende de 08:00 a 12:00 y de 14:00 a 17:00");
       return;
     }
 
@@ -128,16 +162,28 @@ function AgendarCita() {
   };
 
   if (loadingDatos) {
-    return <p>Cargando datos...</p>;
+    return <p style={{ padding: "20px" }}>Cargando datos...</p>;
   }
 
   return (
-    <div>
-      <button onClick={handleLogout}>Cerrar sesión</button>
-
-      <form onSubmit={handleSubmit}>
+    <div style={{ padding: "20px" }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: "20px",
+          flexWrap: "wrap",
+          gap: "12px",
+        }}
+      >
         <h2>Agendar Cita</h2>
+        <button onClick={handleLogout}>Cerrar sesión</button>
+      </div>
 
+      <form
+        onSubmit={handleSubmit}
+        style={{ display: "grid", gap: "12px", maxWidth: "420px" }}
+      >
         <p>
           <strong>Médico asignado:</strong>{" "}
           {medico ? medico.nombre : "No disponible"}
@@ -149,8 +195,6 @@ function AgendarCita() {
           </p>
         ) : (
           <>
-            <h3>Completa tus datos para crear tu ficha</h3>
-
             <input
               type="text"
               placeholder="Nombre completo"
@@ -177,14 +221,22 @@ function AgendarCita() {
         <input
           type="date"
           value={fecha}
+          min={hoy}
           onChange={(e) => setFecha(e.target.value)}
         />
 
         <input
           type="time"
           value={hora}
+          min="08:00"
+          max="17:00"
+          step="1800"
           onChange={(e) => setHora(e.target.value)}
         />
+
+        <small style={{ color: "#555" }}>
+          Horario disponible: 08:00 a 12:00 y 14:00 a 17:00
+        </small>
 
         <input
           type="text"

@@ -1,6 +1,38 @@
 import { supabase } from "./supabase";
 
+function horaPermitida(hora) {
+  if (!hora) return false;
+
+  const [horas, minutos] = hora.split(":").map(Number);
+  const totalMinutos = horas * 60 + minutos;
+
+  const inicioManana = 8 * 60;
+  const finManana = 13 * 60;
+  const inicioTarde = 14 * 60;
+  const finTarde = 17 * 60;
+
+  const enManana = totalMinutos >= inicioManana && totalMinutos <= finManana;
+  const enTarde = totalMinutos >= inicioTarde && totalMinutos <= finTarde;
+
+  return enManana || enTarde;
+}
+
 export async function crearCita(cita) {
+  const fechaHoy = new Date();
+  fechaHoy.setHours(0, 0, 0, 0);
+
+  const fechaSeleccionada = new Date(cita.fecha);
+
+  if (fechaSeleccionada < fechaHoy) {
+    throw new Error("No puedes agendar citas en fechas pasadas");
+  }
+
+  if (!horaPermitida(cita.hora)) {
+    throw new Error(
+      "La hora no está permitida. Solo se atiende de 08:00 a 12:00 y de 14:00 a 17:00"
+    );
+  }
+
   const { data: existentes, error: errorBusqueda } = await supabase
     .from("citas")
     .select("*")
