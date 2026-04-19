@@ -1,23 +1,24 @@
-import logo1 from "../assets/logo1.png";
-import logo2 from "../assets/logo2.png";
+import { cerrarSesion } from "../servicios/auth";
+import { useNavigate } from "react-router-dom";
 
 function Encabezado() {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await cerrarSesion();
+      navigate("/login-cliente");
+    } catch (error) {
+      console.error("Error cerrando sesión:", error);
+      alert("No se pudo cerrar sesión");
+    }
+  };
+
   return (
-    <header className="barra-superior-minimal">
-      <div className="barra-superior-minimal__contenido">
-        
-        {/* IZQUIERDA */}
-        <div className="logo-izquierdo">
-          <img src={logo1} alt="Logo izquierda" />
-        </div>
-
-        {/* DERECHA */}
-        <div className="logo-derecho">
-          <img src={logo1} alt="Logo derecha" />
-        </div>
-
-      </div>
-    </header>
+    <div>
+      <h1>Clínica</h1>
+      <button onClick={handleLogout}>Cerrar sesión</button>
+    </div>
   );
 }
 
