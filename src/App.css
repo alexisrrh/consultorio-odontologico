@@ -3008,3 +3008,321 @@ textarea {
     justify-content: center;
   }
 }
+
+/* =========================================================
+   DASHBOARD MÉDICO
+========================================================= */
+
+.dashboard-medico-page {
+  min-height: 100vh;
+  padding: 20px;
+  background: linear-gradient(rgba(255,255,255,0.38), rgba(255,255,255,0.42));
+
+}
+
+.dashboard-medico-wrapper {
+  width: min(1320px, calc(100% - 24px));
+  margin: 0 auto;
+}
+.dashboard-header {
+  margin-bottom: 28px;
+  padding: 28px 30px;
+  border-radius: 30px;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.96),
+    rgba(230,248,244,0.92)
+  );
+  border: 1px solid rgba(122, 199, 194, 0.32);
+  box-shadow: 0 20px 44px rgba(15, 118, 110, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+.dashboard-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dashboard-logo {
+  width: 88px;
+  height: 88px;
+  object-fit: contain;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(228,240,249,0.92));
+  padding: 8px;
+  box-shadow: 0 10px 24px rgba(15, 118, 110, 0.14);
+}
+.dashboard-badge {
+  margin: 0 0 8px;
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.1);
+  color: #0f766e;
+  border: 1px solid rgba(15, 118, 110, 0.12);
+  font-weight: 800;
+  font-size: 0.82rem;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  color: #134e4a;
+}
+
+.dashboard-subtexto {
+  margin: 10px 0 0;
+  color: #547177;
+  line-height: 1.7;
+  max-width: 700px;
+}
+
+.dashboard-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.dashboard-stat-card {
+  padding: 22px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(236,253,245,0.84));
+  border: 1px solid rgba(180, 210, 214, 0.95);
+  box-shadow: 0 18px 40px rgba(15, 118, 110, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.dashboard-stat-label {
+  display: block;
+  color: #5d7278;
+  font-size: 0.88rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.dashboard-stat-card strong {
+  display: block;
+  font-size: 2rem;
+  color: #134e4a;
+}
+
+.estado-texto.pendiente {
+  color: #92400e;
+}
+
+.estado-texto.confirmada {
+  color: #1d4ed8;
+}
+
+.estado-texto.completada {
+  color: #166534;
+}
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 1.35fr 0.85fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.dashboard-panel {
+  padding: 26px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(236,253,245,0.84));
+  border: 1px solid rgba(180, 210, 214, 0.95);
+  box-shadow: 0 18px 40px rgba(15, 118, 110, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.dashboard-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.dashboard-panel-header h3,
+.dashboard-panel h3 {
+  margin: 0 0 6px;
+  color: #134e4a;
+  font-size: 1.4rem;
+}
+
+.dashboard-panel-header p,
+.dashboard-panel-texto {
+  margin: 0;
+  color: #547177;
+  line-height: 1.7;
+}
+
+.dashboard-citas-lista {
+  display: grid;
+  gap: 16px;
+}
+
+.dashboard-cita-card {
+  padding: 18px;
+  border-radius: 22px;
+  background: rgba(240, 248, 249, 0.92);
+  border: 1px solid rgba(15, 118, 110, 0.08);
+}
+
+.dashboard-cita-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.dashboard-cita-label {
+  margin: 0 0 6px;
+  color: #5d7278;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+}
+
+.dashboard-cita-top h4 {
+  margin: 0;
+  color: #134e4a;
+  font-size: 1.15rem;
+}
+
+.dashboard-cita-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.dashboard-cita-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.86);
+  border: 1px solid rgba(15, 118, 110, 0.08);
+}
+
+.dashboard-cita-item.full {
+  grid-column: 1 / -1;
+}
+
+.dashboard-cita-item span {
+  color: #5d7278;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.dashboard-cita-item strong {
+  color: #134e4a;
+  line-height: 1.5;
+}
+
+.dashboard-panel-lateral {
+  display: flex;
+  flex-direction: column;
+}
+
+.dashboard-acciones-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.dashboard-empty {
+  padding: 40px 26px;
+  border-radius: 28px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(236,253,245,0.84));
+  border: 1px solid rgba(180, 210, 214, 0.95);
+  box-shadow: 0 18px 40px rgba(15, 118, 110, 0.1);
+}
+
+.dashboard-empty.small {
+  padding: 28px 22px;
+}
+
+.dashboard-empty h3 {
+  margin: 0 0 10px;
+  color: #134e4a;
+  font-size: 1.5rem;
+}
+
+.dashboard-empty p {
+  margin: 0;
+  color: #547177;
+  line-height: 1.7;
+}
+
+.dashboard-empty.error {
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  background: rgba(254, 242, 242, 0.92);
+}
+
+@media (max-width: 1100px) {
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 780px) {
+  .dashboard-stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-brand {
+    align-items: flex-start;
+  }
+
+  .dashboard-logo {
+    width: 62px;
+    height: 62px;
+  }
+
+  .dashboard-header h1 {
+    font-size: 1.9rem;
+  }
+
+  .dashboard-panel-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 560px) {
+  .dashboard-medico-page {
+    padding: 16px;
+  }
+
+  .dashboard-medico-wrapper {
+    width: min(1200px, calc(100% - 8px));
+  }
+
+  .dashboard-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-panel,
+  .dashboard-header,
+  .dashboard-stat-card,
+  .dashboard-cita-card {
+    border-radius: 22px;
+  }
+
+  .dashboard-panel .btn-principal,
+  .dashboard-acciones-grid .btn-principal,
+  .dashboard-acciones-grid .btn-secundario {
+    width: 100%;
+    justify-content: center;
+  }
+}

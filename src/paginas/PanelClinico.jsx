@@ -5,6 +5,7 @@ import FichaPaciente from "../componentes/FichaPaciente";
 import HistorialPaciente from "../componentes/HistorialPaciente";
 import PresupuestoPaciente from "../componentes/PresupuestoPaciente";
 import PanelPacientes from "../componentes/PanelPacientes";
+import logoClinica from "../assets/logo-clinica.png";
 import {
   crearPaciente,
   actualizarPaciente,
@@ -15,6 +16,7 @@ import {
 function PanelClinico() {
   const [pacientes, setPacientes] = useState([]);
   const [loadingPacientes, setLoadingPacientes] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const [pacienteActivo, setPacienteActivo] = useState(null);
   const [pacienteHistorial, setPacienteHistorial] = useState(null);
@@ -23,11 +25,12 @@ function PanelClinico() {
   useEffect(() => {
     async function cargarPacientes() {
       try {
+        setErrorMsg("");
         const data = await obtenerPacientes();
-        setPacientes(data);
+        setPacientes(data || []);
       } catch (error) {
         console.error("Error cargando pacientes:", error);
-        alert(error.message || "No se pudieron cargar los pacientes");
+        setErrorMsg(error.message || "No se pudieron cargar los pacientes");
       } finally {
         setLoadingPacientes(false);
       }
@@ -130,9 +133,41 @@ function PanelClinico() {
     }
   };
 
+  const mostrandoVistaDetalle =
+    pacientePresupuesto || pacienteHistorial || pacienteActivo;
+
   return (
-    <div className="app" style={{ padding: "20px" }}>
+    <div className="app panel-clinico-page">
       <NavbarMedico />
+
+      {!mostrandoVistaDetalle && (
+        <div className="panel-clinico-wrapper">
+          <header className="panel-clinico-header">
+            <div className="panel-clinico-brand">
+              <img
+                src={logoClinica}
+                alt="Logo clínica"
+                className="panel-clinico-logo"
+              />
+              <div>
+                <p className="panel-clinico-badge">Panel clínico</p>
+                <h1>Gestión de pacientes</h1>
+                <p className="panel-clinico-subtexto">
+                  Registra pacientes, completa fichas clínicas, consulta
+                  historiales y genera presupuestos desde un solo lugar.
+                </p>
+              </div>
+            </div>
+          </header>
+
+          {errorMsg && (
+            <div className="panel-clinico-error">
+              <h3>Ocurrió un problema</h3>
+              <p>{errorMsg}</p>
+            </div>
+          )}
+        </div>
+      )}
 
       {pacientePresupuesto ? (
         <main className="contenedor-ficha-completa">
@@ -158,19 +193,23 @@ function PanelClinico() {
           />
         </main>
       ) : (
-        <main className="contenedor-principal">
+        <main className="contenedor-principal panel-clinico-main">
           <section className="columna izquierda">
-            <FormularioPaciente alGuardar={agregarPaciente} />
+            <div className="panel-clinico-bloque">
+              <FormularioPaciente alGuardar={agregarPaciente} />
+            </div>
           </section>
 
-          <PanelPacientes
-            pacientes={pacientes}
-            loading={loadingPacientes}
-            alCompletarFicha={abrirFicha}
-            alVerHistorial={abrirHistorial}
-            alVerPresupuesto={abrirPresupuesto}
-            alEliminar={eliminarPaciente}
-          />
+          <div className="panel-clinico-bloque">
+            <PanelPacientes
+              pacientes={pacientes}
+              loading={loadingPacientes}
+              alCompletarFicha={abrirFicha}
+              alVerHistorial={abrirHistorial}
+              alVerPresupuesto={abrirPresupuesto}
+              alEliminar={eliminarPaciente}
+            />
+          </div>
         </main>
       )}
     </div>

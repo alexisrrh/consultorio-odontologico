@@ -4,6 +4,7 @@ import NavbarMedico from "../componentes/NavbarMedico";
 import { useAuth } from "../context/AuthContext";
 import { obtenerCitasMedico } from "../servicios/citas";
 import { obtenerPacientes } from "../servicios/api";
+import logoClinica from "../assets/logo-clinica.png";
 
 function DashboardMedico() {
   const { usuario, perfil } = useAuth();
@@ -12,12 +13,15 @@ function DashboardMedico() {
   const [citas, setCitas] = useState([]);
   const [pacientes, setPacientes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     async function cargarDashboard() {
       if (!usuario) return;
 
       try {
+        setErrorMsg("");
+
         const [citasData, pacientesData] = await Promise.all([
           obtenerCitasMedico(usuario.id),
           obtenerPacientes(),
@@ -27,7 +31,7 @@ function DashboardMedico() {
         setPacientes(pacientesData || []);
       } catch (error) {
         console.error("Error cargando dashboard médico:", error);
-        alert(error.message || "No se pudo cargar el dashboard");
+        setErrorMsg(error.message || "No se pudo cargar el dashboard");
       } finally {
         setLoading(false);
       }
@@ -74,139 +78,168 @@ function DashboardMedico() {
       .slice(0, 5);
   }, [citas]);
 
-  const tarjetaStyle = {
-    borderRadius: "18px",
-    padding: "18px",
-    background: "rgba(255,255,255,0.88)",
-    border: "1px solid #d1d5db",
-    boxShadow: "0 8px 20px rgba(0,0,0,0.06)",
+  const formatearFecha = (fecha) => {
+    if (!fecha) return "-";
+
+    const fechaObj = new Date(fecha);
+    if (Number.isNaN(fechaObj.getTime())) return fecha;
+
+    return fechaObj.toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
   };
 
   if (loading) {
-    return <p style={{ padding: "20px" }}>Cargando dashboard médico...</p>;
+    return (
+      <div className="dashboard-medico-page">
+        <NavbarMedico />
+        <div className="dashboard-medico-wrapper">
+          <div className="dashboard-empty">
+            <h3>Cargando dashboard médico...</h3>
+            <p>Espera un momento mientras preparamos la información.</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="dashboard-medico-page">
       <NavbarMedico />
 
-      <div style={{ marginBottom: "24px" }}>
-        <h2 style={{ margin: 0 }}>Dashboard Médico</h2>
-        <p style={{ margin: "6px 0 0", color: "#4b5563" }}>
-          Bienvenido, {perfil?.nombre || "Doctor"}
-        </p>
-      </div>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-          gap: "16px",
-          marginBottom: "24px",
-        }}
-      >
-        <div style={tarjetaStyle}>
-          <strong>Pacientes registrados</strong>
-          <p style={{ fontSize: "28px", margin: "10px 0 0" }}>
-            {pacientes.length}
-          </p>
-        </div>
-
-        <div style={tarjetaStyle}>
-          <strong>Citas de hoy</strong>
-          <p style={{ fontSize: "28px", margin: "10px 0 0" }}>
-            {citasHoy.length}
-          </p>
-        </div>
-
-        <div style={tarjetaStyle}>
-          <strong>Pendientes hoy</strong>
-          <p style={{ fontSize: "28px", margin: "10px 0 0", color: "#92400e" }}>
-            {pendientesHoy}
-          </p>
-        </div>
-
-        <div style={tarjetaStyle}>
-          <strong>Confirmadas hoy</strong>
-          <p style={{ fontSize: "28px", margin: "10px 0 0", color: "#1e40af" }}>
-            {confirmadasHoy}
-          </p>
-        </div>
-
-        <div style={tarjetaStyle}>
-          <strong>Completadas hoy</strong>
-          <p style={{ fontSize: "28px", margin: "10px 0 0", color: "#065f46" }}>
-            {completadasHoy}
-          </p>
-        </div>
-      </div>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1.2fr 0.8fr",
-          gap: "20px",
-        }}
-      >
-        <div style={tarjetaStyle}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              gap: "12px",
-              alignItems: "center",
-              marginBottom: "16px",
-              flexWrap: "wrap",
-            }}
-          >
-            <h3 style={{ margin: 0 }}>Próximas citas</h3>
-            <button onClick={() => navigate("/citas-medico")}>
-              Ver agenda completa
-            </button>
-          </div>
-
-          {proximasCitas.length === 0 ? (
-            <p>No hay citas registradas.</p>
-          ) : (
-            <div style={{ display: "grid", gap: "12px" }}>
-              {proximasCitas.map((cita) => (
-                <div
-                  key={cita.id}
-                  style={{
-                    border: "1px solid #e5e7eb",
-                    borderRadius: "14px",
-                    padding: "14px",
-                    backgroundColor: "white",
-                  }}
-                >
-                  <p style={{ margin: 0, fontWeight: "bold" }}>
-                    {cita.fecha} - {cita.hora}
-                  </p>
-                  <p style={{ margin: "6px 0 0" }}>
-                    <strong>Motivo:</strong> {cita.motivo || "Sin motivo"}
-                  </p>
-                  <p style={{ margin: "6px 0 0" }}>
-                    <strong>Estado:</strong> {cita.estado}
-                  </p>
-                </div>
-              ))}
+      <div className="dashboard-medico-wrapper">
+        <header className="dashboard-header">
+          <div className="dashboard-brand">
+            <img
+              src={logoClinica}
+              alt="Logo clínica"
+              className="dashboard-logo"
+            />
+            <div>
+              <p className="dashboard-badge">Panel médico</p>
+              <h1>Dashboard Médico</h1>
+              <p className="dashboard-subtexto">
+                Bienvenido, {perfil?.nombre || "Doctor"}. Aquí puedes consultar
+                tus citas, pacientes y accesos rápidos del sistema.
+              </p>
             </div>
-          )}
-        </div>
-
-        <div style={tarjetaStyle}>
-          <h3 style={{ marginTop: 0 }}>Acciones rápidas</h3>
-
-          <div style={{ display: "grid", gap: "12px" }}>
-            <button onClick={() => navigate("/panel-clinico")}>
-              Ir al panel clínico
-            </button>
-
-            <button onClick={() => navigate("/citas-medico")}>
-              Ver agenda médica
-            </button>
           </div>
-        </div>
+        </header>
+
+        {errorMsg ? (
+          <div className="dashboard-empty error">
+            <h3>Ocurrió un problema</h3>
+            <p>{errorMsg}</p>
+          </div>
+        ) : (
+          <>
+            <section className="dashboard-stats-grid">
+              <article className="dashboard-stat-card">
+                <span className="dashboard-stat-label">Pacientes registrados</span>
+                <strong>{pacientes.length}</strong>
+              </article>
+
+              <article className="dashboard-stat-card">
+                <span className="dashboard-stat-label">Citas de hoy</span>
+                <strong>{citasHoy.length}</strong>
+              </article>
+
+              <article className="dashboard-stat-card">
+                <span className="dashboard-stat-label">Pendientes hoy</span>
+                <strong className="estado-texto pendiente">{pendientesHoy}</strong>
+              </article>
+
+              <article className="dashboard-stat-card">
+                <span className="dashboard-stat-label">Confirmadas hoy</span>
+                <strong className="estado-texto confirmada">{confirmadasHoy}</strong>
+              </article>
+
+              <article className="dashboard-stat-card">
+                <span className="dashboard-stat-label">Completadas hoy</span>
+                <strong className="estado-texto completada">{completadasHoy}</strong>
+              </article>
+            </section>
+
+            <section className="dashboard-layout">
+              <div className="dashboard-panel">
+                <div className="dashboard-panel-header">
+                  <div>
+                    <h3>Próximas citas</h3>
+                    <p>Resumen rápido de las siguientes citas registradas.</p>
+                  </div>
+
+                  <button
+                    className="btn-principal"
+                    onClick={() => navigate("/citas-medico")}
+                  >
+                    Ver agenda completa
+                  </button>
+                </div>
+
+                {proximasCitas.length === 0 ? (
+                  <div className="dashboard-empty small">
+                    <h3>No hay citas registradas</h3>
+                    <p>Cuando se registren nuevas citas aparecerán aquí.</p>
+                  </div>
+                ) : (
+                  <div className="dashboard-citas-lista">
+                    {proximasCitas.map((cita) => (
+                      <article key={cita.id} className="dashboard-cita-card">
+                        <div className="dashboard-cita-top">
+                          <div>
+                            <p className="dashboard-cita-label">Fecha</p>
+                            <h4>{formatearFecha(cita.fecha)}</h4>
+                          </div>
+
+                          <span className={`estado-cita ${cita.estado || "pendiente"}`}>
+                            {cita.estado || "pendiente"}
+                          </span>
+                        </div>
+
+                        <div className="dashboard-cita-grid">
+                          <div className="dashboard-cita-item">
+                            <span>Hora</span>
+                            <strong>{cita.hora || "-"}</strong>
+                          </div>
+
+                          <div className="dashboard-cita-item full">
+                            <span>Motivo</span>
+                            <strong>{cita.motivo || "Sin motivo"}</strong>
+                          </div>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <aside className="dashboard-panel dashboard-panel-lateral">
+                <h3>Acciones rápidas</h3>
+                <p className="dashboard-panel-texto">
+                  Accede rápidamente a las secciones principales del panel.
+                </p>
+
+                <div className="dashboard-acciones-grid">
+                  <button
+                    className="btn-principal"
+                    onClick={() => navigate("/panel-clinico")}
+                  >
+                    Ir al panel clínico
+                  </button>
+
+                  <button
+                    className="btn-secundario"
+                    onClick={() => navigate("/citas-medico")}
+                  >
+                    Ver agenda médica
+                  </button>
+                </div>
+              </aside>
+            </section>
+          </>
+        )}
       </div>
     </div>
   );
