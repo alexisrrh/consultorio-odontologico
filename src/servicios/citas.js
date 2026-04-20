@@ -7,7 +7,7 @@ function horaPermitida(hora) {
   const totalMinutos = horas * 60 + minutos;
 
   const inicioManana = 8 * 60;
-  const finManana = 13 * 60;
+  const finManana = 12 * 60;
   const inicioTarde = 14 * 60;
   const finTarde = 17 * 60;
 

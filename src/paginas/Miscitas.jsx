@@ -16,7 +16,12 @@ function Miscitas() {
       if (!usuario) return;
 
       try {
+        console.log("CLIENTE LOGUEADO:", usuario.id);
+
         const data = await obtenerMisCitas(usuario.id);
+
+        console.log("MIS CITAS:", data);
+
         setCitas(data);
       } catch (error) {
         console.error("Error cargando mis citas:", error);
@@ -63,7 +68,9 @@ function Miscitas() {
 
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
           <button onClick={() => navigate("/")}>Inicio</button>
-          <button onClick={() => navigate("/agendar-cita")}>Agendar cita</button>
+          <button onClick={() => navigate("/agendar-cita")}>
+            Agendar cita
+          </button>
           <button onClick={handleLogout}>Cerrar sesión</button>
         </div>
       </div>
@@ -79,13 +86,14 @@ function Miscitas() {
                 border: "1px solid #d1d5db",
                 borderRadius: "14px",
                 padding: "16px",
-                background: "rgba(255,255,255,0.84)",
+                background: "rgba(255,255,255,0.9)",
               }}
             >
               <p><strong>Fecha:</strong> {cita.fecha}</p>
               <p><strong>Hora:</strong> {cita.hora}</p>
               <p><strong>Motivo:</strong> {cita.motivo || "Sin motivo"}</p>
               <p><strong>Estado:</strong> {cita.estado}</p>
+
               {cita.paciente?.nombre && (
                 <p><strong>Paciente:</strong> {cita.paciente.nombre}</p>
               )}

@@ -65,7 +65,7 @@ function Home() {
           {!usuario ? (
             <>
               <button
-                onClick={() => navigate("/login-cliente")}
+                onClick={() => navigate("/login")}
                 className="btn-secundario"
               >
                 Iniciar sesión
