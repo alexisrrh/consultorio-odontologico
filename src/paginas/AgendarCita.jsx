@@ -8,6 +8,7 @@ import {
 } from "../servicios/pacientes";
 import { useAuth } from "../context/AuthContext";
 import { cerrarSesion } from "../servicios/auth";
+import logoClinica from "../assets/logo-clinica.png";
 
 function AgendarCita() {
   const { usuario, perfil } = useAuth();
@@ -26,6 +27,8 @@ function AgendarCita() {
 
   const [guardando, setGuardando] = useState(false);
   const [loadingDatos, setLoadingDatos] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [mensajeOk, setMensajeOk] = useState("");
 
   const hoy = new Date().toISOString().split("T")[0];
 
@@ -34,6 +37,7 @@ function AgendarCita() {
       if (!usuario || !perfil) return;
 
       try {
+        setErrorMsg("");
         const medicoEncontrado = await obtenerPrimerMedico();
         const pacienteEncontrado = await obtenerPacientePorProfileId(usuario.id);
 
@@ -49,7 +53,7 @@ function AgendarCita() {
         }
       } catch (error) {
         console.error("Error cargando datos para la cita:", error);
-        alert(error.message || "No se pudieron cargar los datos");
+        setErrorMsg(error.message || "No se pudieron cargar los datos");
       } finally {
         setLoadingDatos(false);
       }
@@ -64,7 +68,7 @@ function AgendarCita() {
       navigate("/");
     } catch (error) {
       console.error("Error cerrando sesión:", error);
-      alert("No se pudo cerrar sesión");
+      setErrorMsg("No se pudo cerrar sesión");
     }
   };
 
@@ -87,19 +91,21 @@ function AgendarCita() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
+    setMensajeOk("");
 
     if (!usuario) {
-      alert("No hay usuario autenticado");
+      setErrorMsg("No hay usuario autenticado");
       return;
     }
 
     if (!medico) {
-      alert("No hay médico disponible");
+      setErrorMsg("No hay médico disponible");
       return;
     }
 
     if (!fecha || !hora) {
-      alert("Debes seleccionar fecha y hora");
+      setErrorMsg("Debes seleccionar fecha y hora");
       return;
     }
 
@@ -109,12 +115,12 @@ function AgendarCita() {
     const fechaSeleccionada = new Date(fecha);
 
     if (fechaSeleccionada < fechaHoy) {
-      alert("No puedes seleccionar fechas pasadas");
+      setErrorMsg("No puedes seleccionar fechas pasadas");
       return;
     }
 
     if (!horaPermitida(hora)) {
-      alert("Solo se atiende de 08:00 a 12:00 y de 14:00 a 17:00");
+      setErrorMsg("Solo se atiende de 08:00 a 12:00 y de 14:00 a 17:00");
       return;
     }
 
@@ -125,7 +131,7 @@ function AgendarCita() {
 
       if (!pacienteFinal) {
         if (!nombre.trim() || !cedula.trim() || !telefono.trim()) {
-          alert("Debes completar nombre, cédula y teléfono");
+          setErrorMsg("Debes completar nombre, cédula y teléfono");
           return;
         }
 
@@ -149,106 +155,185 @@ function AgendarCita() {
         estado: "pendiente",
       });
 
-      alert("Cita creada correctamente");
+      setMensajeOk("Cita creada correctamente");
       setFecha("");
       setHora("");
       setMotivo("");
     } catch (error) {
       console.error("Error creando cita:", error);
-      alert(error.message || "Error creando cita");
+      setErrorMsg(error.message || "Error creando cita");
     } finally {
       setGuardando(false);
     }
   };
 
   if (loadingDatos) {
-    return <p style={{ padding: "20px" }}>Cargando datos...</p>;
+    return (
+      <div className="agendar-page">
+        <div className="agendar-wrapper">
+          <div className="agendar-empty">
+            <h3>Cargando datos...</h3>
+            <p>Espera un momento mientras preparamos el formulario.</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div style={{ padding: "20px" }}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: "20px",
-          flexWrap: "wrap",
-          gap: "12px",
-        }}
-      >
-        <h2>Agendar Cita</h2>
-        <button onClick={handleLogout}>Cerrar sesión</button>
+    <div className="agendar-page">
+      <div className="agendar-wrapper">
+        <header className="agendar-header">
+          <div className="agendar-brand">
+            <img
+              src={logoClinica}
+              alt="Logo clínica"
+              className="agendar-logo"
+            />
+            <div>
+              <p className="agendar-badge">Área del paciente</p>
+              <h1>Agendar cita</h1>
+              <p className="agendar-subtexto">
+                Reserva tu cita de forma rápida y organizada con el médico
+                disponible.
+              </p>
+            </div>
+          </div>
+
+          <div className="agendar-actions">
+            <button className="btn-secundario" onClick={() => navigate("/")}>
+              Inicio
+            </button>
+            <button className="btn-secundario" onClick={() => navigate("/mis-citas")}>
+              Mis citas
+            </button>
+            <button className="btn-principal" onClick={handleLogout}>
+              Cerrar sesión
+            </button>
+          </div>
+        </header>
+
+        <div className="agendar-layout">
+          <section className="agendar-info-card">
+            <h3>Información de la cita</h3>
+
+            <div className="agendar-info-bloque">
+              <span>Médico asignado</span>
+              <strong>{medico ? medico.nombre : "No disponible"}</strong>
+            </div>
+
+            <div className="agendar-info-bloque">
+              <span>Paciente</span>
+              <strong>
+                {paciente?.nombre || nombre || perfil?.nombre || "Sin nombre"}
+              </strong>
+            </div>
+
+            <div className="agendar-info-bloque">
+              <span>Horario disponible</span>
+              <strong>08:00 am a 5:00 pm </strong>
+            </div>
+
+            <div className="agendar-ayuda">
+              <p>
+                Selecciona una fecha válida, una hora dentro del horario
+                disponible y añade el motivo de tu consulta.
+              </p>
+            </div>
+          </section>
+
+          <section className="agendar-form-card">
+            <form onSubmit={handleSubmit} className="agendar-form">
+              {!paciente ? (
+                <>
+                  <div className="agendar-input-group">
+                    <label htmlFor="nombre">Nombre completo</label>
+                    <input
+                      id="nombre"
+                      type="text"
+                      placeholder="Nombre completo"
+                      value={nombre}
+                      onChange={(e) => setNombre(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="agendar-input-group">
+                    <label htmlFor="cedula">Cédula</label>
+                    <input
+                      id="cedula"
+                      type="text"
+                      placeholder="Cédula"
+                      value={cedula}
+                      onChange={(e) => setCedula(e.target.value)}
+                    />
+                  </div>
+
+                  <div className="agendar-input-group">
+                    <label htmlFor="telefono">Teléfono</label>
+                    <input
+                      id="telefono"
+                      type="text"
+                      placeholder="Teléfono"
+                      value={telefono}
+                      onChange={(e) => setTelefono(e.target.value)}
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="agendar-paciente-asociado">
+                  <span>Paciente asociado</span>
+                  <strong>{paciente.nombre}</strong>
+                </div>
+              )}
+
+              <div className="agendar-input-group">
+                <label htmlFor="fecha">Fecha</label>
+                <input
+                  id="fecha"
+                  type="date"
+                  value={fecha}
+                  min={hoy}
+                  onChange={(e) => setFecha(e.target.value)}
+                />
+              </div>
+
+              <div className="agendar-input-group">
+                <label htmlFor="hora">Hora</label>
+                <input
+                  id="hora"
+                  type="time"
+                  value={hora}
+                  min="08:00"
+                  max="17:00"
+                  step="1800"
+                  onChange={(e) => setHora(e.target.value)}
+                />
+                <small className="agendar-horario-help">
+                  Horario disponible: 08:00 a 12:00 y 14:00 a 17:00
+                </small>
+              </div>
+
+              <div className="agendar-input-group">
+                <label htmlFor="motivo">Motivo de la consulta</label>
+                <input
+                  id="motivo"
+                  type="text"
+                  placeholder="Motivo"
+                  value={motivo}
+                  onChange={(e) => setMotivo(e.target.value)}
+                />
+              </div>
+
+              {errorMsg && <p className="login-error">{errorMsg}</p>}
+              {mensajeOk && <p className="login-success">{mensajeOk}</p>}
+
+              <button type="submit" className="login-btn" disabled={guardando}>
+                {guardando ? "Guardando..." : "Guardar cita"}
+              </button>
+            </form>
+          </section>
+        </div>
       </div>
-
-      <form
-        onSubmit={handleSubmit}
-        style={{ display: "grid", gap: "12px", maxWidth: "420px" }}
-      >
-        <p>
-          <strong>Médico asignado:</strong>{" "}
-          {medico ? medico.nombre : "No disponible"}
-        </p>
-
-        {paciente ? (
-          <p>
-            <strong>Paciente asociado:</strong> {paciente.nombre}
-          </p>
-        ) : (
-          <>
-            <input
-              type="text"
-              placeholder="Nombre completo"
-              value={nombre}
-              onChange={(e) => setNombre(e.target.value)}
-            />
-
-            <input
-              type="text"
-              placeholder="Cédula"
-              value={cedula}
-              onChange={(e) => setCedula(e.target.value)}
-            />
-
-            <input
-              type="text"
-              placeholder="Teléfono"
-              value={telefono}
-              onChange={(e) => setTelefono(e.target.value)}
-            />
-          </>
-        )}
-
-        <input
-          type="date"
-          value={fecha}
-          min={hoy}
-          onChange={(e) => setFecha(e.target.value)}
-        />
-
-        <input
-          type="time"
-          value={hora}
-          min="08:00"
-          max="17:00"
-          step="1800"
-          onChange={(e) => setHora(e.target.value)}
-        />
-
-        <small style={{ color: "#555" }}>
-          Horario disponible: 08:00 a 12:00 y 14:00 a 17:00
-        </small>
-
-        <input
-          type="text"
-          placeholder="Motivo"
-          value={motivo}
-          onChange={(e) => setMotivo(e.target.value)}
-        />
-
-        <button type="submit" disabled={guardando}>
-          {guardando ? "Guardando..." : "Guardar cita"}
-        </button>
-      </form>
     </div>
   );
 }

@@ -22,9 +22,16 @@ export function AuthProvider({ children }) {
         if (!mounted) return;
 
         setUsuario(session?.user ?? null);
+
+        if (!session?.user) {
+          setPerfil(null);
+        }
       } catch (error) {
         console.error("Error obteniendo sesión:", error);
-        if (mounted) setUsuario(null);
+        if (mounted) {
+          setUsuario(null);
+          setPerfil(null);
+        }
       } finally {
         if (mounted) setLoading(false);
       }
@@ -35,7 +42,14 @@ export function AuthProvider({ children }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUsuario(session?.user ?? null);
+      const nuevoUsuario = session?.user ?? null;
+
+      setUsuario(nuevoUsuario);
+
+      if (!nuevoUsuario) {
+        setPerfil(null);
+      }
+
       setLoading(false);
     });
 

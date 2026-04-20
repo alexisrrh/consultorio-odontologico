@@ -9,7 +9,7 @@ function ProtectedRoute({ children, allowedRoles = [] }) {
   }
 
   if (!usuario) {
-    return <Navigate to="/login-cliente" replace />;
+    return <Navigate to="/" replace />;
   }
 
   if (allowedRoles.length > 0 && !allowedRoles.includes(perfil?.rol)) {

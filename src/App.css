@@ -1,5 +1,5 @@
 /* =========================================================
-   1. RESET Y VARIABLES DE MARCA
+   1. RESET Y VARIABLES GLOBALES
 ========================================================= */
 
 * {
@@ -25,14 +25,17 @@
 
   --sombra-suave: 0 10px 30px rgba(77, 94, 97, 0.1);
   --sombra-media: 0 12px 24px rgba(0, 45, 52, 0.16);
+  --sombra-fuerte: 0 22px 50px rgba(0, 45, 52, 0.16);
 
   --radio-xl: 24px;
   --radio-lg: 18px;
   --radio-md: 14px;
+
+  --max-ancho: 1240px;
 }
 
 /* =========================================================
-   2. BASE GENERAL Y FONDO
+   2. BASE GENERAL
 ========================================================= */
 
 body {
@@ -51,7 +54,7 @@ body {
 }
 
 /* =========================================================
-   3. BARRA SUPERIOR
+   3. BARRA SUPERIOR GENERAL
 ========================================================= */
 
 .barra-superior {
@@ -70,7 +73,7 @@ body {
 }
 
 .barra-superior__contenido {
-  width: min(1240px, calc(100% - 32px));
+  width: min(var(--max-ancho), calc(100% - 32px));
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -112,7 +115,7 @@ body {
 }
 
 /* =========================================================
-   4. BOTONES
+   4. BOTONES GLOBALES
 ========================================================= */
 
 button {
@@ -138,19 +141,19 @@ button {
 }
 
 .boton-principal {
-  background: linear-gradient(135deg, #0b5f68, #1399a6);
+  background: linear-gradient(135deg, var(--verde-profundo), var(--turquesa));
   color: white;
   box-shadow: 0 6px 14px rgba(11, 95, 104, 0.22);
 }
 
 .boton-principal:hover {
-  background: linear-gradient(135deg, #08474f, #0f7f8a);
+  background: linear-gradient(135deg, #08474f, var(--turquesa-hover));
   transform: translateY(-1px);
 }
 
 .boton-secundario {
   background: rgba(255, 255, 255, 0.85);
-  color: #0b5f68;
+  color: var(--verde-profundo);
   border: 1px solid rgba(19, 153, 166, 0.22);
   box-shadow: 0 4px 10px rgba(0, 45, 52, 0.06);
   backdrop-filter: blur(6px);
@@ -185,11 +188,11 @@ button {
 }
 
 /* =========================================================
-   5. CONTENEDOR PRINCIPAL
+   5. CONTENEDORES Y TARJETAS GENERALES
 ========================================================= */
 
 .contenedor-principal {
-  width: min(1240px, calc(100% - 32px));
+  width: min(var(--max-ancho), calc(100% - 32px));
   margin: 28px auto;
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
@@ -201,10 +204,6 @@ button {
   flex-direction: column;
   gap: 24px;
 }
-
-/* =========================================================
-   6. PANELES Y TARJETAS
-========================================================= */
 
 .tarjeta {
   background: var(--blanco-panel);
@@ -221,6 +220,10 @@ button {
   font-size: 1.28rem;
   color: var(--verde-oscuro);
 }
+
+/* =========================================================
+   6. LISTA DE PACIENTES
+========================================================= */
 
 .lista-pacientes {
   display: grid;
@@ -254,7 +257,7 @@ button {
 }
 
 /* =========================================================
-   7. TIPOGRAFÍA
+   7. TIPOGRAFÍA GENERAL
 ========================================================= */
 
 .etiqueta-superior {
@@ -272,8 +275,7 @@ button {
   color: var(--verde-oscuro);
 }
 
-.subtexto-ficha,
-.barra-superior__titulo p {
+.subtexto-ficha {
   color: var(--texto-suave);
 }
 
@@ -378,7 +380,7 @@ textarea {
 }
 
 /* =========================================================
-   11. CHIPS / CHECKBOX
+   11. CHECKBOX Y OPCIONES
 ========================================================= */
 
 .bloque-opciones {
@@ -949,7 +951,7 @@ textarea {
 }
 
 /* =========================================================
-   17. ODONTOGRAMA DENTRO DEL PRESUPUESTO
+   17. ODONTOGRAMA EN PRESUPUESTO
 ========================================================= */
 
 .presupuesto-container .odontograma-realista {
@@ -1075,7 +1077,7 @@ textarea {
 .presupuesto-container .arcada-inferior .slot:nth-child(9) { transform: translateY(0); }
 
 /* =========================================================
-   TÍTULO DE PRESUPUESTO Y ACCIONES
+   18. TÍTULO DE PRESUPUESTO Y ACCIONES
 ========================================================= */
 
 .presupuesto-bloque-titulo {
@@ -1104,12 +1106,958 @@ textarea {
 }
 
 /* =========================================================
-   18. RESPONSIVE
+   19. NAVBAR MÉDICO
+========================================================= */
+
+.navbar-medico {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 22px;
+  margin-bottom: 24px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(180, 210, 214, 0.9);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  flex-wrap: wrap;
+}
+
+.navbar-medico__left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.navbar-medico__brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  cursor: pointer;
+}
+
+.navbar-medico__logo {
+  width: auto;
+  height: 60px;
+  object-fit: contain;
+  border-radius: 12px;
+  padding: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.navbar-medico__brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.navbar-medico__title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #0b3b42;
+}
+
+.navbar-medico__subtitle {
+  font-size: 0.85rem;
+  color: #4e6e73;
+}
+
+.navbar-medico__links {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.navbar-medico__link {
+  position: relative;
+  background: transparent;
+  border: none;
+  padding: 6px 0;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #184b52;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.navbar-medico__link:hover {
+  color: #0f8b96;
+  transform: translateY(-1px);
+}
+
+.navbar-medico__link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 0;
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #0f8b96, #17a2b8);
+  transition: width 0.25s ease;
+}
+
+.navbar-medico__link:hover::after,
+.navbar-medico__link.active::after {
+  width: 100%;
+}
+
+.navbar-medico__link.active {
+  color: #0f8b96;
+}
+
+.navbar-medico__right {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-medico__logout {
+  background: linear-gradient(135deg, #db4d63, #c94057);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 18px rgba(201, 64, 87, 0.22);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.navbar-medico__logout:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(201, 64, 87, 0.28);
+  opacity: 0.96;
+}
+
+/* =========================================================
+   20. HOME CLÍNICA - UNIFICADO
+========================================================= */
+
+.home-clinica {
+  min-height: 100vh;
+  color: var(--texto);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(20, 184, 166, 0.18), transparent 24%),
+    radial-gradient(circle at 85% 15%, rgba(94, 234, 212, 0.2), transparent 20%),
+    radial-gradient(circle at bottom right, rgba(15, 118, 110, 0.14), transparent 18%),
+    linear-gradient(180deg, #f3fffd 0%, #ddfaf4 48%, #f4fffc 100%);
+  padding: 24px;
+}
+
+.home-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  width: min(var(--max-ancho), calc(100% - 32px));
+  margin: 0 auto 28px;
+  padding: 16px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(180, 210, 214, 0.95);
+  box-shadow: 0 12px 34px rgba(15, 118, 110, 0.12);
+  backdrop-filter: blur(12px);
+}
+
+.home-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+
+.home-logo {
+  width: 78px;
+  height: 78px;
+  object-fit: contain;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(228,240,249,0.9));
+  padding: 6px;
+  box-shadow: 0 8px 18px rgba(15, 118, 110, 0.12);
+}
+
+.home-brand h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  color: #134e4a;
+  font-weight: 800;
+}
+
+.home-brand p {
+  margin: 4px 0 0;
+  color: #547177;
+  font-size: 0.95rem;
+}
+
+.home-nav-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.btn-principal,
+.btn-secundario {
+  border-radius: 999px;
+  padding: 12px 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-principal {
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  color: white;
+  box-shadow: 0 14px 30px rgba(15, 118, 110, 0.24);
+}
+
+.btn-principal:hover {
+  transform: translateY(-2px);
+  opacity: 0.98;
+}
+
+.btn-secundario {
+  background: rgba(255, 255, 255, 0.88);
+  color: #134e4a;
+  border: 1px solid rgba(15, 118, 110, 0.12);
+  box-shadow: 0 10px 20px rgba(15, 23, 42, 0.05);
+}
+
+.btn-secundario:hover {
+  transform: translateY(-2px);
+  background: white;
+}
+
+.btn-principal.grande,
+.btn-secundario.grande {
+  padding: 14px 22px;
+  font-size: 1rem;
+}
+
+.home-hero,
+.home-seccion,
+.home-seccion-confianza,
+.home-seccion-testimonios,
+.home-seccion-cta-final,
+.home-footer {
+  width: min(var(--max-ancho), calc(100% - 40px));
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.home-hero {
+  display: grid;
+  grid-template-columns: 1.2fr 0.88fr;
+  gap: 28px;
+  align-items: stretch;
+  margin-bottom: 28px;
+  padding: 10px 0 0;
+}
+
+.home-hero-texto,
+.home-hero-card,
+.home-info-box,
+.home-cta-box,
+.tratamiento-card.premium-card,
+.beneficio-card,
+.confianza-card,
+.testimonio-card,
+.contacto-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(236,253,245,0.84));
+  border: 1px solid rgba(180, 210, 214, 0.95);
+  border-radius: 24px;
+  box-shadow: 0 18px 40px rgba(15, 118, 110, 0.1);
+  backdrop-filter: blur(10px);
+}
+
+.home-hero-texto {
+  padding: 34px;
+}
+
+.home-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.1);
+  color: #0f766e;
+  border: 1px solid rgba(15, 118, 110, 0.12);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.home-badge::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #14b8a6, #5eead4);
+}
+
+.home-hero-texto h2 {
+  margin: 0 0 16px;
+  font-size: clamp(2.3rem, 5vw, 4.2rem);
+  line-height: 1.02;
+  color: #134e4a;
+  letter-spacing: -0.05em;
+}
+
+.home-hero-texto p {
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #45666c;
+  max-width: 720px;
+}
+
+.home-hero-botones {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.home-hero-card {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.home-hero-card h3 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: #134e4a;
+}
+
+.home-medico-cargo {
+  margin: 6px 0 14px;
+  color: #0f8b96;
+  font-weight: 700;
+}
+
+.home-hero-card p {
+  color: #48676d;
+  line-height: 1.6;
+}
+
+.home-medico-datos {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.home-medico-datos div {
+  display: grid;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: rgba(240, 248, 249, 0.92);
+  border: 1px solid rgba(15, 118, 110, 0.08);
+}
+
+.home-medico-datos strong {
+  color: #134e4a;
+}
+
+.home-medico-datos span {
+  color: #547177;
+}
+
+.home-seccion,
+.home-seccion-confianza,
+.home-seccion-testimonios,
+.home-seccion-cta-final {
+  padding: 34px 0;
+}
+
+.home-seccion-header {
+  margin-bottom: 24px;
+  max-width: 760px;
+}
+
+.home-seccion-header h3 {
+  margin: 0 0 8px;
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
+  color: #134e4a;
+  letter-spacing: -0.03em;
+}
+
+.home-seccion-header p {
+  margin: 0;
+  color: #547177;
+  line-height: 1.75;
+}
+
+/* TRATAMIENTOS VISUALES */
+
+.home-grid-tratamientos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.tratamiento-card.premium-card {
+  overflow: hidden;
+  padding: 0;
+  border-radius: 28px;
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+.tratamiento-card.premium-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 28px 55px rgba(15, 118, 110, 0.16);
+}
+
+.tratamiento-imagen-wrap {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.tratamiento-imagen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease;
+  display: block;
+}
+
+.tratamiento-card.premium-card:hover .tratamiento-imagen {
+  transform: scale(1.06);
+}
+
+.tratamiento-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(19, 78, 74, 0.05) 0%,
+    rgba(19, 78, 74, 0.18) 55%,
+    rgba(19, 78, 74, 0.38) 100%
+  );
+}
+
+.tratamiento-chip {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #0f766e;
+  font-size: 0.8rem;
+  font-weight: 800;
+  box-shadow: 0 8px 18px rgba(15, 118, 110, 0.08);
+}
+
+.tratamiento-card-body {
+  padding: 22px 22px 24px;
+}
+
+.tratamiento-card-body h4 {
+  margin: 0 0 10px;
+  font-size: 1.2rem;
+  color: #134e4a;
+}
+
+.tratamiento-card-body p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.7;
+  min-height: 88px;
+}
+
+.tratamiento-boton {
+  margin-top: 18px;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.tratamiento-boton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(15, 118, 110, 0.24);
+}
+
+/* GALERÍA */
+
+.home-seccion-galeria {
+  padding-top: 10px;
+}
+
+.galeria-clinica {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr 1fr;
+  gap: 18px;
+}
+
+.galeria-item,
+.galeria-item-grande {
+  overflow: hidden;
+  border-radius: 28px;
+  min-height: 250px;
+  box-shadow: 0 16px 35px rgba(15, 118, 110, 0.1);
+  border: 1px solid rgba(255,255,255,0.76);
+}
+
+.galeria-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s ease;
+}
+
+.galeria-item:hover img {
+  transform: scale(1.05);
+}
+
+/* BENEFICIOS */
+
+.home-grid-beneficios {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.beneficio-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 20px;
+}
+
+.beneficio-check {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: linear-gradient(135deg, rgba(22,163,74,0.14), rgba(20,184,166,0.14));
+  color: #16a34a;
+  font-weight: 900;
+}
+
+.beneficio-card p {
+  margin: 0;
+  color: #45666c;
+  font-weight: 600;
+}
+
+/* CONFIANZA */
+
+.home-grid-confianza {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.confianza-card {
+  padding: 24px;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.confianza-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 24px 48px rgba(15, 118, 110, 0.12);
+}
+
+.confianza-icono {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  margin-bottom: 14px;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #0f766e;
+  background: linear-gradient(135deg, rgba(15,118,110,0.12), rgba(20,184,166,0.12));
+}
+
+.confianza-card h4 {
+  margin: 0 0 10px;
+  font-size: 1.08rem;
+  color: #134e4a;
+}
+
+.confianza-card p {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.7;
+}
+
+/* BLOQUE DESTACADO */
+
+.home-seccion-destacada {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.home-info-box,
+.home-cta-box {
+  padding: 28px;
+}
+
+.home-info-box h3,
+.home-cta-box h3 {
+  margin: 0 0 12px;
+  font-size: 1.45rem;
+  color: #134e4a;
+}
+
+.home-cta-box p,
+.home-info-box > p {
+  color: #547177;
+  line-height: 1.75;
+}
+
+.home-pasos {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.paso-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 18px;
+  background: rgba(240, 248, 249, 0.92);
+}
+
+.paso-item span {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  color: white;
+  font-weight: 800;
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  box-shadow: 0 10px 22px rgba(15, 118, 110, 0.24);
+}
+
+.paso-item strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1rem;
+  color: #134e4a;
+}
+
+.paso-item p {
+  margin: 0;
+  color: #547177;
+  line-height: 1.7;
+}
+
+.home-cta-botones {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+
+/* TESTIMONIOS */
+
+.home-grid-testimonios {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.testimonio-card {
+  padding: 24px;
+}
+
+.testimonio-estrellas {
+  margin-bottom: 14px;
+  color: #f59e0b;
+  letter-spacing: 2px;
+  font-size: 1rem;
+}
+
+.testimonio-texto {
+  margin: 0 0 20px;
+  color: #45666c;
+  line-height: 1.8;
+  font-size: 1rem;
+}
+
+.testimonio-autor {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.testimonio-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  color: #0f766e;
+  background: linear-gradient(135deg, rgba(15,118,110,0.14), rgba(20,184,166,0.14));
+}
+
+.testimonio-autor strong {
+  display: block;
+  font-size: 0.95rem;
+  color: #134e4a;
+}
+
+.testimonio-autor span {
+  color: #64748b;
+  font-size: 0.88rem;
+}
+
+/* CONTACTO */
+
+.home-contacto-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.contacto-card {
+  padding: 26px;
+}
+
+.contacto-card h3 {
+  margin: 0 0 14px;
+  font-size: 1.3rem;
+  color: #134e4a;
+}
+
+.contacto-card p {
+  margin: 10px 0;
+  color: #547177;
+  line-height: 1.7;
+}
+
+.contacto-card strong {
+  color: #134e4a;
+}
+
+/* CTA FINAL */
+
+.cta-final-premium {
+  padding: 36px;
+  border-radius: 34px;
+  background: linear-gradient(135deg, rgba(15, 118, 110, 0.96), rgba(20, 184, 166, 0.9));
+  color: white;
+  box-shadow: 0 25px 60px rgba(15, 118, 110, 0.28);
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr;
+  gap: 24px;
+  align-items: center;
+}
+
+.cta-final-premium h3 {
+  margin: 14px 0 14px;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.cta-final-premium p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.8;
+  max-width: 650px;
+}
+
+.cta-final-premium .home-badge {
+  background: rgba(255, 255, 255, 0.16);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+.cta-final-premium .home-badge::before {
+  background: white;
+}
+
+.cta-final-botones {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+}
+
+.cta-final-botones .btn-principal {
+  background: white;
+  color: #0f766e;
+  box-shadow: 0 14px 30px rgba(255, 255, 255, 0.18);
+}
+
+.cta-final-botones .btn-secundario {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.cta-final-botones .btn-secundario:hover {
+  background: rgba(255,255,255,0.16);
+}
+
+/* FOOTER HOME */
+
+.home-footer {
+  margin: 26px auto 34px;
+  padding: 24px 26px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  border-radius: 26px;
+  background: linear-gradient(180deg, #134e4a, #0f172a);
+  color: white;
+  box-shadow: 0 18px 45px rgba(2, 6, 23, 0.25);
+}
+
+.home-footer strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+
+.home-footer p {
+  margin: 0;
+  color: rgba(255,255,255,0.76);
+  line-height: 1.7;
+}
+
+.home-footer-links {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.home-footer-links button {
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.84);
+  border-radius: 999px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: 0.22s ease;
+}
+
+.home-footer-links button:hover {
+  background: rgba(255,255,255,0.12);
+  color: white;
+}
+
+/* =========================================================
+   21. CONSENTIMIENTO
+========================================================= */
+
+.seccion-consentimiento {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.75);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+}
+
+.consentimiento-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.consentimiento-documento {
+  background: white;
+  color: #111;
+  padding: 32px;
+  border-radius: 16px;
+  line-height: 1.7;
+}
+
+.consentimiento-documento h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 24px;
+}
+
+.consentimiento-documento h4 {
+  margin-top: 18px;
+  margin-bottom: 8px;
+  font-size: 18px;
+}
+
+.consentimiento-documento ul {
+  padding-left: 20px;
+}
+
+.firmas-consentimiento {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 50px;
+}
+
+.firma-box {
+  text-align: center;
+}
+
+.linea-firma {
+  border-top: 2px solid #111;
+  margin-bottom: 10px;
+  height: 30px;
+}
+
+.nota-consentimiento {
+  margin-top: 28px;
+  font-size: 14px;
+  color: #333;
+}
+
+/* =========================================================
+   22. RESPONSIVE GENERAL
 ========================================================= */
 
 @media (max-width: 1100px) {
   .odontograma-canvas {
     overflow-x: auto;
+  }
+
+  .home-hero,
+  .home-seccion-destacada,
+  .home-grid-tratamientos,
+  .home-grid-beneficios,
+  .home-grid-confianza,
+  .home-grid-testimonios,
+  .home-contacto-grid,
+  .cta-final-premium,
+  .galeria-clinica {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -1225,6 +2173,90 @@ textarea {
     bottom: 34px;
     height: 42px;
   }
+
+  .navbar-medico {
+    align-items: flex-start;
+  }
+
+  .navbar-medico__left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .navbar-medico__links {
+    gap: 14px;
+  }
+
+  .home-clinica {
+    padding: 16px;
+  }
+
+  .home-brand h1 {
+    font-size: 1.4rem;
+  }
+
+  .home-logo {
+    width: 62px;
+    height: 62px;
+  }
+
+  .home-hero-texto h2 {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 860px) {
+  .home-navbar {
+    width: min(var(--max-ancho), calc(100% - 24px));
+    border-radius: 28px;
+    padding: 16px;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .home-nav-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .home-brand p {
+    white-space: normal;
+  }
+
+  .home-hero,
+  .home-seccion,
+  .home-seccion-confianza,
+  .home-seccion-testimonios,
+  .home-seccion-cta-final,
+  .home-footer {
+    width: min(var(--max-ancho), calc(100% - 24px));
+  }
+
+  .home-footer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 700px) {
+  .home-grid-beneficios,
+  .home-grid-confianza,
+  .home-grid-testimonios {
+    grid-template-columns: 1fr;
+  }
+
+  .tratamiento-imagen-wrap {
+    height: 200px;
+  }
+
+  .tratamiento-card-body p {
+    min-height: auto;
+  }
+
+  .cta-final-premium {
+    padding: 26px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -1252,6 +2284,41 @@ textarea {
 
   .presupuesto-logo-esquina {
     width: 100px;
+  }
+}
+
+@media (max-width: 560px) {
+  .home-hero-card,
+  .tratamiento-card.premium-card,
+  .beneficio-card,
+  .home-info-box,
+  .home-cta-box,
+  .contacto-card,
+  .confianza-card,
+  .testimonio-card,
+  .galeria-item {
+    border-radius: 22px;
+  }
+
+  .home-hero-texto p,
+  .home-seccion-header p,
+  .contacto-card p,
+  .paso-item p,
+  .testimonio-texto {
+    font-size: 0.96rem;
+  }
+
+  .home-hero-botones,
+  .home-cta-botones,
+  .home-nav-actions,
+  .cta-final-botones {
+    width: 100%;
+  }
+
+  .btn-principal,
+  .btn-secundario {
+    width: 100%;
+    justify-content: center;
   }
 }
 
@@ -1310,7 +2377,7 @@ textarea {
 }
 
 /* =========================================================
-   19. IMPRESIÓN
+   23. IMPRESIÓN
 ========================================================= */
 
 @page {
@@ -1489,479 +2556,455 @@ textarea {
     display: inline !important;
     color: #17323a !important;
   }
-}
-/* ===== NAVBAR MÉDICO ===== */
 
-.navbar-medico {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding: 14px 22px;
-  margin-bottom: 24px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(180, 210, 214, 0.9);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  flex-wrap: wrap;
-}
-
-.navbar-medico__left {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  flex-wrap: wrap;
-}
-
-.navbar-medico__brand {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  cursor: pointer;
-}
-
-.navbar-medico__logo {
-  width: auto;
-  height: 60px;
-  object-fit: contain;
-  border-radius: 12px;
-  padding: 4px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.navbar-medico__brand-text {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.1;
-}
-
-.navbar-medico__title {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #0b3b42;
-}
-
-.navbar-medico__subtitle {
-  font-size: 0.85rem;
-  color: #4e6e73;
-}
-
-.navbar-medico__links {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  flex-wrap: wrap;
-}
-
-.navbar-medico__link {
-  position: relative;
-  background: transparent;
-  border: none;
-  padding: 6px 0;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #184b52;
-  cursor: pointer;
-  transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.navbar-medico__link:hover {
-  color: #0f8b96;
-  transform: translateY(-1px);
-}
-
-.navbar-medico__link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 0;
-  height: 3px;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #0f8b96, #17a2b8);
-  transition: width 0.25s ease;
-}
-
-.navbar-medico__link:hover::after {
-  width: 100%;
-}
-
-.navbar-medico__link.active {
-  color: #0f8b96;
-}
-
-.navbar-medico__link.active::after {
-  width: 100%;
-}
-
-.navbar-medico__right {
-  display: flex;
-  align-items: center;
-}
-
-.navbar-medico__logout {
-  background: linear-gradient(135deg, #db4d63, #c94057);
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 12px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 8px 18px rgba(201, 64, 87, 0.22);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
-}
-
-.navbar-medico__logout:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 10px 22px rgba(201, 64, 87, 0.28);
-  opacity: 0.96;
-}
-
-@media (max-width: 768px) {
-  .navbar-medico {
-    align-items: flex-start;
+  body * {
+    visibility: hidden;
   }
 
-  .navbar-medico__left {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
+  .printable-area,
+  .printable-area * {
+    visibility: visible;
   }
 
-  .navbar-medico__links {
-    gap: 14px;
+  .printable-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 24px;
   }
 }
 
+/* =========================================================
+   LOGIN
+========================================================= */
 
-/* ===== HOME CLINICA ===== */
-
-.home-clinica {
+.login-container {
   min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 24px;
-  color: #0f2f35;
 }
 
-.home-navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 18px;
-  flex-wrap: wrap;
-  margin-bottom: 28px;
-  padding: 16px 22px;
-  border-radius: 22px;
-  background: rgba(255, 255, 255, 0.82);
+.login-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 34px 28px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(236,253,245,0.84));
   border: 1px solid rgba(180, 210, 214, 0.95);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
-  backdrop-filter: blur(6px);
+  box-shadow: 0 22px 50px rgba(15, 118, 110, 0.14);
+  backdrop-filter: blur(10px);
 }
 
-.home-brand {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  cursor: pointer;
+.login-header {
+  text-align: center;
+  margin-bottom: 24px;
 }
 
-.home-logo {
-  width: 78px;
-  height: 78px;
+.login-logo {
+  width: 82px;
+  height: 82px;
   object-fit: contain;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.95);
-  padding: 6px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+  margin-bottom: 10px;
 }
 
-.home-brand h1 {
+.login-header h2 {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  color: #134e4a;
+}
+
+.login-header p {
   margin: 0;
-  font-size: 1.8rem;
-  color: #0b3b42;
-}
-
-.home-brand p {
-  margin: 4px 0 0;
   color: #547177;
-  font-size: 0.95rem;
 }
 
-.home-nav-actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.btn-principal,
-.btn-secundario {
-  border: none;
-  border-radius: 14px;
-  padding: 12px 18px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
-}
-
-.btn-principal:hover,
-.btn-secundario:hover {
-  transform: translateY(-1px);
-  opacity: 0.96;
-}
-
-.btn-principal {
-  background: linear-gradient(135deg, #0f8b96, #179fb1);
-  color: white;
-  box-shadow: 0 10px 22px rgba(15, 139, 150, 0.22);
-}
-
-.btn-secundario {
-  background: rgba(255, 255, 255, 0.85);
-  color: #0f4c55;
-  border: 1px solid rgba(180, 210, 214, 0.95);
-}
-
-.btn-principal.grande,
-.btn-secundario.grande {
-  padding: 14px 22px;
-  font-size: 1rem;
-}
-
-.home-hero {
+.login-form {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 24px;
-  align-items: stretch;
-  margin-bottom: 28px;
+  gap: 16px;
 }
 
-.home-hero-texto,
-.home-hero-card,
-.home-info-box,
-.home-cta-box,
-.tratamiento-card {
-  background: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(180, 210, 214, 0.95);
-  border-radius: 24px;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.06);
-  backdrop-filter: blur(6px);
-}
-
-.home-hero-texto {
-  padding: 34px;
-}
-
-.home-badge {
-  display: inline-block;
-  margin-bottom: 16px;
-  padding: 8px 12px;
-  border-radius: 999px;
-  background: rgba(15, 139, 150, 0.12);
-  color: #0f8b96;
-  font-weight: 700;
-  font-size: 0.9rem;
-}
-
-.home-hero-texto h2 {
-  margin: 0 0 16px;
-  font-size: 2.4rem;
-  line-height: 1.1;
-  color: #0b3b42;
-}
-
-.home-hero-texto p {
-  margin: 0;
-  font-size: 1.05rem;
-  line-height: 1.6;
-  color: #45666c;
-  max-width: 720px;
-}
-
-.home-hero-botones {
-  display: flex;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 24px;
-}
-
-.home-hero-card {
-  padding: 28px;
+.login-input-group {
   display: flex;
   flex-direction: column;
+  gap: 8px;
+}
+
+.login-input-group label {
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: #134e4a;
+}
+
+.login-input-group input {
+  width: 100%;
+  padding: 13px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(19, 153, 166, 0.18);
+  background: rgba(255, 255, 255, 0.8);
+  color: #17323a;
+  outline: none;
+  transition: all 0.18s ease;
+}
+
+.login-input-group input:focus {
+  border-color: #1399a6;
+  box-shadow: 0 0 0 3px rgba(19, 153, 166, 0.12);
+}
+
+.login-error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(254, 226, 226, 0.9);
+  color: #b91c1c;
+  font-size: 0.9rem;
+  border: 1px solid rgba(248, 113, 113, 0.35);
+}
+
+.login-btn {
+  height: 46px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #0f766e, #14b8a6);
+  color: white;
+  font-weight: 700;
+  font-size: 0.96rem;
+  cursor: pointer;
+  box-shadow: 0 14px 28px rgba(15, 118, 110, 0.24);
+  transition: all 0.2s ease;
+}
+
+.login-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 18px 32px rgba(15, 118, 110, 0.28);
+}
+
+.login-btn:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.login-extra {
+  margin-top: 22px;
+  text-align: center;
+}
+
+.login-extra p {
+  margin: 0 0 8px;
+  color: #5d7278;
+}
+
+.login-link {
+  background: none;
+  border: none;
+  color: #0f8b96;
+  font-weight: 800;
+  cursor: pointer;
+  padding: 0;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+.login-extra-secundario {
+  margin-top: 18px;
+  display: flex;
   justify-content: center;
 }
 
-.home-hero-card h3 {
-  margin: 0;
-  font-size: 1.6rem;
-  color: #0b3b42;
-}
-
-.home-medico-cargo {
-  margin: 6px 0 14px;
-  color: #0f8b96;
+.login-back-btn {
+  background: rgba(255, 255, 255, 0.7);
+  color: #134e4a;
+  border: 1px solid rgba(19, 153, 166, 0.18);
+  border-radius: 999px;
+  padding: 10px 16px;
   font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
 }
 
-.home-hero-card p {
-  color: #48676d;
-  line-height: 1.6;
+.login-back-btn:hover {
+  background: rgba(255, 255, 255, 0.92);
+  transform: translateY(-1px);
 }
 
-.home-medico-datos {
-  display: grid;
-  gap: 12px;
-  margin-top: 18px;
+@media (max-width: 520px) {
+  .login-card {
+    padding: 26px 18px;
+    border-radius: 22px;
+  }
+
+  .login-header h2 {
+    font-size: 1.7rem;
+  }
 }
 
-.home-medico-datos div {
-  display: grid;
-  gap: 4px;
-  padding: 12px 14px;
-  border-radius: 16px;
-  background: rgba(240, 248, 249, 0.9);
+.login-success {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(220, 252, 231, 0.9);
+  color: #166534;
+  font-size: 0.9rem;
+  border: 1px solid rgba(34, 197, 94, 0.28);
 }
 
-.home-medico-datos strong {
-  color: #0b3b42;
+/* =========================================================
+   MIS CITAS
+========================================================= */
+
+.mis-citas-page {
+  min-height: 100vh;
+  padding: 24px;
 }
 
-.home-medico-datos span {
-  color: #547177;
+.mis-citas-wrapper {
+  width: min(1200px, calc(100% - 24px));
+  margin: 0 auto;
 }
 
-.home-seccion {
+.mis-citas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
   margin-bottom: 28px;
+  padding: 26px;
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(236,253,245,0.84));
+  border: 1px solid rgba(180, 210, 214, 0.95);
+  box-shadow: 0 18px 40px rgba(15, 118, 110, 0.1);
+  backdrop-filter: blur(10px);
 }
 
-.home-seccion-header {
+.mis-citas-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.mis-citas-logo {
+  width: 74px;
+  height: 74px;
+  object-fit: contain;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(228,240,249,0.9));
+  padding: 6px;
+  box-shadow: 0 8px 18px rgba(15, 118, 110, 0.12);
+}
+
+.mis-citas-badge {
+  margin: 0 0 8px;
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.1);
+  color: #0f766e;
+  border: 1px solid rgba(15, 118, 110, 0.12);
+  font-weight: 800;
+  font-size: 0.82rem;
+}
+
+.mis-citas-header h1 {
+  margin: 0;
+  font-size: 2.2rem;
+  color: #134e4a;
+}
+
+.mis-citas-subtexto {
+  margin: 10px 0 0;
+  color: #547177;
+  line-height: 1.7;
+  max-width: 640px;
+}
+
+.mis-citas-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mis-citas-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+
+.cita-card {
+  padding: 24px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(236,253,245,0.84));
+  border: 1px solid rgba(180, 210, 214, 0.95);
+  box-shadow: 0 18px 40px rgba(15, 118, 110, 0.1);
+  backdrop-filter: blur(10px);
+  transition: transform 0.22s ease, box-shadow 0.22s ease;
+}
+
+.cita-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 48px rgba(15, 118, 110, 0.14);
+}
+
+.cita-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 14px;
   margin-bottom: 18px;
 }
 
-.home-seccion-header h3 {
-  margin: 0 0 8px;
-  font-size: 1.8rem;
-  color: #0b3b42;
+.cita-label {
+  margin: 0 0 6px;
+  color: #5d7278;
+  font-size: 0.88rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
 }
 
-.home-seccion-header p {
+.cita-card-top h3 {
   margin: 0;
-  color: #547177;
+  color: #134e4a;
+  font-size: 1.3rem;
 }
 
-.home-grid-tratamientos {
+.estado-cita {
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+.estado-cita.pendiente {
+  background: rgba(254, 243, 199, 0.9);
+  color: #92400e;
+}
+
+.estado-cita.confirmada {
+  background: rgba(220, 252, 231, 0.9);
+  color: #166534;
+}
+
+.estado-cita.cancelada {
+  background: rgba(254, 226, 226, 0.9);
+  color: #b91c1c;
+}
+
+.estado-cita.completada {
+  background: rgba(219, 234, 254, 0.9);
+  color: #1d4ed8;
+}
+
+.cita-info-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 18px;
-}
-
-.tratamiento-card {
-  padding: 22px;
-}
-
-.tratamiento-card h4 {
-  margin: 0 0 10px;
-  color: #0b3b42;
-  font-size: 1.15rem;
-}
-
-.tratamiento-card p {
-  margin: 0;
-  color: #527176;
-  line-height: 1.6;
-}
-
-.home-seccion-destacada {
-  display: grid;
-  grid-template-columns: 1fr 0.8fr;
-  gap: 24px;
-}
-
-.home-info-box,
-.home-cta-box {
-  padding: 28px;
-}
-
-.home-info-box h3,
-.home-cta-box h3 {
-  margin-top: 0;
-  color: #0b3b42;
-  font-size: 1.5rem;
-}
-
-.home-cta-box p {
-  color: #527176;
-  line-height: 1.6;
-}
-
-.home-pasos {
-  display: grid;
-  gap: 16px;
-  margin-top: 18px;
-}
-
-.paso-item {
-  display: flex;
+  grid-template-columns: 1fr 1fr;
   gap: 14px;
-  align-items: flex-start;
-  padding: 14px;
+}
+
+.cita-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
   border-radius: 18px;
   background: rgba(240, 248, 249, 0.92);
+  border: 1px solid rgba(15, 118, 110, 0.08);
 }
 
-.paso-item span {
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  background: #0f8b96;
-  color: white;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 800;
-  flex-shrink: 0;
+.cita-info-item.full {
+  grid-column: 1 / -1;
 }
 
-.paso-item strong {
-  color: #0b3b42;
+.cita-info-item span {
+  color: #5d7278;
+  font-size: 0.88rem;
+  font-weight: 700;
 }
 
-.paso-item p {
-  margin: 4px 0 0;
-  color: #55757a;
+.cita-info-item strong {
+  color: #134e4a;
+  line-height: 1.5;
 }
 
-.home-cta-botones {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin-top: 20px;
+.mis-citas-empty {
+  padding: 40px 26px;
+  border-radius: 28px;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(236,253,245,0.84));
+  border: 1px solid rgba(180, 210, 214, 0.95);
+  box-shadow: 0 18px 40px rgba(15, 118, 110, 0.1);
 }
 
-@media (max-width: 1024px) {
-  .home-hero,
-  .home-seccion-destacada,
-  .home-grid-tratamientos {
+.mis-citas-empty h3 {
+  margin: 0 0 10px;
+  color: #134e4a;
+  font-size: 1.6rem;
+}
+
+.mis-citas-empty p {
+  margin: 0 0 18px;
+  color: #547177;
+  line-height: 1.7;
+}
+
+.mis-citas-empty.error {
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  background: rgba(254, 242, 242, 0.92);
+}
+
+@media (max-width: 900px) {
+  .mis-citas-grid {
     grid-template-columns: 1fr;
+  }
+
+  .mis-citas-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mis-citas-actions {
+    width: 100%;
   }
 }
 
-@media (max-width: 768px) {
-  .home-clinica {
+@media (max-width: 600px) {
+  .mis-citas-page {
     padding: 16px;
   }
 
-  .home-brand h1 {
-    font-size: 1.4rem;
+  .mis-citas-wrapper {
+    width: min(1200px, calc(100% - 8px));
   }
 
-  .home-logo {
+  .mis-citas-brand {
+    align-items: flex-start;
+  }
+
+  .mis-citas-logo {
     width: 62px;
     height: 62px;
   }
 
-  .home-hero-texto h2 {
+  .mis-citas-header h1 {
     font-size: 1.8rem;
+  }
+
+  .cita-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mis-citas-actions .btn-principal,
+  .mis-citas-actions .btn-secundario {
+    width: 100%;
+    justify-content: center;
   }
 }

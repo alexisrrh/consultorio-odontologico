@@ -1,53 +1,120 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { registrarCliente } from "../servicios/auth";
+import logoClinica from "../assets/logo-clinica.png";
 
 function RegistroCliente() {
   const navigate = useNavigate();
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [cargando, setCargando] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+  const [mensajeOk, setMensajeOk] = useState("");
 
   const handleRegistro = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
+    setMensajeOk("");
 
     try {
+      setCargando(true);
+
       await registrarCliente({ nombre, email, password });
-      alert("Registro correcto");
-      navigate("/login-cliente");
+
+      setMensajeOk("Registro correcto. Ya puedes iniciar sesión.");
+      setNombre("");
+      setEmail("");
+      setPassword("");
+
+      setTimeout(() => {
+        navigate("/login");
+      }, 1200);
     } catch (error) {
       console.error(error);
-      alert(error.message || "No se pudo registrar");
+      setErrorMsg(error.message || "No se pudo registrar");
+    } finally {
+      setCargando(false);
     }
   };
 
   return (
-    <form onSubmit={handleRegistro}>
-      <h2>Registro Cliente</h2>
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-header">
+          <img src={logoClinica} alt="Logo clínica" className="login-logo" />
+          <h2>Crear cuenta</h2>
+          <p>Regístrate como paciente para gestionar tus citas</p>
+        </div>
 
-      <input
-        type="text"
-        placeholder="Nombre"
-        value={nombre}
-        onChange={(e) => setNombre(e.target.value)}
-      />
+        <form onSubmit={handleRegistro} className="login-form">
+          <div className="login-input-group">
+            <label htmlFor="nombre">Nombre completo</label>
+            <input
+              id="nombre"
+              type="text"
+              placeholder="Tu nombre completo"
+              value={nombre}
+              onChange={(e) => setNombre(e.target.value)}
+              required
+            />
+          </div>
 
-      <input
-        type="email"
-        placeholder="Correo"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+          <div className="login-input-group">
+            <label htmlFor="email">Correo electrónico</label>
+            <input
+              id="email"
+              type="email"
+              placeholder="ejemplo@email.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-      <input
-        type="password"
-        placeholder="Contraseña"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+          <div className="login-input-group">
+            <label htmlFor="password">Contraseña</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Mínimo 6 caracteres"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              minLength={6}
+              required
+            />
+          </div>
 
-      <button type="submit">Registrarme</button>
-    </form>
+          {errorMsg && <p className="login-error">{errorMsg}</p>}
+          {mensajeOk && <p className="login-success">{mensajeOk}</p>}
+
+          <button type="submit" className="login-btn" disabled={cargando}>
+            {cargando ? "Creando cuenta..." : "Registrarme"}
+          </button>
+        </form>
+
+        <div className="login-extra">
+          <p>¿Ya tienes una cuenta?</p>
+          <button
+            type="button"
+            className="login-link"
+            onClick={() => navigate("/login")}
+          >
+            Inicia sesión aquí
+          </button>
+        </div>
+
+        <div className="login-extra-secundario">
+          <button
+            type="button"
+            className="login-back-btn"
+            onClick={() => navigate("/")}
+          >
+            Volver al inicio
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 

@@ -1,6 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { cerrarSesion } from "../servicios/auth";
 import logoClinica from "../assets/logo-clinica.png";
+
 function NavbarMedico() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -8,7 +9,7 @@ function NavbarMedico() {
   const handleLogout = async () => {
     try {
       await cerrarSesion();
-      navigate("/login-medico");
+      navigate("/", { replace: true });
     } catch (error) {
       console.error("Error cerrando sesión:", error);
       alert("No se pudo cerrar sesión");
@@ -24,12 +25,15 @@ function NavbarMedico() {
   return (
     <nav className="navbar-medico">
       <div className="navbar-medico__left">
-        <div className="navbar-medico__brand" onClick={() => navigate("/dashboard-medico")}>
+        <div
+          className="navbar-medico__brand"
+          onClick={() => navigate("/dashboard-medico")}
+        >
           <img
-  src={logoClinica}
-  alt="Logo clínica"
-  className="navbar-medico__logo"
-/>
+            src={logoClinica}
+            alt="Logo clínica"
+            className="navbar-medico__logo"
+          />
           <div className="navbar-medico__brand-text">
             <span className="navbar-medico__title">Clínica Dental</span>
             <span className="navbar-medico__subtitle">Panel médico</span>

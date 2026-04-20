@@ -55,19 +55,46 @@ const opcionesEnfermedadesActuales = [
   "No representa ninguna de las anteriores",
 ];
 
+function crearOdontogramaInicial() {
+  const numerosDientes = [
+    18, 17, 16, 15, 14, 13, 12, 11,
+    21, 22, 23, 24, 25, 26, 27, 28,
+    48, 47, 46, 45, 44, 43, 42, 41,
+    31, 32, 33, 34, 35, 36, 37, 38,
+  ];
+
+  return numerosDientes.map((numero) => ({
+    numero,
+    tratamientoGeneral: "sano",
+    caras: {
+      superior: "sano",
+      izquierda: "sano",
+      centro: "sano",
+      derecha: "sano",
+      inferior: "sano",
+    },
+    notas: "",
+  }));
+}
+
 export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
   const [formulario, setFormulario] = useState(null);
   const [tratamientoActivo, setTratamientoActivo] = useState("sano");
 
   useEffect(() => {
     if (paciente) {
+      const odontogramaBase =
+        paciente.odontograma?.length > 0
+          ? paciente.odontograma
+          : crearOdontogramaInicial();
+
       setFormulario({
         ...paciente,
         tejidosOtra: paciente.tejidosOtra || "",
         motivoDetalleOtra: paciente.motivoDetalleOtra || "",
         habitosClinicosOtra: paciente.habitosClinicosOtra || "",
         enfermedadesClinicasOtra: paciente.enfermedadesClinicasOtra || "",
-        odontograma: (paciente.odontograma || []).map((diente) => ({
+        odontograma: odontogramaBase.map((diente) => ({
           ...diente,
           tratamientoGeneral: diente.tratamientoGeneral || "sano",
           caras: {
@@ -156,9 +183,7 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
     setFormulario((prev) => ({
       ...prev,
       odontograma: (prev.odontograma || []).map((diente) =>
-        diente.numero === numero
-          ? { ...diente, notas: texto }
-          : diente
+        diente.numero === numero ? { ...diente, notas: texto } : diente
       ),
     }));
   };
@@ -511,7 +536,8 @@ export default function FichaPaciente({ paciente, alCerrar, alGuardar }) {
           </p>
 
           <p className="subtexto-ficha">
-            Blanco: sano | Negro: caries por caras | Azul: conducto | Gris: extracción
+            Blanco: sano | Negro: caries por caras | Azul: conducto | Gris:
+            extracción
           </p>
 
           <div className="selector-tratamiento">

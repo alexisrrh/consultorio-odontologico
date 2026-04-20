@@ -3,13 +3,18 @@ import html2pdf from "html2pdf.js";
 import Odontograma from "./Odontograma";
 import logo1 from "../assets/logo1.png";
 import marca from "../assets/marca.png";
+import ConsentimientoInformado from "../componentes/ConsentimientoInformado";
 
 export default function PresupuestoPaciente({
   paciente,
   alCerrar,
   logoEsquinaSrc = logo1,
   marcaAguaSrc = marca,
-})  {
+  profesional = {
+    nombre: "José J. Figueroa",
+    telefono: "0412-0282591",
+  },
+}) {
   const presupuestoRef = useRef(null);
 
   const [tratamientos, setTratamientos] = useState(
@@ -67,60 +72,65 @@ export default function PresupuestoPaciente({
   const imprimirPresupuesto = () => {
     window.print();
   };
-const descargarPDF = async () => {
-  if (!presupuestoRef.current) return;
 
-  const elemento = presupuestoRef.current;
-  const ocultarEnPdf = document.querySelectorAll(".no-print");
+  const descargarPDF = async () => {
+    if (!presupuestoRef.current) return;
 
-  ocultarEnPdf.forEach((el) => {
-    el.dataset.prevDisplay = el.style.display || "";
-    el.style.display = "none";
-  });
+    const elemento = presupuestoRef.current;
+    const ocultarEnPdf = document.querySelectorAll(".no-print");
 
-  const opciones = {
-    margin: [8, 8, 8, 8],
-    filename: `presupuesto-${paciente.nombre || "paciente"}.pdf`,
-    image: { type: "jpeg", quality: 1 },
-    html2canvas: {
-      scale: 3,
-      useCORS: true,
-      allowTaint: true,
-      backgroundColor: "#ffffff",
-      logging: false,
-      scrollX: 0,
-      scrollY: 0,
-    },
-    jsPDF: {
-      unit: "mm",
-      format: "a4",
-      orientation: "portrait",
-    },
-    pagebreak: {
-      mode: ["avoid-all", "css", "legacy"],
-    },
+    ocultarEnPdf.forEach((el) => {
+      el.dataset.prevDisplay = el.style.display || "";
+      el.style.display = "none";
+    });
+
+    const opciones = {
+      margin: [8, 8, 8, 8],
+      filename: `presupuesto-${paciente.nombre || "paciente"}.pdf`,
+      image: { type: "jpeg", quality: 1 },
+      html2canvas: {
+        scale: 3,
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: "#ffffff",
+        logging: false,
+        scrollX: 0,
+        scrollY: 0,
+      },
+      jsPDF: {
+        unit: "mm",
+        format: "a4",
+        orientation: "portrait",
+      },
+      pagebreak: {
+        mode: ["avoid-all", "css", "legacy"],
+      },
+    };
+
+    await new Promise((resolve) => setTimeout(resolve, 300));
+
+    try {
+      await html2pdf().set(opciones).from(elemento).save();
+    } finally {
+      ocultarEnPdf.forEach((el) => {
+        el.style.display = el.dataset.prevDisplay || "";
+        delete el.dataset.prevDisplay;
+      });
+    }
   };
 
-  await new Promise((resolve) => setTimeout(resolve, 300));
-
-  try {
-    await html2pdf().set(opciones).from(elemento).save();
-  } finally {
-    ocultarEnPdf.forEach((el) => {
-      el.style.display = el.dataset.prevDisplay || "";
-      delete el.dataset.prevDisplay;
-    });
-  }
-};
+  const procedimientoTexto =
+    tratamientos.length > 0
+      ? tratamientos.map((t) => t.nombre).join(", ")
+      : paciente?.tratamiento || "Procedimiento odontológico";
 
   return (
     <div className="contenedor-ficha-completa">
-      <div className="presupuesto-bloque-titulo">
-      
+      <div className="presupuesto-bloque-titulo no-print">
         <h1 className="presupuesto-titulo-principal">Presupuesto Odontológico</h1>
       </div>
 
-     <div className="presupuesto-container" ref={presupuestoRef}>
+      <div className="presupuesto-container" ref={presupuestoRef}>
         {logoEsquinaSrc && (
           <img
             src={logoEsquinaSrc}
@@ -129,27 +139,27 @@ const descargarPDF = async () => {
           />
         )}
 
-      <header className="presupuesto-header">
-  <div className="presupuesto-header-superior">
-    {logoEsquinaSrc && (
-      <img
-        src={logoEsquinaSrc}
-        alt="Logo de la clínica"
-        className="presupuesto-logo-esquina"
-      />
-    )}
+        <header className="presupuesto-header">
+          <div className="presupuesto-header-superior">
+            {logoEsquinaSrc && (
+              <img
+                src={logoEsquinaSrc}
+                alt="Logo de la clínica"
+                className="presupuesto-logo-esquina"
+              />
+            )}
 
-    <div className="presupuesto-clinica">
-      <h2>ODONTÓLOGO GENERAL</h2>
-      <h1>José J. Figueroa</h1>
-      <p>Teléfono: 0412-0282591</p>
-    </div>
-  </div>
+            <div className="presupuesto-clinica">
+              <h2>ODONTÓLOGO GENERAL</h2>
+              <h1>{profesional?.nombre || "Odontólogo"}</h1>
+              <p>Teléfono: {profesional?.telefono || "-"}</p>
+            </div>
+          </div>
 
-  <div className="presupuesto-bloque-titulo">
-    <h2 className="presupuesto-titulo">PRESUPUESTO</h2>
-  </div>
-</header>
+          <div className="presupuesto-bloque-titulo">
+            <h2 className="presupuesto-titulo">PRESUPUESTO</h2>
+          </div>
+        </header>
 
         <section className="presupuesto-seccion datos-con-marca">
           {marcaAguaSrc && (
@@ -179,12 +189,11 @@ const descargarPDF = async () => {
 
         <section className="presupuesto-seccion">
           <h3>Odontograma</h3>
-      <div className="presupuesto-odontograma-wrap">
-  <Odontograma
-    odontograma={paciente.odontograma || []}
-    alCambiarDiente={() => {}}
-  />
-
+          <div className="presupuesto-odontograma-wrap">
+            <Odontograma
+              odontograma={paciente.odontograma || []}
+              alCambiarDiente={() => {}}
+            />
           </div>
         </section>
 
@@ -276,7 +285,10 @@ const descargarPDF = async () => {
                   </span>
 
                   <span>
-                    {((Number(t.precio) || 0) * (Number(t.cantidad) || 1)).toFixed(2)}$
+                    {(
+                      (Number(t.precio) || 0) * (Number(t.cantidad) || 1)
+                    ).toFixed(2)}
+                    $
                   </span>
 
                   <span className="col-acciones no-print">
@@ -308,9 +320,16 @@ const descargarPDF = async () => {
             Puedes editar tratamientos, imprimir o descargar PDF.
           </p>
         </section>
+
+        <ConsentimientoInformado
+          paciente={paciente}
+          profesional={profesional}
+          procedimiento={procedimientoTexto}
+          fecha={new Date()}
+        />
       </div>
 
-      <div className="acciones-documento no-imprimir">
+      <div className="acciones-documento no-print">
         <button type="button" className="boton-principal" onClick={alCerrar}>
           Volver
         </button>
@@ -332,7 +351,7 @@ const descargarPDF = async () => {
         </button>
       </div>
 
-      <footer className="presupuesto-footer">
+      <footer className="presupuesto-footer no-print">
         <p>@od.josefigueroa</p>
       </footer>
     </div>

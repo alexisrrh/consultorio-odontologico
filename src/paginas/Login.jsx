@@ -2,15 +2,18 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUsuario } from "../servicios/auth";
 import { supabase } from "../servicios/supabase";
+import logoClinica from "../assets/logo-clinica.png";
 
 function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [cargando, setCargando] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    setErrorMsg("");
 
     try {
       setCargando(true);
@@ -39,44 +42,86 @@ function Login() {
       }
 
       navigate("/");
-    } catch (error) {
-      console.error("Error iniciando sesión:", error);
-      alert(error.message || "No se pudo iniciar sesión");
-    } finally {
-      setCargando(false);
-    }
-  };
+    }  catch (error) {
+  console.error("Error iniciando sesión:", error);
 
+  const mensaje = error.message?.toLowerCase() || "";
+
+  // 🔴 Email no confirmado (Supabase)
+  if (mensaje.includes("email not confirmed")) {
+    setErrorMsg("Debes confirmar tu correo antes de iniciar sesión");
+  } 
+  // 🔴 Credenciales incorrectas
+  else if (mensaje.includes("invalid login credentials")) {
+    setErrorMsg("Correo o contraseña incorrectos");
+  } 
+  // 🔴 Error genérico
+  else {
+    setErrorMsg("No se pudo iniciar sesión");
+  }}
+}
   return (
-    <div style={{ padding: "20px" }}>
-      <form
-        onSubmit={handleLogin}
-        style={{
-          display: "grid",
-          gap: "12px",
-          maxWidth: "420px",
-        }}
-      >
-        <h2>Iniciar sesión</h2>
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-header">
+          <img src={logoClinica} alt="Logo clínica" className="login-logo" />
+          <h2>Iniciar sesión</h2>
+          <p>Accede a tu cuenta para continuar</p>
+        </div>
 
-        <input
-          type="email"
-          placeholder="Correo"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <form onSubmit={handleLogin} className="login-form">
+          <div className="login-input-group">
+            <label htmlFor="email">Correo electrónico</label>
+            <input
+              id="email"
+              type="email"
+              placeholder="Correo"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </div>
 
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <div className="login-input-group">
+            <label htmlFor="password">Contraseña</label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
 
-        <button type="submit" disabled={cargando}>
-          {cargando ? "Entrando..." : "Entrar"}
-        </button>
-      </form>
+          {errorMsg && <p className="login-error">{errorMsg}</p>}
+
+          <button type="submit" className="login-btn" disabled={cargando}>
+            {cargando ? "Entrando..." : "Entrar"}
+          </button>
+        </form>
+
+        <div className="login-extra">
+          <p>¿No tienes una cuenta?</p>
+          <button
+            type="button"
+            className="login-link"
+            onClick={() => navigate("/registro-cliente")}
+          >
+            Regístrate aquí
+          </button>
+        </div>
+
+        <div className="login-extra-secundario">
+          <button
+            type="button"
+            className="login-back-btn"
+            onClick={() => navigate("/")}
+          >
+            Volver al inicio
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
