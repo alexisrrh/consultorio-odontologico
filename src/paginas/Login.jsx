@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginUsuario } from "../servicios/auth";
+import { loginUsuario, enviarRecuperacionPassword } from "../servicios/auth";
 import { supabase } from "../servicios/supabase";
 import logoClinica from "../assets/logo-clinica.png";
 
@@ -10,6 +10,12 @@ function Login() {
   const [password, setPassword] = useState("");
   const [cargando, setCargando] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+
+  const [mostrarRecuperacion, setMostrarRecuperacion] = useState(false);
+  const [emailRecuperacion, setEmailRecuperacion] = useState("");
+  const [cargandoRecuperacion, setCargandoRecuperacion] = useState(false);
+  const [mensajeRecuperacion, setMensajeRecuperacion] = useState("");
+  const [errorRecuperacion, setErrorRecuperacion] = useState("");
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -48,19 +54,35 @@ function Login() {
 
       const mensaje = error.message?.toLowerCase() || "";
 
-      if (mensaje.includes("email not confirmed")) {
-        setErrorMsg("Debes confirmar tu correo antes de iniciar sesión");
-      } else if (mensaje.includes("invalid login credentials")) {
+      if (mensaje.includes("invalid login credentials")) {
         setErrorMsg("Correo o contraseña incorrectos");
-      } else if (
-        mensaje.includes("cannot coerce the result to a single json object")
-      ) {
-        setErrorMsg("Hay un problema con el perfil del usuario en la base de datos");
       } else {
         setErrorMsg(error.message || "No se pudo iniciar sesión");
       }
     } finally {
       setCargando(false);
+    }
+  };
+
+  const handleRecuperacion = async (e) => {
+    e.preventDefault();
+    setMensajeRecuperacion("");
+    setErrorRecuperacion("");
+
+    try {
+      setCargandoRecuperacion(true);
+      await enviarRecuperacionPassword(emailRecuperacion);
+      setMensajeRecuperacion(
+        "Te enviamos un enlace para restablecer tu contraseña. Revisa tu correo."
+      );
+      setEmailRecuperacion("");
+    } catch (error) {
+      console.error("Error enviando recuperación:", error);
+      setErrorRecuperacion(
+        error.message || "No se pudo enviar el correo de recuperación"
+      );
+    } finally {
+      setCargandoRecuperacion(false);
     }
   };
 
@@ -98,6 +120,19 @@ function Login() {
             />
           </div>
 
+          <button
+            type="button"
+            className="login-forgot-link"
+            onClick={() => {
+              setMostrarRecuperacion(true);
+              setEmailRecuperacion(email);
+              setMensajeRecuperacion("");
+              setErrorRecuperacion("");
+            }}
+          >
+            ¿Olvidaste tu contraseña?
+          </button>
+
           {errorMsg && <p className="login-error">{errorMsg}</p>}
 
           <button type="submit" className="login-btn" disabled={cargando}>
@@ -126,6 +161,54 @@ function Login() {
           </button>
         </div>
       </div>
+
+      {mostrarRecuperacion && (
+        <div className="login-modal-overlay">
+          <div className="login-modal">
+            <h3>Recuperar contraseña</h3>
+            <p>
+              Introduce tu correo y te enviaremos un enlace para cambiar la contraseña.
+            </p>
+
+            <form onSubmit={handleRecuperacion} className="login-form">
+              <div className="login-input-group">
+                <label htmlFor="emailRecuperacion">Correo electrónico</label>
+                <input
+                  id="emailRecuperacion"
+                  type="email"
+                  placeholder="Correo"
+                  value={emailRecuperacion}
+                  onChange={(e) => setEmailRecuperacion(e.target.value)}
+                  required
+                />
+              </div>
+
+              {errorRecuperacion && <p className="login-error">{errorRecuperacion}</p>}
+              {mensajeRecuperacion && (
+                <p className="login-success">{mensajeRecuperacion}</p>
+              )}
+
+              <div className="login-modal-actions">
+                <button
+                  type="button"
+                  className="login-back-btn"
+                  onClick={() => setMostrarRecuperacion(false)}
+                >
+                  Cerrar
+                </button>
+
+                <button
+                  type="submit"
+                  className="login-btn"
+                  disabled={cargandoRecuperacion}
+                >
+                  {cargandoRecuperacion ? "Enviando..." : "Enviar enlace"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

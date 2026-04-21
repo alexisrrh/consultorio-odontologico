@@ -11,7 +11,7 @@ import DashboardMedico from "./paginas/DashboardMedico";
 import CitasMedico from "./paginas/CitasMedico";
 import PacienteDetalles from "./paginas/PacienteDetalles";
 import PanelClinico from "./paginas/PanelClinico";
-
+import ActualizarPassword from "./paginas/ActualizarPassword";
 import "./App.css";
 
 function App() {
@@ -34,7 +34,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-
+<Route path="/actualizar-password" element={<ActualizarPassword />} />
           <Route
             path="/dashboard-medico" element={<ProtectedRoute allowedRoles={["medico"]}>
                 <DashboardMedico />
