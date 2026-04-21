@@ -1,16 +1,140 @@
-# React + Vite
+# 🦷 Dental Clinic Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack web application for managing a dental clinic, built with React and Supabase. It allows patients to book appointments and doctors to manage patients, clinical records, and schedules.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🚀 Live Demo
 
-## React Compiler
+👉 https://consultorio-odontologico-lac.vercel.app/
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+* ⚛️ React + Vite
+* 🎨 CSS (Tailwind planned)
+* 🔐 Supabase (Authentication + Database)
+* 🌐 React Router
+* 🧠 Context API (Global State)
+
+---
+
+## ✨ Key Features
+
+### 👤 Patient
+
+* User registration and login
+* Password recovery
+* Book appointments
+* View personal appointments
+
+### 👨‍⚕️ Doctor
+
+* Dashboard with statistics
+* Appointment management
+* Clinical panel
+* Patient management
+* Clinical history tracking
+* Odontogram system
+* Budget management
+
+---
+
+## 🔒 Authentication
+
+* Supabase authentication system
+* Role-based access (patient / doctor)
+* Protected routes
+* Fully functional password recovery
+
+---
+
+## 📅 Appointment System
+
+* Date validation (no past dates allowed)
+* Controlled working hours (morning & afternoon)
+* Relationship between:
+
+  * Patient (user)
+  * Doctor
+  * Clinical record
+
+---
+
+## 🧠 Project Structure
+
+```id="2gk3r9"
+src/
+├──assets
+├── components/
+├── context/
+├── pages/
+├── routes/
+├── services/
+```
+
+---
+
+## ⚙️ Local Setup
+
+```bash id="5y2l9c"
+git clone https://github.com/alexisrrh/consultorio-odontologico.git
+cd consultorio-odontologico
+npm install
+npm run dev
+```
+
+---
+
+## 🔑 Environment Variables
+
+Create a `.env` file:
+
+```id="8pq1dr"
+VITE_SUPABASE_URL=YOUR_URL
+VITE_SUPABASE_ANON_KEY=YOUR_KEY
+VITE_APP_URL=https://consultorio-odontologico-lac.vercel.app
+```
+
+---
+
+## ⚠️ Challenges Solved
+
+* Password recovery redirect issues (especially on mobile)
+* Session handling with Supabase
+* Automatic user profile creation
+* Role-based route protection
+* Sync between authenticated user and patient data
+
+---
+
+## 📈 Future Improvements
+
+* Full UI redesign with Tailwind
+* Real-time notifications
+* Payment system
+* Calendar-based scheduling
+* Multi-doctor support
+
+---
+
+## 👨‍💻 Author
+
+**Alexis**
+Junior Frontend Developer
+
+* GitHub: https://github.com/alexisrrh
+
+---
+
+## 💼 Open to Work
+
+I’m currently looking for my first opportunity as a Frontend Developer.
+I’m highly motivated, fast-learning, and focused on building real-world applications.
+
+---
+
+## 📢 Note
+
+This project is part of my learning journey and is continuously improving.

@@ -12,6 +12,7 @@ import CitasMedico from "./paginas/CitasMedico";
 import PacienteDetalles from "./paginas/PacienteDetalles";
 import PanelClinico from "./paginas/PanelClinico";
 import ActualizarPassword from "./paginas/ActualizarPassword";
+
 import "./App.css";
 
 function App() {
@@ -22,39 +23,58 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/registro-cliente" element={<RegistroCliente />} />
+          <Route path="/actualizar-password" element={<ActualizarPassword />} />
 
-          <Route path="/agendar-cita" element={<ProtectedRoute allowedRoles={["cliente"]}>
+          <Route
+            path="/agendar-cita"
+            element={
+              <ProtectedRoute allowedRoles={["cliente"]}>
                 <AgendarCita />
               </ProtectedRoute>
             }
           />
 
-          <Route path="/mis-citas" element={<ProtectedRoute allowedRoles={["cliente"]}>
+          <Route
+            path="/mis-citas"
+            element={
+              <ProtectedRoute allowedRoles={["cliente"]}>
                 <Miscitas />
               </ProtectedRoute>
             }
           />
-<Route path="/actualizar-password" element={<ActualizarPassword />} />
+
           <Route
-            path="/dashboard-medico" element={<ProtectedRoute allowedRoles={["medico"]}>
+            path="/dashboard-medico"
+            element={
+              <ProtectedRoute allowedRoles={["medico"]}>
                 <DashboardMedico />
               </ProtectedRoute>
             }
           />
 
-          <Route path="/citas-medico" element={ <ProtectedRoute allowedRoles={["medico"]}>
-            <CitasMedico />
+          <Route
+            path="/citas-medico"
+            element={
+              <ProtectedRoute allowedRoles={["medico"]}>
+                <CitasMedico />
               </ProtectedRoute>
             }
           />
 
-          <Route path="/paciente/:id"element={<ProtectedRoute allowedRoles={["medico"]}> 
-            <PacienteDetalles />
+          <Route
+            path="/paciente/:id"
+            element={
+              <ProtectedRoute allowedRoles={["medico"]}>
+                <PacienteDetalles />
               </ProtectedRoute>
             }
           />
 
-          <Route path="/panel-clinico"element={  <ProtectedRoute allowedRoles={["medico"]}> <PanelClinico />
+          <Route
+            path="/panel-clinico"
+            element={
+              <ProtectedRoute allowedRoles={["medico"]}>
+                <PanelClinico />
               </ProtectedRoute>
             }
           />
