@@ -42,24 +42,23 @@ function Login() {
       }
 
       navigate("/");
-    }  catch (error) {
-  console.error("Error iniciando sesión:", error);
+    } catch (error) {
+      console.error("Error iniciando sesión:", error);
 
-  const mensaje = error.message?.toLowerCase() || "";
+      const mensaje = error.message?.toLowerCase() || "";
 
-  // 🔴 Email no confirmado (Supabase)
-  if (mensaje.includes("email not confirmed")) {
-    setErrorMsg("Debes confirmar tu correo antes de iniciar sesión");
-  } 
-  // 🔴 Credenciales incorrectas
-  else if (mensaje.includes("invalid login credentials")) {
-    setErrorMsg("Correo o contraseña incorrectos");
-  } 
-  // 🔴 Error genérico
-  else {
-    setErrorMsg("No se pudo iniciar sesión");
-  }}
-}
+      if (mensaje.includes("email not confirmed")) {
+        setErrorMsg("Debes confirmar tu correo antes de iniciar sesión");
+      } else if (mensaje.includes("invalid login credentials")) {
+        setErrorMsg("Correo o contraseña incorrectos");
+      } else {
+        setErrorMsg(error.message || "No se pudo iniciar sesión");
+      }
+    } finally {
+      setCargando(false);
+    }
+  };
+
   return (
     <div className="login-container">
       <div className="login-card">
