@@ -44,7 +44,7 @@ function ActualizarPassword() {
 
   return (
     <div className="login-container">
-      <div className="login-card">
+      <div className="login-card actualizar-password-card">
         <div className="login-header">
           <img src={logoClinica} alt="Logo clínica" className="login-logo" />
           <h2>Nueva contraseña</h2>
@@ -81,6 +81,14 @@ function ActualizarPassword() {
 
           <button type="submit" className="login-btn" disabled={cargando}>
             {cargando ? "Actualizando..." : "Guardar nueva contraseña"}
+          </button>
+
+          <button
+            type="button"
+            className="login-back-btn actualizar-password-back"
+            onClick={() => navigate("/login")}
+          >
+            Volver al login
           </button>
         </form>
       </div>

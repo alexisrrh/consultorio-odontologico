@@ -17,6 +17,13 @@ function Login() {
   const [mensajeRecuperacion, setMensajeRecuperacion] = useState("");
   const [errorRecuperacion, setErrorRecuperacion] = useState("");
 
+  const cerrarModalRecuperacion = () => {
+    setMostrarRecuperacion(false);
+    setMensajeRecuperacion("");
+    setErrorRecuperacion("");
+    setCargandoRecuperacion(false);
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     setErrorMsg("");
@@ -71,11 +78,11 @@ function Login() {
 
     try {
       setCargandoRecuperacion(true);
-      await enviarRecuperacionPassword(emailRecuperacion);
+      await enviarRecuperacionPassword(emailRecuperacion.trim());
+
       setMensajeRecuperacion(
         "Te enviamos un enlace para restablecer tu contraseña. Revisa tu correo."
       );
-      setEmailRecuperacion("");
     } catch (error) {
       console.error("Error enviando recuperación:", error);
       setErrorRecuperacion(
@@ -163,8 +170,14 @@ function Login() {
       </div>
 
       {mostrarRecuperacion && (
-        <div className="login-modal-overlay">
-          <div className="login-modal">
+        <div
+          className="login-modal-overlay"
+          onClick={cerrarModalRecuperacion}
+        >
+          <div
+            className="login-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
             <h3>Recuperar contraseña</h3>
             <p>
               Introduce tu correo y te enviaremos un enlace para cambiar la contraseña.
@@ -183,7 +196,10 @@ function Login() {
                 />
               </div>
 
-              {errorRecuperacion && <p className="login-error">{errorRecuperacion}</p>}
+              {errorRecuperacion && (
+                <p className="login-error">{errorRecuperacion}</p>
+              )}
+
               {mensajeRecuperacion && (
                 <p className="login-success">{mensajeRecuperacion}</p>
               )}
@@ -192,7 +208,7 @@ function Login() {
                 <button
                   type="button"
                   className="login-back-btn"
-                  onClick={() => setMostrarRecuperacion(false)}
+                  onClick={cerrarModalRecuperacion}
                 >
                   Cerrar
                 </button>
