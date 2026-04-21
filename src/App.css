@@ -3326,3 +3326,15 @@ textarea {
     justify-content: center;
   }
 }
+.home-loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.home-loading p {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #134e4a;
+}

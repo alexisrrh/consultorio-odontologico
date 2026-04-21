@@ -5,15 +5,16 @@ import logoClinica from "../assets/logo-clinica.png";
 import blanqueamientoImg from "../assets/tratamientos/blanqueamientoImg.jpg";
 import ortodonciaImg from "../assets/tratamientos/ortodonciaImg.jpg";
 import revisionImg from "../assets/tratamientos/revisionImg.jpeg";
-import limpiezaImg  from "../assets/tratamientos/limpiezaImg.avif"
-import endodonciaImg from "../assets/tratamientos/endodonciaImg.webp"
-import implanteImg from "../assets/tratamientos/implanteImg.jpg"
-import imagen1 from "../assets/tratamientos/imagen1.jpeg"
-import imagen2 from "../assets/tratamientos/imagen2.jpeg"
-import limpieza from "../assets/tratamientos/limpieza.png"
+import limpiezaImg from "../assets/tratamientos/limpiezaImg.avif";
+import endodonciaImg from "../assets/tratamientos/endodonciaImg.webp";
+import implanteImg from "../assets/tratamientos/implanteImg.jpg";
+import imagen1 from "../assets/tratamientos/imagen1.jpeg";
+import imagen2 from "../assets/tratamientos/imagen2.jpeg";
+import limpieza from "../assets/tratamientos/limpieza.png";
+
 function Home() {
   const navigate = useNavigate();
-  const { usuario, perfil } = useAuth();
+  const { usuario, perfil, loading } = useAuth();
 
   const tratamientos = [
     {
@@ -147,20 +148,24 @@ function Home() {
       return;
     }
 
-    navigate("/login");
+    navigate("/registro-cliente");
   };
 
   const textoBotonPrincipal = !usuario
     ? "Iniciar sesión"
     : perfil?.rol === "cliente"
     ? "Agendar cita"
-    : "Ir al panel médico";
+    : perfil?.rol === "medico"
+    ? "Ir al panel médico"
+    : "Iniciar sesión";
 
   const textoBotonSecundario = !usuario
     ? "Crear cuenta"
     : perfil?.rol === "cliente"
     ? "Ver mis citas"
-    : "Ver agenda";
+    : perfil?.rol === "medico"
+    ? "Ver agenda"
+    : "Crear cuenta";
 
   const renderBotonesNavbar = () => {
     if (!usuario) {
@@ -183,11 +188,17 @@ function Home() {
     if (perfil?.rol === "cliente") {
       return (
         <>
-          <button onClick={() => navigate("/agendar-cita")} className="btn-secundario">
+          <button
+            onClick={() => navigate("/agendar-cita")}
+            className="btn-secundario"
+          >
             Agendar cita
           </button>
 
-          <button onClick={() => navigate("/mis-citas")} className="btn-secundario">
+          <button
+            onClick={() => navigate("/mis-citas")}
+            className="btn-secundario"
+          >
             Mis citas
           </button>
 
@@ -215,8 +226,31 @@ function Home() {
       );
     }
 
-    return null;
+    return (
+      <>
+        <button onClick={() => navigate("/login")} className="btn-secundario">
+          Iniciar sesión
+        </button>
+
+        <button
+          onClick={() => navigate("/registro-cliente")}
+          className="btn-principal"
+        >
+          Registrarse
+        </button>
+      </>
+    );
   };
+
+  if (loading) {
+    return (
+      <div className="home-clinica">
+        <div className="home-loading">
+          <p>Cargando...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="home-clinica">
@@ -250,7 +284,10 @@ function Home() {
               {textoBotonPrincipal}
             </button>
 
-            <button onClick={irAccionSecundaria} className="btn-secundario grande">
+            <button
+              onClick={irAccionSecundaria}
+              className="btn-secundario grande"
+            >
               {textoBotonSecundario}
             </button>
           </div>
@@ -511,7 +548,10 @@ function Home() {
               {textoBotonPrincipal}
             </button>
 
-            <button onClick={irAccionSecundaria} className="btn-secundario grande">
+            <button
+              onClick={irAccionSecundaria}
+              className="btn-secundario grande"
+            >
               {textoBotonSecundario}
             </button>
           </div>
@@ -529,10 +569,23 @@ function Home() {
         <div className="home-footer-links">
           <button onClick={() => navigate("/")}>Inicio</button>
           <button onClick={irAccionPrincipal}>
-            {!usuario ? "Iniciar sesión" : perfil?.rol === "cliente" ? "Agendar cita" : "Panel médico"}
+            {!usuario
+              ? "Iniciar sesión"
+              : perfil?.rol === "cliente"
+              ? "Agendar cita"
+              : perfil?.rol === "medico"
+              ? "Panel médico"
+              : "Iniciar sesión"}
           </button>
+
           <button onClick={irAccionSecundaria}>
-            {!usuario ? "Crear cuenta" : perfil?.rol === "cliente" ? "Mis citas" : "Ver agenda"}
+            {!usuario
+              ? "Crear cuenta"
+              : perfil?.rol === "cliente"
+              ? "Mis citas"
+              : perfil?.rol === "medico"
+              ? "Ver agenda"
+              : "Crear cuenta"}
           </button>
         </div>
       </footer>
