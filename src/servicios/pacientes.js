@@ -4,14 +4,21 @@ export async function obtenerPacientePorProfileId(profileId) {
   const { data, error } = await supabase
     .from("pacientes")
     .select("*")
-    .eq("profile_id", profileId)
-    .maybeSingle();
+    .eq("profile_id", profileId);
 
   if (error) throw error;
-  return data;
+
+  return data?.[0] || null;
 }
 
 export async function crearPacienteParaUsuario(profileId, datosPaciente) {
+  // Primero revisa si ya existe un paciente para este usuario
+  const existente = await obtenerPacientePorProfileId(profileId);
+
+  if (existente) {
+    return existente;
+  }
+
   const payload = {
     profile_id: profileId,
     nombre: datosPaciente.nombre || "",
@@ -46,9 +53,9 @@ export async function crearPacienteParaUsuario(profileId, datosPaciente) {
   const { data, error } = await supabase
     .from("pacientes")
     .insert([payload])
-    .select()
-    .single();
+    .select();
 
   if (error) throw error;
-  return data;
+
+  return data?.[0] || null;
 }

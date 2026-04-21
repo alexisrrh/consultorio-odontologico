@@ -69,13 +69,14 @@ export function AuthProvider({ children }) {
       }
 
       try {
-        const { data, error } = await supabase
+        const { data: perfiles, error } = await supabase
           .from("profiles")
           .select("*")
-          .eq("id", usuario.id)
-          .maybeSingle();
+          .eq("id", usuario.id);
 
         if (error) throw error;
+
+        const data = perfiles?.[0] || null;
 
         if (!data) {
           const { error: insertError } = await supabase.from("profiles").insert([
@@ -88,13 +89,14 @@ export function AuthProvider({ children }) {
 
           if (insertError) throw insertError;
 
-          const { data: nuevoPerfil, error: nuevoError } = await supabase
+          const { data: nuevoPerfiles, error: nuevoError } = await supabase
             .from("profiles")
             .select("*")
-            .eq("id", usuario.id)
-            .single();
+            .eq("id", usuario.id);
 
           if (nuevoError) throw nuevoError;
+
+          const nuevoPerfil = nuevoPerfiles?.[0] || null;
 
           if (mounted) setPerfil(nuevoPerfil);
           return;

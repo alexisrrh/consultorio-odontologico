@@ -28,13 +28,14 @@ function Login() {
         throw new Error("No se pudo obtener el usuario autenticado");
       }
 
-      const { data: perfil, error } = await supabase
+      const { data: perfiles, error } = await supabase
         .from("profiles")
         .select("*")
-        .eq("id", user.id)
-        .single();
+        .eq("id", user.id);
 
       if (error) throw error;
+
+      const perfil = perfiles?.[0] || null;
 
       if (perfil?.rol === "medico") {
         navigate("/dashboard-medico");
@@ -51,6 +52,10 @@ function Login() {
         setErrorMsg("Debes confirmar tu correo antes de iniciar sesión");
       } else if (mensaje.includes("invalid login credentials")) {
         setErrorMsg("Correo o contraseña incorrectos");
+      } else if (
+        mensaje.includes("cannot coerce the result to a single json object")
+      ) {
+        setErrorMsg("Hay un problema con el perfil del usuario en la base de datos");
       } else {
         setErrorMsg(error.message || "No se pudo iniciar sesión");
       }
