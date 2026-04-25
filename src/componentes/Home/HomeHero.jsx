@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import fondoHome from "../../assets/tratamientos/fondoHome.jpeg"
+import fondoHome from "../../assets/tratamientos/fondoHome.jpeg";
 import logoClinica from "../../assets/logo-clinica.png";
 
 export function HomeHero({
@@ -9,7 +9,6 @@ export function HomeHero({
   navigate,
   handleLogout,
   textoBotonPrincipal,
-  textoBotonSecundario,
 }) {
   const [form, setForm] = useState({
     nombre: "",
@@ -47,7 +46,7 @@ export function HomeHero({
       return;
     }
 
-    const numeroClinica = "+584120282591";
+    const numeroClinica = "584120282591";
 
     const mensaje = `Hola, quiero agendar una cita dental:
 
@@ -72,7 +71,7 @@ Consulta: ${form.consulta}`;
           <img
             src={logoClinica}
             alt="Logo"
-            className="h-19 w-75 rounded-2xl object-cover shadow"
+            className="h-16 w-16 rounded-2xl object-cover shadow"
           />
 
           <div>
@@ -89,6 +88,7 @@ Consulta: ${form.consulta}`;
           {!usuario ? (
             <>
               <button
+                type="button"
                 onClick={() => navigate("/login")}
                 className="rounded-2xl border border-sky-200 bg-white px-6 py-3 font-semibold text-slate-900 shadow-sm transition hover:border-sky-500"
               >
@@ -96,6 +96,7 @@ Consulta: ${form.consulta}`;
               </button>
 
               <button
+                type="button"
                 onClick={() => navigate("/registro-cliente")}
                 className="rounded-2xl bg-sky-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:bg-sky-500"
               >
@@ -105,6 +106,7 @@ Consulta: ${form.consulta}`;
           ) : (
             <>
               <button
+                type="button"
                 onClick={irAccionPrincipalHero}
                 className="rounded-2xl border border-sky-200 bg-white px-6 py-3 font-semibold text-slate-900 shadow-sm transition hover:border-sky-500"
               >
@@ -112,6 +114,7 @@ Consulta: ${form.consulta}`;
               </button>
 
               <button
+                type="button"
                 onClick={handleLogout}
                 className="rounded-2xl bg-sky-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:bg-sky-500"
               >
@@ -183,7 +186,7 @@ Consulta: ${form.consulta}`;
           initial={{ opacity: 0, scale: 0.96 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.9, delay: 0.2 }}
-          className="relative min-h-[700px]"
+          className="relative min-h-[770px]"
         >
           <div className="absolute inset-0 overflow-hidden rounded-[3rem] bg-white shadow-2xl">
             <img
@@ -193,12 +196,12 @@ Consulta: ${form.consulta}`;
             />
           </div>
 
-        <div className="absolute left-1/2 top-[65%] w-[400px] max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 rounded-[2rem] border border-white/60 bg-white/20 p-6 shadow-2xl">
-            <h3 className="text-3xl font-bold text-slate-950">
+          <div className="absolute left-1/2 top-[68%] w-[520px] max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 rounded-[2rem] border border-white/70 bg-white/30 p-6 shadow-2xl">
+            <h3 className="text-center text-3xl font-bold text-slate-950">
               Agenda tu cita
             </h3>
 
-            <p className="mt-2 text-slate-500">
+            <p className="mt-2 text-center text-slate-500 text-slate-900">
               Solicita atención dental de forma rápida y sencilla.
             </p>
 
@@ -208,7 +211,7 @@ Consulta: ${form.consulta}`;
                 value={form.nombre}
                 onChange={handleChange}
                 placeholder="Nombre"
-                className="rounded-2xl border border-slate-200 px-5 py-4 outline-none focus:border-sky-400"
+                className="rounded-2xl border border-sky-200 bg-white px-5 py-4 text-slate-900 outline-none focus:border-sky-500"
               />
 
               <input
@@ -216,7 +219,7 @@ Consulta: ${form.consulta}`;
                 value={form.apellido}
                 onChange={handleChange}
                 placeholder="Apellido"
-                className="rounded-2xl border border-slate-200 px-5 py-4 outline-none focus:border-sky-400"
+                className="rounded-2xl border border-sky-200 bg-white px-5 py-4 text-slate-900 outline-none focus:border-sky-500"
               />
 
               <input
@@ -224,7 +227,7 @@ Consulta: ${form.consulta}`;
                 value={form.cedula}
                 onChange={handleChange}
                 placeholder="Cédula"
-                className="rounded-2xl border border-slate-200 px-5 py-4 outline-none focus:border-sky-400"
+                className="rounded-2xl border border-sky-200 bg-white px-5 py-4 text-slate-900 outline-none focus:border-sky-500"
               />
 
               <input
@@ -232,28 +235,31 @@ Consulta: ${form.consulta}`;
                 value={form.telefono}
                 onChange={handleChange}
                 placeholder="Teléfono"
-                className="rounded-2xl border border-slate-200 px-5 py-4 outline-none focus:border-sky-400"
+                className="rounded-2xl border border-sky-200 bg-white px-5 py-4 text-slate-900 outline-none focus:border-sky-500"
               />
 
               <select
                 name="consulta"
                 value={form.consulta}
                 onChange={handleChange}
-                className="rounded-2xl border border-slate-200 px-5 py-4 outline-none focus:border-sky-400 md:col-span-2"
+                className="rounded-2xl border border-sky-200 bg-white px-5 py-4 text-slate-900 outline-none focus:border-sky-500 md:col-span-2"
               >
                 <option>Tipo de consulta</option>
+                 <option>Revisión general</option>
                 <option>Limpieza dental</option>
                 <option>Blanqueamiento</option>
-                <option>Ortodoncia</option>
-                <option>Endodoncia</option>
-                <option>Implantes dentales</option>
-                <option>Revisión general</option>
+                <option>Dolor de muela</option>
+                <option>Sensibilidad</option>
+                  <option>Fractura dental</option>
+                    <option>Sangrado de encias</option>
+                       <option>Protesis dental</option>
+               
               </select>
 
               <button
                 type="button"
                 onClick={enviarWhatsApp}
-                className="rounded-2xl bg-sky-600 px-5 py-4 font-bold text-white transition hover:bg-sky-500 md:col-span-2"
+                className="rounded-2xl bg-green-600 px-5 py-4 font-bold text-white transition hover:bg-sky-500 md:col-span-2"
               >
                 Agendar por WhatsApp
               </button>
