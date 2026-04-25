@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import joseImg from "../../assets/tratamientos/joseImg.jpeg"
+import fondocitaImg from "../../assets/tratamientos/fondocita.jpeg"
 import imagen2 from "../../assets/tratamientos/imagen2.jpeg";
 import limpieza from "../../assets/tratamientos/limpieza.png";
 
@@ -39,7 +39,7 @@ export function DentalGallery() {
             className="group relative min-h-[560px] overflow-hidden rounded-[2.5rem] bg-white shadow-xl shadow-slate-200/60 md:col-span-2 md:row-span-2"
           >
             <img
-              src={joseImg}
+              src={fondocitaImg}
               alt="Atención odontológica"
               className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
             />
