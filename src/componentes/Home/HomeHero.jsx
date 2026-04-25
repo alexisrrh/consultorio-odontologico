@@ -71,7 +71,7 @@ Consulta: ${form.consulta}`;
           <img
             src={logoClinica}
             alt="Logo"
-            className="h-16 w-16 rounded-2xl object-cover shadow"
+            className="max-h-20 max-w-70 rounded-2xl object-cover shadow"
           />
 
           <div>

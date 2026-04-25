@@ -46,7 +46,7 @@ export function DentalGallery() {
 
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/65 via-slate-950/10 to-transparent" />
 
-            <div className="absolute bottom-6 left-6 right-6 rounded-[2rem] bg-white/90 p-6 backdrop-blur-xl">
+            <div className="absolute bottom-6 left-6 right-6 rounded-[2rem] bg-white/40 p-6">
               <p className="text-xs font-bold uppercase tracking-[0.25em] text-sky-700">
                 Clínica moderna
               </p>
