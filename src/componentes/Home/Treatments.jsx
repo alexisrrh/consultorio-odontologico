@@ -6,7 +6,7 @@ import revisionImg from "../../assets/tratamientos/revisionImg.jpeg";
 import limpiezaImg from "../../assets/tratamientos/limpiezaImg.avif";
 import endodonciaImg from "../../assets/tratamientos/endodonciaImg.webp";
 import implanteImg from "../../assets/tratamientos/implanteImg.jpg";
-import fondocitaImg from "../../assets/tratamientos/fondocita.jpeg";
+import fondocitaImg from "../../assets/tratamientos/fondocita.png";
 const tratamientos = [
   {
     titulo: "Limpieza dental",
@@ -37,7 +37,7 @@ const tratamientos = [
     icono: "＋",
   },
   {
-    titulo: "Implantes dentales",
+    titulo: "Protesis dental",
     descripcion:
       "Reemplazo de piezas perdidas con una solución fija, funcional y estética.",
     imagen: implanteImg,

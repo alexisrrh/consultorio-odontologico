@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import fondocitaImg from "../../assets/tratamientos/fondocita.jpeg"
+import fondocitaImg from "../../assets/tratamientos/fondocita.png"
 import imagen2 from "../../assets/tratamientos/imagen2.jpeg";
 import limpieza from "../../assets/tratamientos/limpieza.png";
 
