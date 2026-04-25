@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import joseImg from "../../assets/tratamientos/joseImg.jpeg"
+import fondoHome from "../../assets/tratamientos/fondoHome.jpeg"
 import logoClinica from "../../assets/logo-clinica.png";
 
 export function HomeHero({
@@ -187,13 +187,13 @@ Consulta: ${form.consulta}`;
         >
           <div className="absolute inset-0 overflow-hidden rounded-[3rem] bg-white shadow-2xl">
             <img
-              src={joseImg}
+              src={fondoHome}
               alt="Dentista profesional"
               className="h-full w-full object-cover object-center"
             />
           </div>
 
-          <div className="absolute bottom-8 right-8 w-[540px] max-w-[calc(100%-4rem)] rounded-[2rem] border border-white/70 bg-white/95 p-6 shadow-2xl backdrop-blur-xl">
+        <div className="absolute left-1/2 top-[65%] w-[400px] max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 rounded-[2rem] border border-white/60 bg-white/20 p-6 shadow-2xl">
             <h3 className="text-3xl font-bold text-slate-950">
               Agenda tu cita
             </h3>
