@@ -189,7 +189,7 @@ Consulta: ${form.consulta}`;
             <img
               src={fondoHome}
               alt="Dentista profesional"
-              className="h-full w-full object-cover object-center"
+              className="h-full w-full object-cover object-top"
             />
           </div>
 
