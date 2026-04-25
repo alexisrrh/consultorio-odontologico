@@ -71,12 +71,12 @@ Consulta: ${form.consulta}`;
           <img
             src={logoClinica}
             alt="Logo"
-            className="max-h-20 max-w-70 rounded-2xl object-cover shadow"
+            className="max-h-20 max-w-72 rounded-2xl object-cover shadow "
           />
 
           <div>
             <h1 className="text-xl font-bold text-slate-950">
-              Dr. José Figuera
+              Dr. José Figueroa
             </h1>
             <p className="text-xs font-bold uppercase tracking-wider text-sky-600">
               Odontología avanzada
@@ -189,11 +189,11 @@ Consulta: ${form.consulta}`;
           className="relative min-h-[770px]"
         >
           <div className="absolute inset-0 overflow-hidden rounded-[3rem] bg-white shadow-2xl">
-            <img
-              src={fondoHome}
-              alt="Dentista profesional"
-              className="h-full w-full object-cover object-top"
-            />
+           <img
+  src={fondoHome}
+  alt="Dentista profesional"
+  className="absolute inset-0 h-full w-full object-cover object-[20%_center] md:object-top"
+/>
           </div>
 
           <div className="absolute left-1/2 top-[68%] w-[520px] max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 rounded-[2rem] border border-white/70 bg-white/30 p-6 shadow-2xl">
