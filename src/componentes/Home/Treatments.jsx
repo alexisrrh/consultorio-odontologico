@@ -6,7 +6,7 @@ import revisionImg from "../../assets/tratamientos/revisionImg.jpeg";
 import limpiezaImg from "../../assets/tratamientos/limpiezaImg.avif";
 import endodonciaImg from "../../assets/tratamientos/endodonciaImg.webp";
 import implanteImg from "../../assets/tratamientos/implanteImg.jpg";
-
+import fondocitaImg from "../../assets/tratamientos/fondocita.jpeg";
 const tratamientos = [
   {
     titulo: "Limpieza dental",
@@ -23,10 +23,10 @@ const tratamientos = [
     icono: "✧",
   },
   {
-    titulo: "Ortodoncia",
+    titulo: "Cirugia Dental",
     descripcion:
       "Corrección de la posición dental para mejorar estética, mordida y salud bucal.",
-    imagen: ortodonciaImg,
+    imagen: fondocitaImg,
     icono: "⌁",
   },
   {
