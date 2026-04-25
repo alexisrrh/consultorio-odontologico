@@ -1,240 +1,245 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
+import joseImg from "../../assets/tratamientos/joseImg.jpeg"
 import logoClinica from "../../assets/logo-clinica.png";
-import heroDentalImg from "../../assets/tratamientos/imagen1.jpeg";
 
 export function HomeHero({
   usuario,
   perfil,
   navigate,
   handleLogout,
-  irAccionPrincipal,
-  irAccionSecundaria,
   textoBotonPrincipal,
   textoBotonSecundario,
 }) {
   const [form, setForm] = useState({
     nombre: "",
+    apellido: "",
+    cedula: "",
     telefono: "",
     consulta: "Tipo de consulta",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+  };
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const irAccionPrincipalHero = () => {
+    if (!usuario) return navigate("/login");
+    if (perfil?.rol === "cliente") return navigate("/agendar-cita");
+    if (perfil?.rol === "medico") return navigate("/dashboard-medico");
+    navigate("/login");
   };
 
   const enviarWhatsApp = () => {
-    const numeroClinica = "584120282591";
+    if (
+      !form.nombre.trim() ||
+      !form.apellido.trim() ||
+      !form.cedula.trim() ||
+      !form.telefono.trim()
+    ) {
+      alert("Por favor completa todos los campos.");
+      return;
+    }
 
-    const mensaje = `Hola, quiero agendar una cita dental.
+    if (form.consulta === "Tipo de consulta") {
+      alert("Selecciona el tipo de consulta.");
+      return;
+    }
 
-Nombre: ${form.nombre}
+    const numeroClinica = "+584120282591";
+
+    const mensaje = `Hola, quiero agendar una cita dental:
+
+Nombre: ${form.nombre} ${form.apellido}
+Cédula: ${form.cedula}
 Teléfono: ${form.telefono}
-Tipo de consulta: ${form.consulta}`;
+Consulta: ${form.consulta}`;
 
-    const url = `https://wa.me/${numeroClinica}?text=${encodeURIComponent(
-      mensaje
-    )}`;
-
-    window.open(url, "_blank");
-  };
-
-  const renderBotonesNavbar = () => {
-    if (!usuario) {
-      return (
-        <>
-          <button
-            onClick={() => navigate("/login")}
-            className="rounded-full border border-sky-200 px-5 py-2 text-sm font-semibold text-sky-700 transition hover:bg-sky-50"
-          >
-            Iniciar sesión
-          </button>
-
-          <button
-            onClick={() => navigate("/registro-cliente")}
-            className="rounded-full bg-sky-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-sky-500"
-          >
-            Registrarse
-          </button>
-        </>
-      );
-    }
-
-    if (perfil?.rol === "cliente") {
-      return (
-        <>
-          <button
-            onClick={() => navigate("/agendar-cita")}
-            className="rounded-full border border-sky-200 px-5 py-2 text-sm font-semibold text-sky-700 transition hover:bg-sky-50"
-          >
-            Agendar cita
-          </button>
-
-          <button
-            onClick={() => navigate("/mis-citas")}
-            className="rounded-full border border-sky-200 px-5 py-2 text-sm font-semibold text-sky-700 transition hover:bg-sky-50"
-          >
-            Mis citas
-          </button>
-
-          <button
-            onClick={handleLogout}
-            className="rounded-full bg-sky-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-sky-500"
-          >
-            Cerrar sesión
-          </button>
-        </>
-      );
-    }
-
-    if (perfil?.rol === "medico") {
-      return (
-        <>
-          <button
-            onClick={() => navigate("/dashboard-medico")}
-            className="rounded-full border border-sky-200 px-5 py-2 text-sm font-semibold text-sky-700 transition hover:bg-sky-50"
-          >
-            Panel médico
-          </button>
-
-          <button
-            onClick={handleLogout}
-            className="rounded-full bg-sky-600 px-5 py-2 text-sm font-semibold text-white transition hover:bg-sky-500"
-          >
-            Cerrar sesión
-          </button>
-        </>
-      );
-    }
-
-    return null;
+    window.open(
+      `https://wa.me/${numeroClinica}?text=${encodeURIComponent(mensaje)}`,
+      "_blank"
+    );
   };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-white via-sky-50 to-cyan-50">
-      <div className="absolute -right-32 -top-32 h-96 w-96 rounded-full bg-sky-200/40 blur-3xl" />
-      <div className="absolute -bottom-32 -left-32 h-96 w-96 rounded-full bg-cyan-200/40 blur-3xl" />
-
-      <header className="relative z-20 mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
+    <section className="relative min-h-screen overflow-hidden bg-[#eef9fd]">
+      <header className="relative z-30 mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
         <div
           onClick={() => navigate("/")}
           className="flex cursor-pointer items-center gap-3"
         >
           <img
             src={logoClinica}
-            alt="Logo clínica"
-            className="h-12 w-12 rounded-2xl object-cover shadow-md"
+            alt="Logo"
+            className="h-19 w-75 rounded-2xl object-cover shadow"
           />
 
           <div>
-            <h1 className="text-lg font-bold text-slate-950">
-              Clínica Dental
+            <h1 className="text-xl font-bold text-slate-950">
+              Dr. José Figuera
             </h1>
-            <p className="text-xs text-slate-500">
-              Atención profesional y humana
+            <p className="text-xs font-bold uppercase tracking-wider text-sky-600">
+              Odontología avanzada
             </p>
           </div>
         </div>
 
         <div className="hidden items-center gap-3 md:flex">
-          {renderBotonesNavbar()}
+          {!usuario ? (
+            <>
+              <button
+                onClick={() => navigate("/login")}
+                className="rounded-2xl border border-sky-200 bg-white px-6 py-3 font-semibold text-slate-900 shadow-sm transition hover:border-sky-500"
+              >
+                Iniciar sesión
+              </button>
+
+              <button
+                onClick={() => navigate("/registro-cliente")}
+                className="rounded-2xl bg-sky-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:bg-sky-500"
+              >
+                Registrarse
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={irAccionPrincipalHero}
+                className="rounded-2xl border border-sky-200 bg-white px-6 py-3 font-semibold text-slate-900 shadow-sm transition hover:border-sky-500"
+              >
+                {textoBotonPrincipal}
+              </button>
+
+              <button
+                onClick={handleLogout}
+                className="rounded-2xl bg-sky-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:bg-sky-500"
+              >
+                Cerrar sesión
+              </button>
+            </>
+          )}
         </div>
       </header>
 
-      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-96px)] max-w-7xl items-center gap-14 px-6 pb-20 pt-10 lg:grid-cols-[1fr_0.95fr]">
-        <div>
-          <span className="inline-flex rounded-full border border-sky-200 bg-white/70 px-5 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-sky-700 shadow-sm backdrop-blur">
+      <div className="relative z-10 mx-auto grid max-w-7xl items-center gap-12 px-6 pb-20 pt-10 lg:grid-cols-[0.85fr_1.15fr]">
+        <motion.div
+          initial={{ opacity: 0, y: 35 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="relative z-20"
+        >
+          <span className="inline-flex rounded-full border border-sky-200 bg-white px-5 py-3 text-xs font-bold uppercase tracking-[0.25em] text-sky-700 shadow-sm">
             Atención moderna y cercana
           </span>
 
-          <h2 className="mt-7 max-w-4xl text-5xl font-light leading-tight tracking-tight text-slate-950 md:text-7xl">
-            Odontología profesional con una experiencia moderna, confiable y
-            humana
+          <h2 className="mt-8 max-w-3xl text-6xl font-light leading-none tracking-tight text-slate-950 md:text-7xl">
+            Luce una{" "}
+            <span className="block font-serif italic text-teal-600">
+              Sonrisa
+            </span>
+            Hermosa.
           </h2>
 
-          <p className="mt-7 max-w-2xl text-lg leading-8 text-slate-600">
-            Agenda tu cita, gestiona tus consultas y recibe seguimiento clínico
-            de forma clara, organizada y profesional.
+          <p className="mt-7 max-w-xl text-lg leading-8 text-slate-600">
+            Cuidado dental profesional para ti y tu familia. Agenda tu cita de
+            forma rápida, fácil y segura.
           </p>
 
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <button
-              onClick={irAccionPrincipal}
-              className="rounded-full bg-sky-600 px-8 py-4 text-sm font-bold text-white shadow-xl shadow-sky-600/20 transition hover:-translate-y-1 hover:bg-sky-500"
-            >
-              {textoBotonPrincipal}
-            </button>
-
-            <button
-              onClick={irAccionSecundaria}
-              className="rounded-full border border-slate-300 bg-white px-8 py-4 text-sm font-bold text-slate-800 transition hover:-translate-y-1 hover:border-sky-400 hover:text-sky-700"
-            >
-              {textoBotonSecundario}
-            </button>
+          <div className="mt-10 grid max-w-xl grid-cols-3 gap-4">
+            {[
+              "Profesionales certificados",
+              "Agenda fácil y rápida",
+              "Atención personalizada",
+            ].map((item) => (
+              <div
+                key={item}
+                className="rounded-3xl border border-sky-100 bg-white p-5 text-center shadow-md"
+              >
+                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full border border-sky-300 text-sky-600">
+                  ✓
+                </div>
+                <p className="text-sm font-bold text-slate-800">{item}</p>
+              </div>
+            ))}
           </div>
 
-          <div className="mt-12 grid max-w-xl grid-cols-3 gap-4">
-            <div className="rounded-3xl bg-white/80 p-5 shadow-sm">
-              <strong className="text-2xl text-slate-950">+6</strong>
-              <p className="mt-1 text-xs text-slate-500">Tratamientos</p>
+          <div className="mt-8 flex max-w-xl gap-4 rounded-3xl border border-sky-100 bg-white p-5 shadow-lg">
+            <div className="flex-1">
+              <strong className="text-3xl text-sky-700">+6</strong>
+              <p className="text-sm text-slate-500">Tratamientos</p>
             </div>
 
-            <div className="rounded-3xl bg-white/80 p-5 shadow-sm">
-              <strong className="text-2xl text-slate-950">24h</strong>
-              <p className="mt-1 text-xs text-slate-500">Gestión online</p>
-            </div>
+            <div className="w-px bg-slate-200" />
 
-            <div className="rounded-3xl bg-white/80 p-5 shadow-sm">
-              <strong className="text-2xl text-slate-950">100%</strong>
-              <p className="mt-1 text-xs text-slate-500">Organizado</p>
+            <div className="flex-1">
+              <strong className="text-3xl text-sky-700">24h</strong>
+              <p className="text-sm text-slate-500">Gestión online</p>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="relative">
-          <div className="overflow-hidden rounded-[2.5rem] bg-white p-3 shadow-2xl shadow-sky-900/10">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.96 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, delay: 0.2 }}
+          className="relative min-h-[700px]"
+        >
+          <div className="absolute inset-0 overflow-hidden rounded-[3rem] bg-white shadow-2xl">
             <img
-              src={heroDentalImg}
-              alt="Atención odontológica profesional"
-              className="h-[620px] w-full rounded-[2rem] object-cover"
+              src={joseImg}
+              alt="Dentista profesional"
+              className="h-full w-full object-cover object-center"
             />
           </div>
 
-          <div className="absolute bottom-8 left-6 right-6 rounded-[2rem] border border-white/60 bg-white/90 p-6 shadow-2xl backdrop-blur-xl">
-            <h3 className="text-2xl font-bold text-slate-950">
+          <div className="absolute bottom-8 right-8 w-[540px] max-w-[calc(100%-4rem)] rounded-[2rem] border border-white/70 bg-white/95 p-6 shadow-2xl backdrop-blur-xl">
+            <h3 className="text-3xl font-bold text-slate-950">
               Agenda tu cita
             </h3>
 
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-slate-500">
               Solicita atención dental de forma rápida y sencilla.
             </p>
 
-            <div className="mt-5 grid gap-3">
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
               <input
                 name="nombre"
                 value={form.nombre}
                 onChange={handleChange}
-                className="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-sky-400"
-                placeholder="Nombre completo"
+                placeholder="Nombre"
+                className="rounded-2xl border border-slate-200 px-5 py-4 outline-none focus:border-sky-400"
+              />
+
+              <input
+                name="apellido"
+                value={form.apellido}
+                onChange={handleChange}
+                placeholder="Apellido"
+                className="rounded-2xl border border-slate-200 px-5 py-4 outline-none focus:border-sky-400"
+              />
+
+              <input
+                name="cedula"
+                value={form.cedula}
+                onChange={handleChange}
+                placeholder="Cédula"
+                className="rounded-2xl border border-slate-200 px-5 py-4 outline-none focus:border-sky-400"
               />
 
               <input
                 name="telefono"
                 value={form.telefono}
                 onChange={handleChange}
-                className="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-sky-400"
                 placeholder="Teléfono"
+                className="rounded-2xl border border-slate-200 px-5 py-4 outline-none focus:border-sky-400"
               />
 
               <select
                 name="consulta"
                 value={form.consulta}
                 onChange={handleChange}
-                className="rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:border-sky-400"
+                className="rounded-2xl border border-slate-200 px-5 py-4 outline-none focus:border-sky-400 md:col-span-2"
               >
                 <option>Tipo de consulta</option>
                 <option>Limpieza dental</option>
@@ -248,13 +253,13 @@ Tipo de consulta: ${form.consulta}`;
               <button
                 type="button"
                 onClick={enviarWhatsApp}
-                className="rounded-2xl bg-sky-600 px-5 py-3 font-bold text-white transition hover:bg-sky-500"
+                className="rounded-2xl bg-sky-600 px-5 py-4 font-bold text-white transition hover:bg-sky-500 md:col-span-2"
               >
                 Agendar por WhatsApp
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
