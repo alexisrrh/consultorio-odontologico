@@ -83,7 +83,7 @@ export function AuthProvider({ children }) {
             {
               id: usuario.id,
               nombre: usuario.user_metadata?.nombre || "Usuario",
-              rol: usuario.user_metadata?.rol || "cliente",
+              rol: "cliente",
             },
           ]);
 
